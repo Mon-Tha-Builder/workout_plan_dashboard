@@ -175,6 +175,298 @@
     .tip { border: 1px solid var(--border); background: rgba(255,255,255,.06); border-radius: 24px; padding: 18px; margin-top: 14px; color: var(--muted); line-height: 1.6; }
     .tip b { color: white; }
     .print-note { margin-top: 16px; color: var(--muted2); font-size: 13px; }
+
+    .mobile-reset { display: none; }
+    .mobile-tracker-cards { display: none; }
+
+    @media (max-width: 760px) {
+      html { scroll-behavior: smooth; }
+      body {
+        background:
+          radial-gradient(circle at 20% 0%, rgba(14,165,233,.28), transparent 36%),
+          radial-gradient(circle at 95% 12%, rgba(217,70,239,.20), transparent 32%),
+          var(--bg);
+      }
+      .wrap {
+        padding: 12px 10px calc(98px + env(safe-area-inset-bottom));
+        width: 100%;
+        overflow-x: hidden;
+      }
+      .hero {
+        border-radius: 24px;
+        padding: 18px;
+      }
+      .badge {
+        max-width: 100%;
+        font-size: 11px;
+        line-height: 1.35;
+        padding: 8px 11px;
+      }
+      h1 {
+        font-size: clamp(36px, 13vw, 48px);
+        line-height: .95;
+        letter-spacing: -0.07em;
+      }
+      .hero p {
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+      .mini {
+        border-radius: 18px;
+        padding: 13px;
+      }
+      .tabs {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        bottom: calc(10px + env(safe-area-inset-bottom));
+        z-index: 50;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 7px;
+        margin: 0;
+        padding: 8px;
+        border: 1px solid rgba(255,255,255,.14);
+        border-radius: 22px;
+        background: rgba(6,7,17,.86);
+        box-shadow: 0 18px 70px rgba(0,0,0,.55);
+        backdrop-filter: blur(18px);
+      }
+      .tab {
+        min-height: 48px;
+        padding: 8px 4px;
+        border-radius: 16px;
+        font-size: 11px;
+        line-height: 1.15;
+        text-align: center;
+      }
+      .tab[data-tab="dashboard"]::before { content: "🏠"; display:block; font-size:16px; margin-bottom:2px; }
+      .tab[data-tab="workouts"]::before { content: "🏋️"; display:block; font-size:16px; margin-bottom:2px; }
+      .tab[data-tab="tracker"]::before { content: "✅"; display:block; font-size:16px; margin-bottom:2px; }
+      .tab[data-tab="rpe"]::before { content: "🔥"; display:block; font-size:16px; margin-bottom:2px; }
+      .reset { display: none !important; }
+      .mobile-reset {
+        display: inline-flex;
+        margin-top: 12px;
+        width: 100%;
+        justify-content: center;
+      }
+      .section {
+        margin-top: 14px;
+      }
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .card {
+        border-radius: 22px;
+        padding: 16px;
+      }
+      .stat-top {
+        margin-bottom: 10px;
+      }
+      .iconbox {
+        width: 36px;
+        height: 36px;
+        border-radius: 13px;
+      }
+      .live {
+        display: none;
+      }
+      .stat-label {
+        font-size: 12px;
+        line-height: 1.25;
+      }
+      .stat-value {
+        font-size: 27px;
+      }
+      .stat-sub {
+        display: none;
+      }
+      .layout {
+        gap: 12px;
+        margin-top: 12px;
+      }
+      .week-buttons {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0,1fr));
+        gap: 7px;
+      }
+      .pill {
+        min-height: 40px;
+        padding: 9px 6px;
+        text-align: center;
+        border-radius: 13px;
+        font-size: 12px;
+      }
+      .day-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+      .day-card {
+        min-height: 126px;
+        border-radius: 20px;
+        padding: 13px;
+      }
+      .day-card:hover {
+        transform: none;
+      }
+      .today-box {
+        border-radius: 22px;
+        padding: 16px;
+      }
+      .today-box h3 {
+        font-size: 26px;
+      }
+      .detail-line {
+        font-size: 14px;
+        line-height: 1.55;
+      }
+      .primary-btn, .secondary-btn {
+        min-height: 46px;
+        width: 100%;
+      }
+      .side {
+        position: static;
+      }
+      .side .day-select {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(132px, 1fr));
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 6px;
+        scroll-snap-type: x mandatory;
+      }
+      .side-btn {
+        min-width: 132px;
+        min-height: 76px;
+        scroll-snap-align: start;
+        border-radius: 18px;
+        padding: 12px;
+      }
+      .volume-tags {
+        gap: 6px;
+      }
+      .tag {
+        font-size: 11px;
+        padding: 6px 9px;
+      }
+      .exercise {
+        margin-top: 11px;
+      }
+      .exercise-head {
+        gap: 12px;
+      }
+      .ex-title-row {
+        gap: 10px;
+      }
+      .check {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+      }
+      .card h2, .today-box h2 {
+        font-size: 24px;
+      }
+      .exercise h2 {
+        font-size: 21px !important;
+        line-height: 1.12;
+      }
+      .metric-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+      }
+      .metric, .field {
+        border-radius: 16px;
+        padding: 12px;
+      }
+      input, textarea {
+        font-size: 16px;
+      }
+      .log-grid {
+        grid-template-columns: 1fr;
+      }
+      .table-wrap {
+        display: none;
+      }
+      .mobile-tracker-cards {
+        display: grid;
+        gap: 12px;
+        margin-top: 14px;
+      }
+      .tracker-card {
+        border: 1px solid var(--border);
+        background: var(--panel);
+        border-radius: 22px;
+        padding: 15px;
+        box-shadow: 0 18px 55px rgba(0,0,0,.22);
+      }
+      .tracker-card-top {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+        align-items: flex-start;
+      }
+      .tracker-card h3 {
+        margin: 8px 0 0;
+        font-size: 18px;
+        line-height: 1.15;
+      }
+      .tracker-mobile-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0,1fr));
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .mobile-data {
+        border: 1px solid var(--border);
+        background: var(--panel2);
+        border-radius: 15px;
+        padding: 10px;
+      }
+      .mobile-data small {
+        display: block;
+        color: var(--muted2);
+        font-size: 11px;
+      }
+      .mobile-data b {
+        display: block;
+        margin-top: 4px;
+        font-size: 13px;
+        color: white;
+        word-break: break-word;
+      }
+      .guide-grid {
+        gap: 12px;
+      }
+      .guide-item, .tip {
+        border-radius: 20px;
+        padding: 14px;
+      }
+      .print-note {
+        font-size: 12px;
+        padding: 0 4px;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+      .day-grid {
+        grid-template-columns: 1fr;
+      }
+      .tab {
+        font-size: 10px;
+      }
+      .tracker-mobile-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     @media print {
       body { background: white; color: black; }
       .hero, .card { box-shadow: none; background: white; color: black; border-color: #ddd; }
@@ -204,6 +496,7 @@
         <button class="tab" data-tab="rpe">RPE Guide</button>
         <button class="tab reset" id="resetBtn">Reset Progress</button>
       </nav>
+      <button class="secondary-btn mobile-reset" id="resetMobileBtn">Reset Progress</button>
     </header>
 
     <section id="dashboard" class="section active">
@@ -289,6 +582,7 @@
           <tbody id="trackerBody"></tbody>
         </table>
       </div>
+      <div class="mobile-tracker-cards" id="mobileTrackerCards"></div>
     </section>
 
     <section id="rpe" class="section">
@@ -481,7 +775,8 @@ function renderExercises() {
 }
 function renderTracker() {
   const body = document.getElementById("trackerBody");
-  body.innerHTML = exercises.map(ex => {
+  const mobileCards = document.getElementById("mobileTrackerCards");
+  const rows = exercises.map(ex => {
     const key = exerciseKey(selectedWeek, ex);
     const log = logs[key] || {};
     return `<tr>
@@ -496,6 +791,32 @@ function renderTracker() {
       <td>${log.notes || ""}</td>
     </tr>`;
   }).join("");
+
+  const cards = exercises.map(ex => {
+    const key = exerciseKey(selectedWeek, ex);
+    const log = logs[key] || {};
+    return `<article class="tracker-card">
+      <div class="tracker-card-top">
+        <div>
+          <span class="tag">${ex.day}</span>
+          <span class="tag ${categoryClass(ex.category)}">${ex.category}</span>
+          <h3>${ex.name}</h3>
+        </div>
+        <button class="pill ${log.done?'active':''}" onclick='toggleExercise(${selectedWeek}, exercises.find(e => exerciseKey(${selectedWeek}, e) === "${key}"))'>${log.done?'Done':'Open'}</button>
+      </div>
+      <div class="tracker-mobile-grid">
+        <div class="mobile-data"><small>Plan</small><b>${ex.sets} sets, ${ex.reps}</b></div>
+        <div class="mobile-data"><small>Target RPE</small><b>${ex.rpe}</b></div>
+        <div class="mobile-data"><small>Load</small><b>${log.load || "Not logged"}</b></div>
+        <div class="mobile-data"><small>Actual reps</small><b>${log.actualReps || "Not logged"}</b></div>
+        <div class="mobile-data"><small>Actual RPE</small><b>${log.actualRpe || "Not logged"}</b></div>
+        <div class="mobile-data"><small>Notes</small><b>${log.notes || "No notes"}</b></div>
+      </div>
+    </article>`;
+  }).join("");
+
+  body.innerHTML = rows;
+  if (mobileCards) mobileCards.innerHTML = cards;
 }
 function renderGuide() {
   document.getElementById("rpeGuide").innerHTML = rpeGuide.map(item => `
@@ -543,7 +864,7 @@ document.getElementById("tabs").addEventListener("click", (e) => {
   const btn = e.target.closest("button[data-tab]");
   if (btn) setTab(btn.dataset.tab);
 });
-document.getElementById("resetBtn").addEventListener("click", () => {
+function resetAllProgress() {
   if (confirm("Reset all workout progress and logs?")) {
     logs = {};
     completedDays = {};
@@ -551,7 +872,10 @@ document.getElementById("resetBtn").addEventListener("click", () => {
     save("workout_dashboard_days_v2", completedDays);
     render();
   }
-});
+}
+document.getElementById("resetBtn").addEventListener("click", resetAllProgress);
+const mobileResetButton = document.getElementById("resetMobileBtn");
+if (mobileResetButton) mobileResetButton.addEventListener("click", resetAllProgress);
 render();
 </script>
 </body>
