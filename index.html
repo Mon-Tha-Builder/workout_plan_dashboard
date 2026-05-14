@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Workout Plan Dashboard</title>
+  <style>
+    :root {
+      --bg: #060711;
+      --panel: rgba(255,255,255,0.07);
+      --panel2: rgba(0,0,0,0.25);
+      --border: rgba(255,255,255,0.12);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.68);
+      --muted2: rgba(255,255,255,0.45);
+      --cyan: #7dd3fc;
+      --violet: #c4b5fd;
+      --pink: #f0abfc;
+      --green: #86efac;
+      --amber: #fcd34d;
+      --red: #fca5a5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 10% 5%, rgba(14,165,233,.24), transparent 32%),
+        radial-gradient(circle at 90% 18%, rgba(217,70,239,.22), transparent 34%),
+        radial-gradient(circle at 55% 100%, rgba(37,99,235,.24), transparent 38%),
+        var(--bg);
+      color: var(--text);
+    }
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    .wrap { max-width: 1320px; margin: 0 auto; padding: 28px 18px 60px; }
+    .hero {
+      border: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border-radius: 34px;
+      padding: 28px;
+      box-shadow: 0 28px 90px rgba(0,0,0,.34);
+      backdrop-filter: blur(18px);
+    }
+    .badge {
+      display: inline-flex; gap: 8px; align-items: center;
+      padding: 9px 14px; border-radius: 999px;
+      border: 1px solid rgba(125,211,252,.22);
+      background: rgba(125,211,252,.10);
+      color: #dff8ff; font-size: 13px; font-weight: 800;
+    }
+    h1 { margin: 16px 0 0; font-size: clamp(38px, 6vw, 72px); line-height: .95; letter-spacing: -0.06em; }
+    .hero p { color: var(--muted); max-width: 860px; font-size: 17px; line-height: 1.7; }
+    .topgrid { display: grid; grid-template-columns: 1fr; gap: 18px; }
+    @media (min-width: 980px) { .topgrid { grid-template-columns: 1.4fr .6fr; align-items: end; } }
+    .mini-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .mini {
+      border: 1px solid var(--border); background: var(--panel2);
+      border-radius: 24px; padding: 16px;
+    }
+    .mini .label { color: var(--muted2); text-transform: uppercase; letter-spacing: .18em; font-size: 11px; }
+    .mini .value { margin-top: 8px; font-weight: 900; }
+    .tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+    .tab {
+      border: 1px solid var(--border); background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.70); border-radius: 16px; padding: 10px 15px;
+      font-weight: 900;
+    }
+    .tab.active { border-color: rgba(125,211,252,.42); background: rgba(125,211,252,.18); color: #edfbff; }
+    .reset { margin-left: auto; }
+    .section { margin-top: 22px; display: none; }
+    .section.active { display: block; }
+    .stats { display: grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap: 14px; }
+    @media (min-width: 740px) { .stats { grid-template-columns: repeat(2, minmax(0,1fr)); } }
+    @media (min-width: 1120px) { .stats { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    .card {
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 30px;
+      padding: 22px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.24);
+      backdrop-filter: blur(14px);
+    }
+    .stat-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+    .iconbox { width: 44px; height: 44px; border-radius: 16px; display: grid; place-items: center; background: rgba(255,255,255,.10); }
+    .live { border: 1px solid var(--border); border-radius: 999px; padding: 5px 10px; color: var(--muted); font-size: 12px; }
+    .stat-label { color: var(--muted); font-size: 14px; }
+    .stat-value { margin-top: 4px; font-size: 34px; line-height: 1; font-weight: 1000; letter-spacing: -.04em; }
+    .stat-sub { margin-top: 9px; color: var(--muted); font-size: 13px; }
+    .layout { display: grid; gap: 18px; margin-top: 18px; }
+    @media (min-width: 1050px) { .layout.two { grid-template-columns: 1.25fr .75fr; } .layout.workout { grid-template-columns: 310px 1fr; } }
+    .progress { height: 13px; background: rgba(255,255,255,.10); border-radius: 999px; overflow: hidden; }
+    .progress > div { height: 100%; width: 0%; border-radius: 999px; background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink)); transition: width .35s ease; }
+    .week-buttons, .day-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      border: 1px solid var(--border); background: rgba(255,255,255,.05);
+      color: rgba(255,255,255,.67); border-radius: 14px; padding: 8px 12px; font-weight: 900; font-size: 13px;
+    }
+    .pill.active { border-color: rgba(240,171,252,.4); background: rgba(240,171,252,.18); color: #fff0ff; }
+    .day-grid { display: grid; gap: 12px; grid-template-columns: repeat(1, minmax(0,1fr)); margin-top: 18px; }
+    @media (min-width: 720px) { .day-grid { grid-template-columns: repeat(5, minmax(0,1fr)); } }
+    .day-card {
+      border: 1px solid var(--border); background: var(--panel2);
+      border-radius: 24px; padding: 17px; min-height: 158px; text-align: left; color: white; width: 100%;
+      transition: .16s ease;
+    }
+    .day-card:hover { transform: translateY(-2px); background: rgba(255,255,255,.08); }
+    .day-card.done { border-color: rgba(134,239,172,.40); background: rgba(134,239,172,.14); }
+    .day-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .done-chip { border-radius: 999px; padding: 5px 9px; font-size: 11px; background: rgba(255,255,255,.10); color: rgba(255,255,255,.65); }
+    .day-card.done .done-chip { background: var(--green); color: #052e16; font-weight: 1000; }
+    .today-box { background: var(--panel2); border: 1px solid var(--border); border-radius: 28px; padding: 22px; }
+    .eyebrow { color: var(--muted2); letter-spacing: .20em; text-transform: uppercase; font-size: 12px; font-weight: 900; }
+    .today-box h2, .card h2 { margin: 0; font-size: 28px; letter-spacing: -.04em; }
+    .today-box h3 { margin: 8px 0 0; font-size: 31px; letter-spacing: -.04em; }
+    .detail-line { color: var(--muted); line-height: 1.6; }
+    .detail-line b { color: white; }
+    .primary-btn {
+      border: 0; background: linear-gradient(90deg, var(--cyan), var(--violet));
+      color: #07111d; border-radius: 16px; padding: 11px 15px; font-weight: 1000;
+    }
+    .secondary-btn {
+      border: 1px solid var(--border); background: rgba(255,255,255,.06);
+      color: rgba(255,255,255,.78); border-radius: 16px; padding: 11px 15px; font-weight: 1000;
+    }
+    .side { position: sticky; top: 18px; align-self: start; }
+    .side .day-select { display: grid; gap: 9px; margin-top: 16px; }
+    .side-btn {
+      width: 100%; text-align: left; border: 1px solid var(--border); background: var(--panel2);
+      border-radius: 20px; padding: 14px; color: white;
+    }
+    .side-btn.active { border-color: rgba(125,211,252,.42); background: rgba(125,211,252,.15); }
+    .volume-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .tag { display: inline-flex; border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; font-size: 12px; font-weight: 900; }
+    .strength { background: rgba(248,113,113,.14); color: #fee2e2; border-color: rgba(248,113,113,.28); }
+    .hypertrophy { background: rgba(168,85,247,.14); color: #f3e8ff; border-color: rgba(168,85,247,.28); }
+    .accessory { background: rgba(59,130,246,.14); color: #dbeafe; border-color: rgba(59,130,246,.28); }
+    .core { background: rgba(52,211,153,.14); color: #d1fae5; border-color: rgba(52,211,153,.28); }
+    .cardio { background: rgba(251,146,60,.14); color: #ffedd5; border-color: rgba(251,146,60,.28); }
+    .mobility { background: rgba(34,211,238,.14); color: #cffafe; border-color: rgba(34,211,238,.28); }
+    .exercise { margin-top: 14px; }
+    .exercise-head { display: grid; gap: 16px; }
+    @media (min-width: 1020px) { .exercise-head { grid-template-columns: 1fr 540px; align-items: start; } }
+    .ex-title-row { display: flex; gap: 14px; align-items: flex-start; }
+    .check {
+      width: 42px; height: 42px; flex: 0 0 42px; border: 1px solid var(--border);
+      background: var(--panel2); color: rgba(255,255,255,.5); border-radius: 16px; font-weight: 1000;
+    }
+    .check.done { background: var(--green); color: #052e16; border-color: rgba(134,239,172,.5); }
+    .metric-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    @media (min-width: 640px) { .metric-grid { grid-template-columns: repeat(4, minmax(0,1fr)); } }
+    .metric, .field {
+      border: 1px solid var(--border); background: var(--panel2);
+      border-radius: 18px; padding: 12px;
+    }
+    .metric small, .field span { display: block; color: var(--muted2); font-size: 12px; }
+    .metric b { display: block; margin-top: 4px; font-size: 18px; }
+    input, textarea {
+      width: 100%; border: 0; outline: 0; background: transparent; color: white; margin-top: 5px;
+      font-weight: 800;
+    }
+    textarea { resize: vertical; min-height: 42px; }
+    .log-grid { display: grid; gap: 10px; margin-top: 12px; }
+    @media (min-width: 740px) { .log-grid { grid-template-columns: .8fr 1.2fr; } }
+    .table-wrap { overflow-x: auto; }
+    table { min-width: 1120px; width: 100%; border-collapse: collapse; }
+    th { text-align: left; padding: 15px; background: rgba(255,255,255,.09); color: var(--muted2); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+    td { border-top: 1px solid var(--border); padding: 14px 15px; vertical-align: top; color: rgba(255,255,255,.75); }
+    tr:hover td { background: rgba(255,255,255,.035); }
+    .guide-grid { display: grid; gap: 18px; }
+    @media (min-width: 1040px) { .guide-grid { grid-template-columns: 1.05fr .95fr; } }
+    .guide-item { border: 1px solid var(--border); background: var(--panel2); border-radius: 24px; padding: 16px; margin-top: 12px; }
+    .guide-top { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .tip { border: 1px solid var(--border); background: rgba(255,255,255,.06); border-radius: 24px; padding: 18px; margin-top: 14px; color: var(--muted); line-height: 1.6; }
+    .tip b { color: white; }
+    .print-note { margin-top: 16px; color: var(--muted2); font-size: 13px; }
+    @media print {
+      body { background: white; color: black; }
+      .hero, .card { box-shadow: none; background: white; color: black; border-color: #ddd; }
+      .tabs, .reset, button { display: none !important; }
+      .section { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="hero">
+      <div class="topgrid">
+        <div>
+          <div class="badge">🏋️ 5 Day Muscle, Strength, Endurance and Flexibility Plan</div>
+          <h1>Workout Command Center</h1>
+          <p>Built for a 28 year old, 6 foot lifter between beginner and intermediate. The plan uses your building gym for lifting and nearby trails for cardio, with one hour sessions or split sessions when needed.</p>
+        </div>
+        <div class="mini-grid">
+          <div class="mini"><div class="label">Goal</div><div class="value">Muscle, strength, endurance</div></div>
+          <div class="mini"><div class="label">Style</div><div class="value">Gym plus trails</div></div>
+        </div>
+      </div>
+      <nav class="tabs" id="tabs">
+        <button class="tab active" data-tab="dashboard">Dashboard</button>
+        <button class="tab" data-tab="workouts">Workouts</button>
+        <button class="tab" data-tab="tracker">Tracker</button>
+        <button class="tab" data-tab="rpe">RPE Guide</button>
+        <button class="tab reset" id="resetBtn">Reset Progress</button>
+      </nav>
+    </header>
+
+    <section id="dashboard" class="section active">
+      <div class="stats">
+        <div class="card"><div class="stat-top"><div class="iconbox">📅</div><div class="live">Live</div></div><div class="stat-label">Training days completed</div><div class="stat-value" id="daysCompleted">0/20</div><div class="stat-sub">Across the 4 week tracker</div></div>
+        <div class="card"><div class="stat-top"><div class="iconbox">✅</div><div class="live">Live</div></div><div class="stat-label">Exercise completion</div><div class="stat-value" id="exerciseCompletion">0%</div><div class="stat-sub" id="exerciseCompletionSub">0 of 0 logged as done</div></div>
+        <div class="card"><div class="stat-top"><div class="iconbox">💪</div><div class="live">Live</div></div><div class="stat-label">Planned weekly sets</div><div class="stat-value" id="weeklySets">0</div><div class="stat-sub">Lifting, core, mobility and cardio items</div></div>
+        <div class="card"><div class="stat-top"><div class="iconbox">🔥</div><div class="live">Live</div></div><div class="stat-label">Average actual RPE</div><div class="stat-value" id="averageRpe">0.0</div><div class="stat-sub">Based on what you log</div></div>
+      </div>
+
+      <div class="layout two">
+        <div class="card">
+          <div style="display:flex; gap:14px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+            <div>
+              <h2>4 Week Training Board</h2>
+              <p class="detail-line">Mark each training day complete as you go.</p>
+            </div>
+            <div class="week-buttons" id="weekButtonsDashboard"></div>
+          </div>
+          <div class="progress" style="margin-top:18px;"><div id="dayProgress"></div></div>
+          <div class="day-grid" id="dayGrid"></div>
+        </div>
+
+        <div class="card">
+          <div class="today-box">
+            <div class="eyebrow" id="todayDay">Day 1</div>
+            <h3 id="todayFocus">Upper Body Strength</h3>
+            <p class="detail-line" id="todayGoal">Build strength and upper body muscle</p>
+            <div id="todayDetails"></div>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;">
+              <button class="primary-btn" id="markDayBtn">Mark Day Complete</button>
+              <button class="secondary-btn" onclick="setTab('workouts')">Open Workout</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="workouts" class="section">
+      <div class="layout workout">
+        <aside class="card side">
+          <h2>Workout Days</h2>
+          <p class="detail-line">Choose the day, then log the session.</p>
+          <div class="day-select" id="sideDayButtons"></div>
+          <div class="mini" style="margin-top:16px;">
+            <div class="value">Day Volume</div>
+            <div class="volume-tags" id="volumeTags"></div>
+          </div>
+        </aside>
+        <div>
+          <div class="card">
+            <div style="display:flex; gap:14px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+              <div>
+                <div class="eyebrow" id="workoutDayLabel">Day 1</div>
+                <h2 id="workoutTitle">Upper Body Strength</h2>
+                <p class="detail-line" id="workoutNote">Keep RPE mostly 6 to 7 during the first two weeks.</p>
+              </div>
+              <div class="week-buttons" id="weekButtonsWorkout"></div>
+            </div>
+          </div>
+          <div id="exerciseList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tracker" class="section">
+      <div class="card">
+        <div style="display:flex; gap:14px; justify-content:space-between; align-items:flex-start; flex-wrap:wrap;">
+          <div>
+            <h2>4 Week Progress Tracker</h2>
+            <p class="detail-line">This replaces the static spreadsheet tracker with a log you can fill in each session.</p>
+          </div>
+          <div class="week-buttons" id="weekButtonsTracker"></div>
+        </div>
+      </div>
+      <div class="card table-wrap" style="margin-top:18px;">
+        <table>
+          <thead>
+            <tr>
+              <th>Done</th><th>Day</th><th>Exercise</th><th>Plan</th><th>Target RPE</th><th>Load</th><th>Actual Reps</th><th>Actual RPE</th><th>Notes</th>
+            </tr>
+          </thead>
+          <tbody id="trackerBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="rpe" class="section">
+      <div class="guide-grid">
+        <div class="card">
+          <h2>RPE Guide</h2>
+          <p class="detail-line">RPE means Rate of Perceived Exertion. It tells you how hard the set felt based on how many good reps you had left.</p>
+          <div id="rpeGuide"></div>
+        </div>
+        <div>
+          <div class="card">
+            <h2>Progression Rules</h2>
+            <div class="tip"><b>Add weight</b> when you hit the top of the rep range with clean form and the target RPE.</div>
+            <div class="tip"><b>Keep weight the same</b> when form was good but reps were not at the top yet.</div>
+            <div class="tip"><b>Lower weight</b> if you miss the rep range, form breaks, or the set feels like RPE 9 or 10.</div>
+            <div class="tip"><b>Skip optional cardio</b> when legs feel beat up, sleep is poor, or recovery is low.</div>
+          </div>
+          <div class="card" style="margin-top:18px;">
+            <h2>Session Structure</h2>
+            <div class="tip"><b>Warm up:</b> 5 to 8 minutes easy cardio plus warm up sets.</div>
+            <div class="tip"><b>Main work:</b> Complete the listed lifts with controlled reps.</div>
+            <div class="tip"><b>Optional split:</b> Lift for 45 minutes, then do cardio later for 20 to 35 minutes.</div>
+            <div class="tip"><b>Cool down:</b> 5 minutes easy walking and light mobility.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="print-note">Progress saves in this browser using local storage. To host online, upload this file as index.html to GitHub Pages.</p>
+  </div>
+
+<script>
+const weeklyPlan = [{"day": "Day 1", "focus": "Upper Body Strength", "mainGoal": "Build strength and upper body muscle", "primaryWork": "Press, pulldown, rows, shoulder press, arms, core", "optional": "25 to 35 min easy cardio", "length": "45 to 60 min lifting or split cardio", "notes": "Keep RPE mostly 6 to 7 during the first two weeks."}, {"day": "Day 2", "focus": "Lower Body Strength", "mainGoal": "Build lower body strength", "primaryWork": "Squat or leg press, RDL, lunges, leg curl, calves, plank", "optional": "10 to 15 min mobility", "length": "45 to 60 min", "notes": "Pick stable variations first. Technique before load."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "mainGoal": "Improve conditioning and mobility", "primaryWork": "Trail jog, walk jog, treadmill, bike, mobility", "optional": "Extra easy walk", "length": "45 to 60 min", "notes": "This day should not feel exhausting."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "mainGoal": "Upper body muscle growth", "primaryWork": "Incline press, row, chest press, raises, arms", "optional": "20 to 30 min Zone 2 cardio", "length": "45 to 60 min lifting or split cardio", "notes": "Aim for clean reps and a pump, not failure."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "mainGoal": "Lower body muscle growth and conditioning", "primaryWork": "Deadlift variation, split squat, leg isolation, glutes, core", "optional": "Trail intervals", "length": "45 to 60 min with optional finisher", "notes": "Skip intervals if fatigue is high."}, {"day": "Day 6", "focus": "Rest or easy walk", "mainGoal": "Recovery", "primaryWork": "Rest", "optional": "Light walk or mobility", "length": "0 to 30 min", "notes": "Recovery supports muscle and strength gains."}, {"day": "Day 7", "focus": "Rest, mobility, or light trail walk", "mainGoal": "Recovery and flexibility", "primaryWork": "Rest or gentle movement", "optional": "Light trail walk", "length": "0 to 30 min", "notes": "Prepare for next week."}];
+const exercises = [{"day": "Day 1", "focus": "Upper Body Strength", "name": "Barbell or Machine Bench Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Choose machine bench if barbell setup feels unstable."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Lat Pulldown", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Controlled reps. Pause briefly at the bottom."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Seated Cable Row", "sets": 3, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Keep torso stable and pull elbows back."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Dumbbell Shoulder Press", "sets": 2, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Use a neutral grip if shoulders prefer it."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Cable Triceps Pressdown", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Keep elbows fixed."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Dumbbell Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Avoid swinging."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Dead Bug", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 6, "category": "Core", "notes": "Slow, controlled core work."}, {"day": "Day 1", "focus": "Upper Body Strength", "name": "Optional Easy Trail Walk or Incline Treadmill", "sets": 1, "reps": "25 to 35 min", "rpe": 4, "category": "Cardio", "notes": "Only if using split sessions or feeling recovered."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Squat or Leg Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Pick leg press if squat technique is not yet comfortable."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Romanian Deadlift", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Hip hinge. Keep spine neutral."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Walking Lunges", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Accessory", "notes": "Shorter stride targets quads. Longer stride targets more glutes."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Seated or Lying Leg Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Control the lowering part."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Standing Calf Raise", "sets": 3, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch at bottom."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Plank", "sets": 3, "reps": "30 to 60 sec", "rpe": 6, "category": "Core", "notes": "Stop before form breaks."}, {"day": "Day 2", "focus": "Lower Body Strength", "name": "Hips Hamstrings Calves and Ankles Mobility", "sets": 1, "reps": "10 to 15 min", "rpe": 3, "category": "Mobility", "notes": "Keep it easy and restorative."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Trail Jog or Walk Jog Intervals", "sets": 1, "reps": "30 to 40 min", "rpe": 5, "category": "Cardio", "notes": "Easy enough to hold a conversation most of the time."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Incline Treadmill Walk or Bike", "sets": 1, "reps": "15 to 20 min", "rpe": 5, "category": "Cardio", "notes": "Steady non exhausting pace."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Hip Flexor Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Relax into the stretch."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Hamstring Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "No aggressive bouncing."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Lat Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Breathe slowly."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Thoracic Rotations", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 3, "category": "Mobility", "notes": "Rotate through upper back."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "name": "Deep Squat Hold or Goblet Squat Hold", "sets": 2, "reps": "30 to 45 sec", "rpe": 4, "category": "Mobility", "notes": "Use support if needed."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Incline Dumbbell Press", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Controlled tempo."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Chest Supported Row", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Reduce lower back fatigue."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Machine Chest Press or Push Ups", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Use a range that feels stable."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Cable or Dumbbell Lateral Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7.5, "category": "Accessory", "notes": "Light weight, clean reps."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Face Pull", "sets": 2, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Upper back and rear delt focus."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Cable Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Smooth reps."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Overhead Cable Triceps Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Emphasize long head triceps stretch."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "name": "Optional Easy Zone 2 Cardio", "sets": 1, "reps": "20 to 30 min", "rpe": 4, "category": "Cardio", "notes": "Keep it easy. Do not turn it into a hard workout."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Trap Bar Deadlift or Dumbbell Deadlift", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Use dumbbells if trap bar is unavailable."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Bulgarian Split Squat", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Hypertrophy", "notes": "Use support for balance if needed."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Leg Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Pause at top if comfortable."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Hamstring Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Controlled reps."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Hip Thrust or Glute Bridge", "sets": 2, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Full lockout without overextending low back."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Seated Calf Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch and controlled top."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Hanging Knee Raise or Cable Crunch", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Core", "notes": "Use cable crunch if hanging grip is limiting."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "name": "Trail Intervals", "sets": 6, "reps": "30 sec faster plus 90 sec easy walk", "rpe": 7, "category": "Cardio", "notes": "Optional finisher. Skip if legs feel overly fatigued."}];
+const rpeGuide = [{"rpe": 4, "meaning": "Easy cardio or warm up effort", "reserve": "6 plus reps left", "feel": "Comfortable and sustainable."}, {"rpe": 5, "meaning": "Moderate endurance effort", "reserve": "5 plus reps left", "feel": "Working but not straining."}, {"rpe": 6, "meaning": "Moderately challenging lift", "reserve": "About 4 reps left", "feel": "Good technique with plenty in reserve."}, {"rpe": 7, "meaning": "Challenging but controlled", "reserve": "About 3 reps left", "feel": "Productive hard work without grinding."}, {"rpe": 8, "meaning": "Hard", "reserve": "About 2 reps left", "feel": "Still clean but requires focus."}, {"rpe": 9, "meaning": "Very hard", "reserve": "About 1 rep left", "feel": "Near maximal. Use sparingly."}, {"rpe": 10, "meaning": "Failure", "reserve": "0 reps left", "feel": "No further good reps possible. Not prescribed in this plan."}];
+const trainingDays = ["Day 1","Day 2","Day 3","Day 4","Day 5"];
+const weeks = [1,2,3,4];
+
+let selectedDay = "Day 1";
+let selectedWeek = 1;
+let logs = load("workout_dashboard_logs_v2", {});
+let completedDays = load("workout_dashboard_days_v2", {});
+
+function load(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+  catch { return fallback; }
+}
+function save(key, value) {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch {}
+}
+function slug(value) {
+  return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+}
+function exerciseKey(week, ex) {
+  return `week_${week}_${slug(ex.day)}_${slug(ex.name)}`;
+}
+function dayKey(week, day) {
+  return `${week}_${day}`;
+}
+function categoryClass(cat) {
+  const map = {
+    Strength:"strength", Hypertrophy:"hypertrophy", Accessory:"accessory",
+    Core:"core", Cardio:"cardio", Mobility:"mobility"
+  };
+  return map[cat] || "";
+}
+function rpeClass(rpe) {
+  if (rpe <= 4) return "core";
+  if (rpe <= 6) return "mobility";
+  if (rpe <= 7.5) return "cardio";
+  return "strength";
+}
+function planFor(day) {
+  return weeklyPlan.find(p => p.day === day) || weeklyPlan[0];
+}
+function dayExercises(day) {
+  return exercises.filter(e => e.day === day);
+}
+function setTab(tab) {
+  document.querySelectorAll(".tab[data-tab]").forEach(btn => btn.classList.toggle("active", btn.dataset.tab === tab));
+  document.querySelectorAll(".section").forEach(sec => sec.classList.toggle("active", sec.id === tab));
+  render();
+}
+function setDay(day) {
+  selectedDay = day;
+  render();
+}
+function setWeek(week) {
+  selectedWeek = week;
+  render();
+}
+function toggleDay(week, day) {
+  const key = dayKey(week, day);
+  completedDays[key] = !completedDays[key];
+  save("workout_dashboard_days_v2", completedDays);
+  render();
+}
+function toggleExercise(week, ex) {
+  const key = exerciseKey(week, ex);
+  logs[key] = logs[key] || {};
+  logs[key].done = !logs[key].done;
+  save("workout_dashboard_logs_v2", logs);
+  render();
+}
+function updateLog(key, field, value) {
+  logs[key] = logs[key] || {};
+  logs[key][field] = value;
+  save("workout_dashboard_logs_v2", logs);
+  renderStatsOnly();
+}
+function renderWeekButtons(containerId) {
+  const box = document.getElementById(containerId);
+  if (!box) return;
+  box.innerHTML = weeks.map(w => `<button class="pill ${selectedWeek===w?'active':''}" onclick="setWeek(${w})">Week ${w}</button>`).join("");
+}
+function renderDayGrid() {
+  const grid = document.getElementById("dayGrid");
+  grid.innerHTML = trainingDays.map(day => {
+    const p = planFor(day);
+    const done = !!completedDays[dayKey(selectedWeek, day)];
+    return `<button class="day-card ${done?'done':''}" onclick="setDay('${day}'); setTab('workouts')">
+      <div class="day-card-top"><b>${day}</b><span class="done-chip">${done?'Done':'Open'}</span></div>
+      <div style="font-weight:1000; line-height:1.35;">${p.focus}</div>
+      <div style="color:var(--muted); font-size:12px; margin-top:14px;">${p.length}</div>
+    </button>`;
+  }).join("");
+}
+function renderToday() {
+  const p = planFor(selectedDay);
+  document.getElementById("todayDay").textContent = p.day;
+  document.getElementById("todayFocus").textContent = p.focus;
+  document.getElementById("todayGoal").textContent = p.mainGoal;
+  document.getElementById("todayDetails").innerHTML = `
+    <p class="detail-line"><b>Main work:</b> ${p.primaryWork}</p>
+    <p class="detail-line"><b>Optional:</b> ${p.optional}</p>
+    <p class="detail-line"><b>Length:</b> ${p.length}</p>
+    <p class="detail-line"><b>Coach note:</b> ${p.notes}</p>`;
+  const btn = document.getElementById("markDayBtn");
+  const done = !!completedDays[dayKey(selectedWeek, selectedDay)];
+  btn.textContent = done ? "Marked Complete" : "Mark Day Complete";
+  btn.onclick = () => toggleDay(selectedWeek, selectedDay);
+}
+function renderSideDays() {
+  const box = document.getElementById("sideDayButtons");
+  box.innerHTML = trainingDays.map(day => {
+    const p = planFor(day);
+    return `<button class="side-btn ${selectedDay===day?'active':''}" onclick="setDay('${day}')"><b>${day}</b><br><span style="color:var(--muted);">${p.focus}</span></button>`;
+  }).join("");
+}
+function renderVolumeTags() {
+  const counts = {};
+  dayExercises(selectedDay).forEach(ex => counts[ex.category] = (counts[ex.category] || 0) + Number(ex.sets || 0));
+  document.getElementById("volumeTags").innerHTML = Object.entries(counts).map(([cat,total]) => `<span class="tag ${categoryClass(cat)}">${cat}: ${total}</span>`).join("");
+}
+function renderExercises() {
+  const p = planFor(selectedDay);
+  document.getElementById("workoutDayLabel").textContent = selectedDay;
+  document.getElementById("workoutTitle").textContent = p.focus;
+  document.getElementById("workoutNote").textContent = p.notes;
+  document.getElementById("exerciseList").innerHTML = dayExercises(selectedDay).map((ex, index) => {
+    const key = exerciseKey(selectedWeek, ex);
+    const log = logs[key] || {};
+    return `<article class="card exercise">
+      <div class="exercise-head">
+        <div class="ex-title-row">
+          <button class="check ${log.done?'done':''}" onclick='toggleExercise(${selectedWeek}, exercises.find(e => exerciseKey(${selectedWeek}, e) === "${key}"))'>✓</button>
+          <div>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px;">
+              <span class="tag">#${index+1}</span>
+              <span class="tag ${categoryClass(ex.category)}">${ex.category}</span>
+              <span class="tag ${rpeClass(ex.rpe)}">Target RPE ${ex.rpe}</span>
+            </div>
+            <h2 style="font-size:25px;">${ex.name}</h2>
+            <p class="detail-line">${ex.notes}</p>
+          </div>
+        </div>
+        <div class="metric-grid">
+          <div class="metric"><small>Sets</small><b>${ex.sets}</b></div>
+          <div class="metric"><small>Reps or Time</small><b style="font-size:14px;">${ex.reps}</b></div>
+          <label class="field"><span>Load</span><input value="${log.load || ''}" placeholder="lbs" oninput="updateLog('${key}','load',this.value)"></label>
+          <label class="field"><span>Actual RPE</span><input value="${log.actualRpe || ''}" placeholder="1 to 10" oninput="updateLog('${key}','actualRpe',this.value)"></label>
+        </div>
+      </div>
+      <div class="log-grid">
+        <label class="field"><span>Actual reps or time completed</span><input value="${log.actualReps || ''}" placeholder="Example: 8, 8, 7 or 32 min" oninput="updateLog('${key}','actualReps',this.value)"></label>
+        <label class="field"><span>Notes</span><input value="${log.notes || ''}" placeholder="Form, energy, pain, wins, substitutions" oninput="updateLog('${key}','notes',this.value)"></label>
+      </div>
+    </article>`;
+  }).join("");
+}
+function renderTracker() {
+  const body = document.getElementById("trackerBody");
+  body.innerHTML = exercises.map(ex => {
+    const key = exerciseKey(selectedWeek, ex);
+    const log = logs[key] || {};
+    return `<tr>
+      <td><button class="pill ${log.done?'active':''}" onclick='toggleExercise(${selectedWeek}, exercises.find(e => exerciseKey(${selectedWeek}, e) === "${key}"))'>${log.done?'Done':'Open'}</button></td>
+      <td><b>${ex.day}</b></td>
+      <td><b style="color:white;">${ex.name}</b><br><span style="color:var(--muted2);">${ex.category}</span></td>
+      <td>${ex.sets} sets, ${ex.reps}</td>
+      <td><span class="tag ${rpeClass(ex.rpe)}">${ex.rpe}</span></td>
+      <td>${log.load || ""}</td>
+      <td>${log.actualReps || ""}</td>
+      <td>${log.actualRpe || ""}</td>
+      <td>${log.notes || ""}</td>
+    </tr>`;
+  }).join("");
+}
+function renderGuide() {
+  document.getElementById("rpeGuide").innerHTML = rpeGuide.map(item => `
+    <div class="guide-item">
+      <div class="guide-top">
+        <div><span class="tag ${rpeClass(item.rpe)}">RPE ${item.rpe}</span><h3 style="margin:12px 0 0;">${item.meaning}</h3></div>
+        <span class="tag">${item.reserve}</span>
+      </div>
+      <p class="detail-line">${item.feel}</p>
+    </div>
+  `).join("");
+}
+function renderStatsOnly() {
+  const totalTrainingSessions = trainingDays.length * weeks.length;
+  const completeDayCount = Object.values(completedDays).filter(Boolean).length;
+  const exerciseKeys = exercises.flatMap(ex => weeks.map(w => exerciseKey(w, ex)));
+  const completedExerciseCount = exerciseKeys.filter(k => logs[k]?.done).length;
+  const totalExerciseInstances = exerciseKeys.length;
+  const rpes = exerciseKeys.map(k => Number(logs[k]?.actualRpe)).filter(v => Number.isFinite(v) && v > 0);
+  const avgRpe = rpes.length ? (rpes.reduce((a,b)=>a+b,0)/rpes.length).toFixed(1) : "0.0";
+  const totalSets = exercises.reduce((sum, ex) => sum + Number(ex.sets || 0), 0);
+  const dayPct = Math.round((completeDayCount / totalTrainingSessions) * 100);
+  const exercisePct = Math.round((completedExerciseCount / totalExerciseInstances) * 100);
+  document.getElementById("daysCompleted").textContent = `${completeDayCount}/${totalTrainingSessions}`;
+  document.getElementById("exerciseCompletion").textContent = `${exercisePct}%`;
+  document.getElementById("exerciseCompletionSub").textContent = `${completedExerciseCount} of ${totalExerciseInstances} logged as done`;
+  document.getElementById("weeklySets").textContent = totalSets;
+  document.getElementById("averageRpe").textContent = avgRpe;
+  document.getElementById("dayProgress").style.width = `${dayPct}%`;
+}
+function render() {
+  renderWeekButtons("weekButtonsDashboard");
+  renderWeekButtons("weekButtonsWorkout");
+  renderWeekButtons("weekButtonsTracker");
+  renderDayGrid();
+  renderToday();
+  renderSideDays();
+  renderVolumeTags();
+  renderExercises();
+  renderTracker();
+  renderGuide();
+  renderStatsOnly();
+}
+document.getElementById("tabs").addEventListener("click", (e) => {
+  const btn = e.target.closest("button[data-tab]");
+  if (btn) setTab(btn.dataset.tab);
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if (confirm("Reset all workout progress and logs?")) {
+    logs = {};
+    completedDays = {};
+    save("workout_dashboard_logs_v2", logs);
+    save("workout_dashboard_days_v2", completedDays);
+    render();
+  }
+});
+render();
+</script>
+</body>
+</html>
