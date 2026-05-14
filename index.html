@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Workout Plan Dashboard Mobile Fixed</title>
+  <title>Workout Plan Dashboard v2 Tutorials</title>
   <style>
     :root {
       --bg: #070814;
@@ -477,6 +477,92 @@
       word-break: break-word;
     }
 
+
+    .tutorial-box {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .tutorial-box summary {
+      list-style: none;
+      padding: 13px 14px;
+      font-weight: 1000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .tutorial-box summary::-webkit-details-marker { display: none; }
+
+    .tutorial-content {
+      border-top: 1px solid var(--border);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 7px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mini-list li {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      display: flex;
+      gap: 8px;
+    }
+
+    .mini-list li::before {
+      content: "•";
+      color: var(--cyan);
+      font-weight: 1000;
+    }
+
+    .link-btn {
+      border: 1px solid rgba(125,211,252,.28);
+      background: rgba(125,211,252,.12);
+      color: #e4f8ff;
+      min-height: 42px;
+      border-radius: 16px;
+      padding: 11px 13px;
+      font-weight: 1000;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .timer-card {
+      background: linear-gradient(135deg, rgba(134,239,172,.12), rgba(125,211,252,.10));
+      margin-top: 12px;
+      padding: 14px;
+    }
+
+    .timer-display {
+      font-size: 44px;
+      font-weight: 1000;
+      letter-spacing: -.06em;
+      margin: 10px 0 0;
+    }
+
+    .timer-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
     .bottom-nav {
       position: fixed;
       left: 10px;
@@ -546,7 +632,93 @@
         max-width: 480px;
       }
 
-      .bottom-nav {
+  
+    .tutorial-box {
+      margin-top: 12px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.18);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .tutorial-box summary {
+      list-style: none;
+      padding: 13px 14px;
+      font-weight: 1000;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .tutorial-box summary::-webkit-details-marker { display: none; }
+
+    .tutorial-content {
+      border-top: 1px solid var(--border);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 7px;
+      margin: 8px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .mini-list li {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.35;
+      display: flex;
+      gap: 8px;
+    }
+
+    .mini-list li::before {
+      content: "•";
+      color: var(--cyan);
+      font-weight: 1000;
+    }
+
+    .link-btn {
+      border: 1px solid rgba(125,211,252,.28);
+      background: rgba(125,211,252,.12);
+      color: #e4f8ff;
+      min-height: 42px;
+      border-radius: 16px;
+      padding: 11px 13px;
+      font-weight: 1000;
+      text-align: center;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+    }
+
+    .timer-card {
+      background: linear-gradient(135deg, rgba(134,239,172,.12), rgba(125,211,252,.10));
+      margin-top: 12px;
+      padding: 14px;
+    }
+
+    .timer-display {
+      font-size: 44px;
+      font-weight: 1000;
+      letter-spacing: -.06em;
+      margin: 10px 0 0;
+    }
+
+    .timer-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .bottom-nav {
         position: sticky;
         top: 12px;
         left: auto;
@@ -636,9 +808,9 @@
 <body>
   <main class="app">
     <header class="hero">
-      <div class="badge">🏋️ Mobile first workout dashboard</div>
+      <div class="badge">🏋️ Workout Dashboard v2</div>
       <h1>Workout Command Center</h1>
-      <p class="hero-text">A cleaner phone friendly version of your 5 day plan. Track workouts, RPE, load, reps, notes, and weekly progress without fighting a spreadsheet on mobile.</p>
+      <p class="hero-text">A cleaner phone friendly version of your 5 day plan with exercise tutorial buttons, form cues, common mistakes, substitutions, rest timer, and previous best tracking. No manual step tracker included.</p>
       <div class="hero-meta">
         <div class="mini"><small>Goal</small><b>Muscle, strength, endurance, flexibility</b></div>
         <div class="mini"><small>Setup</small><b>Building gym plus trails</b></div>
@@ -695,6 +867,19 @@
             <h2>Choose Day</h2>
           </div>
           <div class="day-row vertical" id="workoutDayControls"></div>
+
+          <div class="card timer-card">
+            <span class="tag core">Rest Timer</span>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+              <button class="secondary" data-timer="60">60 sec</button>
+              <button class="secondary" data-timer="90">90 sec</button>
+              <button class="secondary" data-timer="120">2 min</button>
+              <button class="secondary" data-timer="180">3 min</button>
+              <button class="primary" id="timerStart">Start</button>
+              <button class="danger" id="timerReset">Reset</button>
+            </div>
+          </div>
         </aside>
 
         <div class="stack">
@@ -756,7 +941,11 @@
       day: localStorage.getItem("wp_day_mobile_fixed") || "Day 1",
       trackerDay: localStorage.getItem("wp_tracker_day_mobile_fixed") || "All",
       logs: readStore("wp_logs_mobile_fixed", {}),
-      completedDays: readStore("wp_days_mobile_fixed", {})
+      completedDays: readStore("wp_days_mobile_fixed", {}),
+      timerSeconds: 0,
+      timerTotal: 0,
+      timerRunning: false,
+      timerInterval: null
     };
 
     function readStore(key, fallback) {
@@ -931,7 +1120,7 @@
             <div class="plan-grid">
               <div class="plan-cell"><small>Sets</small><b>${exercise.sets}</b></div>
               <div class="plan-cell"><small>Reps or Time</small><b>${exercise.reps}</b></div>
-              <div class="plan-cell"><small>Target RPE</small><b>${exercise.rpe}</b></div>
+              <div class="plan-cell"><small>Previous Best</small><b>${lastBestFor(exercise.index)}</b></div>
             </div>
 
             <div class="log-grid">
@@ -952,6 +1141,24 @@
                 <input placeholder="Form, energy, pain, wins" value="${escapeHtml(log.notes || "")}" data-input-key="${key}" data-field="notes" />
               </div>
             </div>
+
+            ${(() => {
+              const tutorial = tutorialData(exercise.name);
+              const videoUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent(exercise.name + " proper form tutorial");
+              const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(exercise.name + " exercise form guide");
+              return `<details class="tutorial-box">
+                <summary>Exercise Tutorial Mode <span>＋</span></summary>
+                <div class="tutorial-content">
+                  <div class="button-row">
+                    <a class="link-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Watch Tutorial</a>
+                    <a class="link-btn" href="${searchUrl}" target="_blank" rel="noopener noreferrer">Form Guide Search</a>
+                  </div>
+                  <div><span class="tag core">Form Cues</span><ul class="mini-list">${listItems(tutorial.cues)}</ul></div>
+                  <div><span class="tag strength">Common Mistakes</span><ul class="mini-list">${listItems(tutorial.mistakes)}</ul></div>
+                  <div><span class="tag accessory">Substitutions</span><ul class="mini-list">${listItems(tutorial.subs)}</ul></div>
+                </div>
+              </details>`;
+            })()}
           </article>
         `;
       }).join("");
@@ -1020,6 +1227,47 @@
       });
     }
 
+
+
+    function renderTimer() {
+      const display = document.getElementById("timerDisplay");
+      const button = document.getElementById("timerStart");
+      if (!display || !button) return;
+      const minutes = String(Math.floor(state.timerSeconds / 60)).padStart(2, "0");
+      const seconds = String(state.timerSeconds % 60).padStart(2, "0");
+      display.textContent = `${minutes}:${seconds}`;
+      button.textContent = state.timerRunning ? "Pause" : "Start";
+    }
+
+    function startTimer() {
+      if (state.timerRunning) {
+        clearInterval(state.timerInterval);
+        state.timerRunning = false;
+        renderTimer();
+        return;
+      }
+      if (state.timerSeconds <= 0) state.timerSeconds = state.timerTotal || 90;
+      state.timerRunning = true;
+      state.timerInterval = setInterval(() => {
+        state.timerSeconds -= 1;
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timerInterval);
+          state.timerSeconds = 0;
+          state.timerRunning = false;
+          if ("vibrate" in navigator) navigator.vibrate([180, 80, 180]);
+        }
+        renderTimer();
+      }, 1000);
+      renderTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(state.timerInterval);
+      state.timerRunning = false;
+      state.timerSeconds = state.timerTotal || 0;
+      renderTimer();
+    }
+
     function renderAll() {
       saveState();
       renderNav();
@@ -1035,6 +1283,51 @@
       renderTrackerFilters();
       renderTracker();
       renderRpe();
+      renderTimer();
+    }
+
+
+
+    function tutorialData(name) {
+      const n = String(name).toLowerCase();
+      if (n.includes("bench press") || n.includes("chest press") || n.includes("push ups") || n.includes("incline dumbbell")) return { cues:["Shoulder blades back and down","Feet planted and core tight","Lower under control, press without bouncing"], mistakes:["Flaring elbows too wide","Letting shoulders roll forward","Using a weight that kills range of motion"], subs:["Machine chest press","Dumbbell press","Push ups"] };
+      if (n.includes("lat pulldown")) return { cues:["Chest tall and ribs down","Pull elbows toward your pockets","Control the weight back up"], mistakes:["Leaning way back","Shrugging shoulders","Pulling with arms only"], subs:["Assisted pull up","Cable pullover","Band pulldown"] };
+      if (n.includes("row")) return { cues:["Brace before you pull","Drive elbows back","Pause and squeeze upper back"], mistakes:["Jerking with lower back","Letting shoulders shrug","Cutting the rep short"], subs:["One arm dumbbell row","Machine row","Resistance band row"] };
+      if (n.includes("shoulder press")) return { cues:["Brace ribs down","Press slightly back over ears","Keep wrists stacked over elbows"], mistakes:["Overarching low back","Pressing too far forward","Going too heavy too soon"], subs:["Machine shoulder press","Landmine press","Seated dumbbell press"] };
+      if (n.includes("triceps")) return { cues:["Keep elbows still","Fully straighten at the bottom","Control the return"], mistakes:["Letting elbows drift","Using body swing","Short reps"], subs:["Rope pressdown","Bench dips","Dumbbell skull crusher"] };
+      if (n.includes("curl") && !n.includes("leg") && !n.includes("hamstring")) return { cues:["Elbows stay close","Curl without swinging","Squeeze at the top"], mistakes:["Rocking the torso","Letting wrists bend back","Dropping the weight fast"], subs:["Cable curl","Hammer curl","EZ bar curl"] };
+      if (n.includes("dead bug")) return { cues:["Low back gently pressed down","Move slow","Exhale as arm and leg extend"], mistakes:["Arching the back","Rushing reps","Moving too far before you can control it"], subs:["Bird dog","Plank","Heel taps"] };
+      if (n.includes("squat") || n.includes("leg press")) return { cues:["Brace first","Knees track with toes","Use a depth you can control"], mistakes:["Knees collapsing inward","Rounding low back","Bouncing out of the bottom"], subs:["Goblet squat","Hack squat","Leg press"] };
+      if (n.includes("romanian")) return { cues:["Push hips back","Keep dumbbells close","Feel hamstrings stretch"], mistakes:["Turning it into a squat","Rounding the back","Reaching too low just to go lower"], subs:["Dumbbell RDL","Cable pull through","Back extension"] };
+      if (n.includes("lunge")) return { cues:["Tall chest","Step with control","Push through the whole front foot"], mistakes:["Crashing into the front knee","Losing balance from rushing","Taking tiny uneven steps"], subs:["Reverse lunge","Split squat","Step up"] };
+      if (n.includes("leg curl") || n.includes("hamstring curl")) return { cues:["Set hips firmly","Curl smoothly","Slowly lower"], mistakes:["Lifting hips off pad","Using momentum","Not controlling the negative"], subs:["Seated leg curl","Lying leg curl","Stability ball curl"] };
+      if (n.includes("calf")) return { cues:["Full stretch at bottom","Pause at the top","Do not bounce"], mistakes:["Tiny range of motion","Fast bouncing reps","Letting ankles roll"], subs:["Standing calf raise","Seated calf raise","Single leg calf raise"] };
+      if (n.includes("plank")) return { cues:["Squeeze glutes","Ribs down","Straight line from head to heels"], mistakes:["Hips sagging","Holding breath","Shrugging shoulders"], subs:["Knee plank","Dead bug","Side plank"] };
+      if (n.includes("stretch") || n.includes("mobility") || n.includes("rotations") || n.includes("squat hold")) return { cues:["Move slowly","Breathe through the stretch","Stay away from sharp pain"], mistakes:["Forcing range","Bouncing aggressively","Holding your breath"], subs:["Gentle walk","Dynamic warm up","Foam rolling"] };
+      if (n.includes("trail") || n.includes("treadmill") || n.includes("bike") || n.includes("zone 2")) return { cues:["Start easier than you think","Keep breathing controlled","Finish with energy left"], mistakes:["Turning easy cardio into a sprint","Skipping warm up","Ignoring knee or shin pain"], subs:["Incline walk","Stationary bike","Elliptical"] };
+      if (n.includes("lateral raise")) return { cues:["Soft elbows","Lead with elbows","Stop around shoulder height"], mistakes:["Swinging heavy weight","Shrugging traps","Going too high"], subs:["Cable lateral raise","Machine lateral raise","Lean away lateral raise"] };
+      if (n.includes("face pull")) return { cues:["Pull toward forehead","Elbows high","Squeeze rear delts"], mistakes:["Using too much weight","Low elbow path","Arching back"], subs:["Reverse pec deck","Band face pull","Rear delt fly"] };
+      if (n.includes("deadlift")) return { cues:["Brace hard","Push floor away","Keep weight close"], mistakes:["Rounding back","Yanking from the floor","Letting hips shoot up first"], subs:["Trap bar deadlift","Dumbbell deadlift","Rack pull"] };
+      if (n.includes("bulgarian")) return { cues:["Set front foot stable","Control the descent","Drive through front foot"], mistakes:["Front foot too close","Rushing reps","Letting knee cave inward"], subs:["Split squat","Reverse lunge","Step up"] };
+      if (n.includes("leg extension")) return { cues:["Back against pad","Lift smoothly","Pause at the top"], mistakes:["Swinging the stack","Locking out aggressively","Setting pad incorrectly"], subs:["Goblet squat","Leg press","Step up"] };
+      if (n.includes("hip thrust") || n.includes("glute bridge")) return { cues:["Ribs down","Chin tucked","Squeeze glutes at top"], mistakes:["Overarching low back","Feet too far away","Not reaching full lockout"], subs:["Glute bridge","Cable pull through","Back extension"] };
+      if (n.includes("knee raise") || n.includes("cable crunch")) return { cues:["Curl pelvis up","Move with control","Exhale on the crunch"], mistakes:["Swinging legs","Using hip flexors only","Rushing reps"], subs:["Reverse crunch","Dead bug","Machine crunch"] };
+      return { cues:["Start light","Control the movement","Stop if sharp pain appears"], mistakes:["Rushing","Going too heavy","Ignoring form"], subs:["Machine version","Dumbbell version","Bodyweight version"] };
+    }
+
+    function listItems(items) {
+      return items.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+    }
+
+    function lastBestFor(index) {
+      const previousWeeks = weeks.filter(week => week < state.week).reverse();
+      for (const week of previousWeeks) {
+        const log = state.logs[exerciseKey(week, index)];
+        if (log && (log.load || log.actualReps || log.actualRpe)) {
+          return `Week ${week}: ${log.load || "no load"} • ${log.actualReps || "no reps"} • RPE ${log.actualRpe || "?"}`;
+        }
+      }
+      return "No previous best yet";
     }
 
     function setScreen(screen) {
@@ -1061,6 +1354,15 @@
 
       if (button.dataset.screenJump) {
         setScreen(button.dataset.screenJump);
+        return;
+      }
+
+      if (button.dataset.timer) {
+        state.timerTotal = Number(button.dataset.timer);
+        state.timerSeconds = state.timerTotal;
+        state.timerRunning = false;
+        clearInterval(state.timerInterval);
+        renderTimer();
         return;
       }
 
@@ -1118,6 +1420,8 @@
     });
 
     document.getElementById("resetMobile").addEventListener("click", resetProgress);
+    document.getElementById("timerStart").addEventListener("click", startTimer);
+    document.getElementById("timerReset").addEventListener("click", resetTimer);
     document.getElementById("resetDesktop").addEventListener("click", resetProgress);
 
     renderAll();
