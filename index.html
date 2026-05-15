@@ -3,113 +3,1422 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>FORGE Workout Dashboard</title>
+  <title>Workout Plan Dashboard v2 Tutorials</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
+
     :root {
-      --ink-0:#050608; --ink-1:#0A0D0F; --ink-2:#12161A; --ink-3:#1B2025; --ink-4:#262C32; --ink-5:#3A4148;
-      --bone-0:#FFFFFF; --bone-1:#F7F6F2; --bone-2:#C7C9CC; --bone-3:#8A9099; --bone-4:#5A6068;
-      --volt-300:#EBFF7A; --volt-400:#DCFF4A; --volt-500:#D7FF1E; --volt-600:#B8DD0A; --volt-700:#8FAB00;
-      --heat-400:#FF6A3D; --heat-500:#FF3B1A; --heat-600:#D62208;
-      --steel-400:#6FA8FF; --steel-500:#2F7BFF; --success:#00E676; --warning:#FFB300;
-      --fg-1:var(--bone-1); --fg-2:var(--bone-2); --fg-3:var(--bone-3); --fg-inverse:var(--ink-1);
-      --bg-app:var(--ink-1); --bg-elev-1:var(--ink-2); --bg-elev-2:var(--ink-3); --border-subtle:var(--ink-4); --border-strong:var(--ink-5);
-      --font-display:'Bebas Neue','Barlow Condensed','Impact','Arial Narrow',sans-serif;
-      --font-condensed:'Barlow Condensed','Oswald','Arial Narrow',sans-serif;
-      --font-body:'Manrope',system-ui,-apple-system,'Helvetica Neue',sans-serif;
-      --font-mono:'JetBrains Mono',ui-monospace,'SF Mono',Menlo,monospace;
-      --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-7:32px; --s-8:40px;
-      --r-0:0; --r-1:2px; --r-2:4px; --r-3:8px; --r-4:12px; --r-pill:999px;
-      --shadow-2:0 8px 24px rgba(0,0,0,.55); --shadow-volt:0 0 0 1px rgba(215,255,30,.4), 0 8px 24px rgba(215,255,30,.15);
+      /* Ink — backgrounds */
+      --ink-0: #050608;
+      --ink-1: #0A0D0F;
+      --ink-2: #12161A;
+      --ink-3: #1B2025;
+      --ink-4: #262C32;
+      --ink-5: #3A4148;
+      /* Bone — text */
+      --bone-1: #F7F6F2;
+      --bone-2: #C7C9CC;
+      --bone-3: #8A9099;
+      --bone-4: #5A6068;
+      /* Volt — signature accent */
+      --volt-400: #DCFF4A;
+      --volt-500: #D7FF1E;
+      --volt-600: #B8DD0A;
+      /* Heat / Steel */
+      --heat-500: #FF3B1A;
+      --steel-500: #2F7BFF;
+      /* Semantic */
+      --success: #00E676;
+      --warning: #FFB300;
+
+      /* Legacy aliases (preserves all original class behaviour) */
+      --bg: var(--ink-1);
+      --card: var(--ink-2);
+      --card2: var(--ink-3);
+      --border: var(--ink-4);
+      --text: var(--bone-1);
+      --muted: var(--bone-2);
+      --faint: var(--bone-3);
+      --cyan: var(--volt-500);
+      --purple: var(--volt-500);
+      --pink: var(--volt-500);
+      --green: var(--success);
+      --orange: var(--warning);
+      --red: var(--heat-500);
+
+      /* Type */
+      --font-display: 'Bebas Neue', 'Barlow Condensed', Impact, sans-serif;
+      --font-cond: 'Barlow Condensed', 'Oswald', sans-serif;
+      --font-body: 'Manrope', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
     }
 
-    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent} html,body{margin:0;min-height:100%;background:var(--bg-app);color:var(--fg-1);font-family:var(--font-body)}
-    body{overflow-x:hidden;padding-bottom:calc(92px + env(safe-area-inset-bottom));background:radial-gradient(circle at 0 0,rgba(215,255,30,.10),transparent 28%),radial-gradient(circle at 100% 18%,rgba(255,59,26,.12),transparent 30%),var(--bg-app)}
-    button,input,textarea{font:inherit} button{cursor:pointer;color:inherit} a{color:inherit;text-decoration:none} input{width:100%;min-height:46px;border:1px solid var(--ink-4);background:var(--ink-0);color:var(--bone-1);border-radius:var(--r-2);padding:12px;font-size:16px;outline:none} input:focus{border-color:var(--volt-500);box-shadow:var(--shadow-volt)}
-    .app{width:min(100%,1120px);margin:0 auto;padding:12px}.screen{display:none;margin-top:12px}.screen.active{display:block}.stack{display:grid;gap:12px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-    .forge-hero{position:relative;overflow:hidden;border:1px solid var(--ink-4);background:linear-gradient(135deg,var(--ink-2),var(--ink-0));border-radius:var(--r-4);padding:18px;box-shadow:var(--shadow-2)}.forge-hero:before{content:"";position:absolute;inset:auto -30px -60px auto;width:170px;height:170px;background:var(--volt-500);opacity:.08;transform:rotate(15deg)}
-    .brand{display:flex;align-items:center;gap:8px}.brand-mark{width:34px;height:34px;background:var(--volt-500);color:var(--ink-1);font-family:var(--font-display);font-size:38px;line-height:.8;display:flex;align-items:center;justify-content:center}.brand-word{font-family:var(--font-display);font-size:28px;letter-spacing:.04em;text-transform:uppercase}.eyebrow{font-family:var(--font-mono);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--volt-500)}
-    h1{margin:18px 0 0;font-family:var(--font-display);font-size:clamp(64px,20vw,126px);line-height:.82;letter-spacing:-.02em;text-transform:uppercase}.hero-line{display:block}.hero-line.volt{color:var(--volt-500)}.hero-copy{margin:14px 0 0;color:var(--bone-2);font-weight:700;font-size:14px;line-height:1.45;max-width:720px}.hero-actions{display:grid;grid-template-columns:1fr;gap:8px;margin-top:16px}
-    .card{border:1px solid var(--ink-4);background:var(--ink-2);border-radius:var(--r-3);padding:14px;box-shadow:0 1px 0 rgba(255,255,255,.04) inset}.card.inset{background:var(--ink-3)}.card.volt{background:var(--volt-500);color:var(--ink-1);border-color:var(--volt-500)}.card.heat{background:linear-gradient(135deg,rgba(255,59,26,.22),var(--ink-2));border-color:rgba(255,59,26,.4)}
-    .section-title{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px}.section-title h2{margin:0;font-family:var(--font-display);font-size:42px;line-height:.9;text-transform:uppercase;letter-spacing:-.01em}.muted{color:var(--bone-2);font-size:13px;line-height:1.45}.caption{color:var(--bone-3);font-size:11px;line-height:1.35}.label{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--bone-3);font-weight:800}.stat b{display:block;margin-top:6px;font-family:var(--font-mono);font-size:26px;line-height:1}.stat small{display:block;color:var(--bone-3);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;line-height:1.2}
-    .btn{min-height:48px;border-radius:var(--r-1);border:2px solid transparent;padding:12px 16px;font-family:var(--font-display);font-size:18px;line-height:1;text-transform:uppercase;letter-spacing:.06em;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .12s ease,filter .12s ease}.btn:active{transform:translateY(2px)}.btn.primary{background:var(--volt-500);color:var(--ink-1)}.btn.dark{background:var(--ink-0);border-color:var(--ink-5);color:var(--bone-1)}.btn.ghost{background:transparent;border-color:var(--ink-5);color:var(--bone-1)}.btn.danger{background:var(--heat-500);color:var(--bone-1)}.btn.full{width:100%}.chip-row,.day-row{display:flex;gap:8px;overflow-x:auto;padding:2px 0 8px;scrollbar-width:none}.chip-row::-webkit-scrollbar,.day-row::-webkit-scrollbar{display:none}.chip{flex:0 0 auto;border:1px solid var(--ink-4);background:var(--ink-3);border-radius:var(--r-pill);padding:10px 13px;font-family:var(--font-mono);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--bone-2)}.chip.active{background:var(--volt-500);color:var(--ink-1);border-color:var(--volt-500)}.chip.done{border-color:var(--success);color:var(--success)}
-    .tag-row{display:flex;flex-wrap:wrap;gap:6px}.tag{display:inline-flex;align-items:center;border:1px solid var(--ink-4);background:var(--ink-3);border-radius:var(--r-1);padding:5px 8px;font-family:var(--font-mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:800;color:var(--bone-2)}.tag.strength{color:var(--heat-400);border-color:rgba(255,106,61,.35)}.tag.hypertrophy{color:var(--volt-300);border-color:rgba(215,255,30,.25)}.tag.accessory{color:var(--steel-400);border-color:rgba(111,168,255,.35)}.tag.core{color:var(--success);border-color:rgba(0,230,118,.35)}.tag.cardio{color:var(--warning);border-color:rgba(255,179,0,.35)}.tag.mobility{color:#9ADFFF;border-color:rgba(154,223,255,.35)}
-    .progress{height:12px;background:var(--ink-3);border:1px solid var(--ink-4);border-radius:var(--r-pill);overflow:hidden}.progress span{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--volt-500),var(--heat-400));transition:width .2s ease}.day-card{width:100%;text-align:left;border:1px solid var(--ink-4);background:var(--ink-2);border-radius:var(--r-3);padding:14px}.day-card.done{border-color:rgba(0,230,118,.55);background:linear-gradient(135deg,rgba(0,230,118,.12),var(--ink-2))}.day-card h3{margin:10px 0 4px;font-family:var(--font-condensed);font-size:22px;line-height:1;text-transform:uppercase;letter-spacing:.04em}.day-card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
-    .exercise-card{border:1px solid var(--ink-4);background:var(--ink-2);border-radius:var(--r-3);padding:14px}.exercise-top{display:flex;gap:10px;align-items:flex-start}.check{flex:0 0 44px;width:44px;height:44px;border:2px solid var(--ink-5);background:var(--ink-0);color:var(--bone-3);font-family:var(--font-display);font-size:22px}.check.done{background:var(--volt-500);color:var(--ink-1);border-color:var(--volt-500)}.exercise-card h3{margin:8px 0 5px;font-family:var(--font-condensed);font-size:23px;text-transform:uppercase;letter-spacing:.04em;line-height:1}.plan-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}.plan-cell,.data-cell{border:1px solid var(--ink-4);background:var(--ink-0);border-radius:var(--r-2);padding:10px;min-height:68px}.plan-cell small,.data-cell small{display:block;color:var(--bone-3);font-size:10px;text-transform:uppercase;letter-spacing:.1em;font-weight:800}.plan-cell b,.data-cell b{display:block;margin-top:5px;font-family:var(--font-mono);font-size:13px;line-height:1.25;word-break:break-word}.log-grid{display:grid;grid-template-columns:1fr;gap:9px;margin-top:10px}.field label{display:block;color:var(--bone-3);font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
-    .tutorial-box{margin-top:12px;border:1px solid var(--ink-4);background:var(--ink-0);border-radius:var(--r-3);overflow:hidden}.tutorial-box summary{list-style:none;padding:13px 14px;font-family:var(--font-display);font-size:18px;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;display:flex;justify-content:space-between}.tutorial-box summary::-webkit-details-marker{display:none}.tutorial-content{border-top:1px solid var(--ink-4);padding:14px;display:grid;gap:12px}.mini-list{display:grid;gap:7px;margin:8px 0 0;padding:0;list-style:none}.mini-list li{color:var(--bone-2);font-size:13px;line-height:1.35;display:flex;gap:8px}.mini-list li:before{content:'//';color:var(--volt-500);font-family:var(--font-mono);font-size:10px;margin-top:2px}
-    .timer-card{background:linear-gradient(135deg,rgba(215,255,30,.12),var(--ink-2));border-color:rgba(215,255,30,.35)}.timer-display{font-family:var(--font-mono);font-size:52px;font-weight:800;line-height:1;margin-top:8px}.timer-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.session-hero{background:linear-gradient(135deg,var(--volt-500),var(--volt-600));color:var(--ink-1);border-color:var(--volt-500)}.session-hero h2{margin:8px 0 0;font-family:var(--font-display);font-size:52px;line-height:.85;text-transform:uppercase}.tracker-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}.bottom-nav{position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:100;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;padding:8px;border:1px solid var(--ink-4);border-radius:var(--r-4);background:rgba(10,13,15,.92);backdrop-filter:blur(18px);box-shadow:var(--shadow-2)}.nav-btn{border:1px solid transparent;background:transparent;min-height:52px;border-radius:var(--r-2);color:var(--bone-3);font-family:var(--font-mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;line-height:1.1}.nav-btn span{display:block;font-size:16px;margin-bottom:3px}.nav-btn.active{border-color:rgba(215,255,30,.35);background:rgba(215,255,30,.12);color:var(--volt-500)}.nav-btn.plus{background:var(--volt-500);color:var(--ink-1)}.nav-btn.plus.active{background:var(--volt-500);color:var(--ink-1)}
-    @media (min-width:720px){body{padding-bottom:24px}.app{padding:22px}.hero-actions{grid-template-columns:repeat(2,minmax(0,1fr));max-width:520px}.bottom-nav{position:sticky;top:12px;bottom:auto;left:auto;right:auto;margin-top:14px}.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}.day-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px}.workout-layout{display:grid;grid-template-columns:280px 1fr;gap:12px;align-items:start}.workout-side{position:sticky;top:98px}.day-row.vertical{display:grid;overflow:visible;padding:0}.log-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.log-grid .wide{grid-column:span 2}.tracker-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media (max-width:390px){.grid2,.grid3,.plan-grid,.tracker-grid,.timer-controls{grid-template-columns:1fr}h1{font-size:58px}.nav-btn{font-size:9px}.nav-btn span{font-size:14px}.session-hero h2{font-size:42px}}
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--ink-1);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 500;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      overflow-x: hidden;
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; color: inherit; }
+
+    input, textarea {
+      width: 100%;
+      border: 1px solid var(--ink-5);
+      outline: 0;
+      background: var(--ink-3);
+      color: var(--text);
+      border-radius: 2px;
+      padding: 12px 14px;
+      font-size: 15px;
+      font-weight: 500;
+      min-height: 46px;
+      font-family: var(--font-body);
+    }
+    input:focus, textarea:focus {
+      border-color: var(--volt-500);
+      box-shadow: 0 0 0 2px rgba(215,255,30,0.18);
+    }
+    input::placeholder, textarea::placeholder { color: var(--bone-4); }
+
+    textarea { resize: vertical; min-height: 72px; }
+
+    .app {
+      width: min(100%, 1180px);
+      margin: 0 auto;
+      padding: 14px;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-2);
+      border-radius: 2px;
+      padding: 22px;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 4px;
+      background: var(--volt-500);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 9px;
+      border-radius: 2px;
+      border: 1px solid var(--ink-5);
+      background: var(--ink-0);
+      color: var(--volt-500);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      line-height: 1;
+    }
+
+    h1 {
+      margin: 16px 0 0;
+      padding-bottom: 12px;
+      font-family: var(--font-display);
+      font-size: clamp(40px, 13vw, 76px);
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--bone-1);
+    }
+
+    .hero-text {
+      margin: 20px 0 0;
+      color: var(--bone-2);
+      font-size: 14px;
+      line-height: 1.55;
+      font-weight: 500;
+    }
+
+    .hero-meta {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 18px;
+    }
+
+    .mini {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-3);
+      border-radius: 2px;
+      padding: 12px 14px;
+    }
+    .mini small {
+      display: block;
+      color: var(--volt-500);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 10px;
+      font-weight: 700;
+    }
+    .mini b {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--font-body);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--bone-1);
+    }
+
+    /* ============ SCREENS / CARDS ============ */
+    .screen { display: none; margin-top: 14px; }
+    .screen.active { display: block; }
+
+    .card {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-2);
+      border-radius: 2px;
+      padding: 18px;
+    }
+
+    .stack { display: grid; gap: 12px; }
+    .grid2 { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 8px; }
+
+    .stat { min-height: 116px; padding: 16px; }
+    .stat small {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      line-height: 1.25;
+    }
+    .stat b {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--font-mono);
+      font-size: 32px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      color: var(--bone-1);
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============ SECTION TITLE ============ */
+    .section-title {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .section-title h2 {
+      margin: 0;
+      font-family: var(--font-display);
+      font-size: 28px;
+      line-height: 1;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--bone-1);
+    }
+
+    .muted {
+      color: var(--bone-2);
+      line-height: 1.5;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* ============ CHIPS (filters) ============ */
+    .week-row, .day-row {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 0 8px;
+      scrollbar-width: none;
+    }
+    .week-row::-webkit-scrollbar, .day-row::-webkit-scrollbar { display: none; }
+
+    .chip {
+      flex: 0 0 auto;
+      min-height: 38px;
+      border: 1px solid var(--ink-5);
+      background: var(--ink-3);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-family: var(--font-body);
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--bone-2);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+      transition: background 120ms cubic-bezier(.2,.9,.2,1);
+    }
+    .chip.active {
+      border-color: var(--volt-500);
+      background: var(--volt-500);
+      color: var(--ink-1);
+    }
+    .chip.done {
+      border-color: var(--success);
+      background: rgba(0,230,118,0.12);
+      color: var(--success);
+    }
+
+    /* ============ PROGRESS BAR ============ */
+    .progress {
+      height: 8px;
+      overflow: hidden;
+      border-radius: 0;
+      background: var(--ink-3);
+      border: 1px solid var(--ink-4);
+    }
+    .progress span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: var(--volt-500);
+      transition: width 250ms cubic-bezier(.2,.9,.2,1);
+    }
+
+    /* ============ DAY CARDS ============ */
+    .day-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+    .day-card {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-3);
+      border-radius: 2px;
+      padding: 14px;
+      text-align: left;
+      width: 100%;
+      position: relative;
+      transition: border-color 120ms ease;
+    }
+    .day-card:hover { border-color: var(--ink-5); }
+    .day-card.done {
+      border-color: rgba(0,230,118,0.4);
+      background: rgba(0,230,118,0.06);
+    }
+    .day-card.done::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 3px;
+      background: var(--success);
+    }
+
+    .day-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .day-card h3 {
+      margin: 10px 0 4px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      line-height: 0.95;
+      text-transform: uppercase;
+      color: var(--bone-1);
+      letter-spacing: 0;
+    }
+
+    /* ============ TAGS (categorical badges) ============ */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--ink-5);
+      border-radius: 2px;
+      padding: 4px 7px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--bone-2);
+      background: var(--ink-0);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      line-height: 1;
+    }
+    .tag.strength { color: var(--heat-500); border-color: var(--heat-500); background: rgba(255,59,26,0.08); }
+    .tag.hypertrophy { color: var(--volt-500); border-color: var(--volt-500); background: rgba(215,255,30,0.08); }
+    .tag.accessory { color: var(--steel-500); border-color: var(--steel-500); background: rgba(47,123,255,0.08); }
+    .tag.core { color: var(--success); border-color: var(--success); background: rgba(0,230,118,0.08); }
+    .tag.cardio { color: var(--warning); border-color: var(--warning); background: rgba(255,179,0,0.08); }
+    .tag.mobility { color: var(--bone-2); border-color: var(--bone-4); background: rgba(255,255,255,0.04); }
+
+    /* ============ TODAY HERO CARD ============ */
+    .today {
+      background: var(--volt-500);
+      color: var(--ink-1);
+      border-color: var(--volt-500);
+    }
+    .today::before { display: none; }
+    .today .tag {
+      background: var(--ink-1);
+      color: var(--volt-500);
+      border-color: var(--ink-1);
+    }
+    .today h2 {
+      margin: 12px 0 6px;
+      font-family: var(--font-display);
+      font-size: 36px;
+      letter-spacing: -0.01em;
+      line-height: 0.9;
+      text-transform: uppercase;
+      color: var(--ink-1);
+    }
+    .today .muted { color: rgba(10,13,15,0.78); font-weight: 600; }
+    .today .muted b { color: var(--ink-1) !important; }
+
+    /* ============ BUTTONS ============ */
+    .button-row {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .primary, .secondary, .danger {
+      border: 2px solid transparent;
+      min-height: 48px;
+      border-radius: 2px;
+      padding: 12px 16px;
+      font-family: var(--font-display);
+      font-weight: 400;
+      font-size: 18px;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      line-height: 1;
+      transition: filter 120ms cubic-bezier(.2,.9,.2,1);
+    }
+    .primary:active, .secondary:active, .danger:active { transform: translateY(1px); filter: brightness(0.92); }
+
+    .primary {
+      background: var(--ink-1);
+      color: var(--volt-500);
+      border-color: var(--ink-1);
+    }
+    .today .primary {
+      background: var(--ink-1);
+      color: var(--volt-500);
+    }
+    .screen:not(#dashboard) .primary,
+    .card:not(.today) .primary,
+    .timer-card .primary {
+      background: var(--volt-500);
+      color: var(--ink-1);
+      border-color: var(--volt-500);
+    }
+
+    .secondary {
+      border: 2px solid var(--ink-5);
+      background: transparent;
+      color: var(--bone-1);
+    }
+    .today .secondary {
+      border-color: var(--ink-1);
+      color: var(--ink-1);
+    }
+
+    .danger {
+      border: 2px solid var(--heat-500);
+      background: transparent;
+      color: var(--heat-500);
+    }
+
+    /* ============ EXERCISE CARD ============ */
+    .exercise-card {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-2);
+      border-radius: 2px;
+      padding: 16px;
+    }
+    .exercise-top {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .check {
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      border-radius: 2px;
+      border: 1.5px solid var(--ink-5);
+      background: transparent;
+      color: transparent;
+      font-weight: 900;
+      font-size: 20px;
+      transition: all 120ms cubic-bezier(.2,.9,.2,1);
+    }
+    .check.done {
+      background: var(--volt-500);
+      color: var(--ink-1);
+      border-color: var(--volt-500);
+    }
+
+    .exercise-card h3 {
+      margin: 10px 0 6px;
+      font-family: var(--font-display);
+      font-size: 26px;
+      line-height: 0.95;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: var(--bone-1);
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    /* ============ PLAN / DATA GRIDS ============ */
+    .plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .plan-cell {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-3);
+      border-radius: 2px;
+      padding: 10px 12px;
+      min-height: 64px;
+    }
+    .plan-cell small {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .plan-cell b {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--bone-1);
+      line-height: 1.2;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .log-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .field label {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin: 0 0 6px;
+    }
+
+    /* ============ TRACKER ============ */
+    .tracker-card {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-2);
+      border-radius: 2px;
+      padding: 16px;
+    }
+    .tracker-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .data-cell {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-3);
+      border-radius: 2px;
+      padding: 10px 12px;
+    }
+    .data-cell small {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+    .data-cell b {
+      display: block;
+      margin-top: 6px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--bone-1);
+      word-break: break-word;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ============ TUTORIAL BOX ============ */
+    .tutorial-box {
+      margin-top: 14px;
+      border: 1px solid var(--ink-4);
+      background: var(--ink-1);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .tutorial-box summary {
+      list-style: none;
+      padding: 12px 14px;
+      font-family: var(--font-display);
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--bone-1);
+    }
+    .tutorial-box summary > span {
+      color: var(--volt-500);
+      font-family: var(--font-mono);
+      font-size: 20px;
+    }
+    .tutorial-box[open] summary > span::before { content: '−'; }
+    .tutorial-box summary::-webkit-details-marker { display: none; }
+    .tutorial-content {
+      border-top: 1px solid var(--ink-4);
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+      background: var(--ink-2);
+    }
+    .mini-list {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+    .mini-list li {
+      color: var(--bone-2);
+      font-size: 13px;
+      line-height: 1.4;
+      display: flex;
+      gap: 10px;
+    }
+    .mini-list li::before {
+      content: "→";
+      color: var(--volt-500);
+      font-family: var(--font-mono);
+      font-weight: 700;
+    }
+
+    .link-btn {
+      border: 2px solid var(--ink-5);
+      background: transparent;
+      color: var(--bone-1);
+      min-height: 42px;
+      border-radius: 2px;
+      padding: 10px 14px;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 400;
+      text-align: center;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      line-height: 1;
+    }
+    .link-btn:hover {
+      border-color: var(--volt-500);
+      color: var(--volt-500);
+    }
+
+    /* ============ TIMER ============ */
+    .timer-card {
+      background: var(--ink-1);
+      border: 1px solid var(--volt-500);
+      border-radius: 2px;
+      margin-top: 14px;
+      padding: 16px;
+      position: relative;
+    }
+    .timer-display {
+      font-family: var(--font-mono);
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin: 14px 0 0;
+      color: var(--bone-1);
+      font-variant-numeric: tabular-nums;
+      line-height: 1;
+    }
+    .timer-controls {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .timer-controls .secondary { min-height: 42px; padding: 10px; font-size: 14px; }
+    .timer-controls .primary,
+    .timer-controls .danger { min-height: 42px; padding: 10px; font-size: 14px; }
+
+    /* ============ BOTTOM NAV ============ */
+    .bottom-nav {
+      position: fixed;
+      left: 10px;
+      right: 10px;
+      bottom: calc(10px + env(safe-area-inset-bottom));
+      z-index: 100;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap: 4px;
+      padding: 6px;
+      border: 1px solid var(--ink-4);
+      border-radius: 2px;
+      background: var(--ink-0);
+    }
+
+    .nav-btn {
+      border: 1.5px solid transparent;
+      background: transparent;
+      min-height: 52px;
+      border-radius: 2px;
+      color: var(--bone-3);
+      font-family: var(--font-body);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      line-height: 1.15;
+      padding: 8px 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+    .nav-btn svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .nav-btn.active {
+      color: var(--volt-500);
+      background: rgba(215,255,30,0.08);
+      border-color: var(--volt-500);
+    }
+
+    .desktop-only { display: none; }
+
+    @media (min-width: 720px) {
+      body { padding-bottom: 28px; }
+      .app { padding: 24px; }
+      .hero { padding: 32px; }
+      h1 { font-size: clamp(56px, 8vw, 96px); }
+      .hero-text { font-size: 16px; max-width: 850px; }
+      .hero-meta { grid-template-columns: repeat(2, minmax(0,1fr)); max-width: 540px; }
+
+      .bottom-nav {
+        position: sticky;
+        top: 12px;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        margin-top: 18px;
+        grid-template-columns: repeat(5, minmax(0,1fr));
+      }
+      .desktop-only { display: flex; }
+      .nav-btn { min-height: 46px; font-size: 11px; flex-direction: row; gap: 8px; }
+      .nav-btn svg { width: 14px; height: 14px; }
+
+      .grid2 { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .button-row { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .day-grid { grid-template-columns: repeat(5, minmax(0,1fr)); }
+      .day-card { min-height: 158px; }
+      .workout-layout {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 14px;
+        align-items: start;
+      }
+      .workout-side { position: sticky; top: 98px; }
+      .day-row.vertical { display: grid; overflow: visible; padding: 0; }
+      .log-grid { grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .log-grid .wide { grid-column: span 2; }
+      .tracker-list { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+
+    @media (max-width: 380px) {
+      .grid2, .plan-grid, .tracker-grid { grid-template-columns: 1fr; }
+      h1 { font-size: 40px; }
+    }
   </style>
 </head>
 <body>
   <main class="app">
-    <header class="forge-hero">
-      <div class="brand"><div class="brand-mark">F</div><div class="brand-word">FORGE</div></div>
-      <h1><span class="hero-line">Build</span><span class="hero-line">the</span><span class="hero-line volt">Engine.</span></h1>
-      <p class="hero-copy">A mobile first 5 day workout command center redesigned with the FORGE system: ink black, bone text, electric volt accents, sharp athletic cards, live logging, tutorial mode, and session flow.</p>
-      <div class="hero-actions"><button class="btn primary" data-screen-jump="session">Start Session</button><button class="btn ghost" data-screen-jump="workouts">Open Plan</button></div>
+    <header class="hero">
+      <div class="badge">v2 · No nonsense</div>
+      <h1>The couch isn't going anywhere.</h1>
+      <p class="hero-text">A cleaner phone friendly version of your 5 day plan. Tutorial buttons, form cues, common mistakes, substitutions, rest timer, and previous best tracking. Lift first. Sit later.</p>
+      <div class="hero-meta">
+        <div class="mini"><small>Goal</small><b>Muscle, strength, endurance, flexibility</b></div>
+        <div class="mini"><small>Setup</small><b>Building gym plus trails</b></div>
+      </div>
     </header>
 
     <nav class="bottom-nav" aria-label="Main navigation">
-      <button class="nav-btn active" data-screen="dashboard"><span>⌂</span>Home</button>
-      <button class="nav-btn" data-screen="workouts"><span>▤</span>Plan</button>
-      <button class="nav-btn plus" data-screen="session"><span>＋</span>Start</button>
-      <button class="nav-btn" data-screen="tracker"><span>✓</span>Log</button>
-      <button class="nav-btn" data-screen="rpe"><span>!</span>RPE</button>
+      <button class="nav-btn active" data-screen="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>Dashboard
+      </button>
+      <button class="nav-btn" data-screen="workouts">
+        <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M3 8h3M3 16h3M18 8h3M18 16h3M6 12h12"/></svg>Workouts
+      </button>
+      <button class="nav-btn" data-screen="tracker">
+        <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tracker
+      </button>
+      <button class="nav-btn" data-screen="rpe">
+        <svg viewBox="0 0 24 24"><path d="M3 20V8M9 20V4M15 20v-9M21 20v-5"/></svg>RPE
+      </button>
+      <button class="nav-btn desktop-only" id="resetDesktop">
+        <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9v4"/><path d="M9 7L12 3l3 4"/></svg>Reset
+      </button>
     </nav>
 
     <section class="screen active" id="dashboard">
       <div class="grid2" id="stats"></div>
-      <div class="card stack" style="margin-top:12px;"><div class="section-title"><div><div class="eyebrow">Cycle control</div><h2>Week Board</h2></div></div><div class="chip-row" id="weekControls"></div><div class="progress"><span id="progressBar"></span></div></div>
-      <div class="card session-hero" style="margin-top:12px;"><div class="eyebrow" style="color:var(--ink-1);opacity:.75" id="todayDayTag">Day 1</div><h2 id="todayTitle">Upper Body Strength</h2><p style="font-weight:800;line-height:1.35" id="todayGoal"></p><div class="stack" id="todayDetails"></div><div class="hero-actions"><button class="btn dark" id="toggleToday">Mark Day Complete</button><button class="btn dark" data-screen-jump="session">Start This Day</button></div></div>
-      <div class="card" style="margin-top:12px;"><div class="section-title"><div><div class="eyebrow">The split</div><h2>Training Days</h2></div></div><div class="day-grid" id="dashboardDays"></div></div>
-      <button class="btn danger full" id="resetMobile" style="margin-top:12px;">Reset Progress</button>
+
+      <div class="card stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Week Control</h2>
+            <p class="muted" style="margin:6px 0 0;">Choose the week you are logging.</p>
+          </div>
+        </div>
+        <div class="week-row" id="weekControls"></div>
+        <div class="progress"><span id="progressBar"></span></div>
+      </div>
+
+      <div class="card today" style="margin-top:12px;">
+        <span class="tag" id="todayDayTag">Day 1</span>
+        <h2 id="todayTitle">Upper Body Strength</h2>
+        <p class="muted" id="todayGoal"></p>
+        <div class="stack" id="todayDetails" style="margin-top:12px;"></div>
+        <div class="button-row">
+          <button class="primary" id="toggleToday">Mark Day Complete</button>
+          <button class="secondary" data-screen-jump="workouts">Open Workout →</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <div class="section-title">
+          <h2>Training Days</h2>
+        </div>
+        <div class="day-grid" id="dashboardDays"></div>
+      </div>
+
+      <button class="danger" id="resetMobile" style="width:100%; margin-top:12px;">Reset Progress</button>
     </section>
 
     <section class="screen" id="workouts">
       <div class="workout-layout">
-        <aside class="card workout-side"><div class="section-title"><div><div class="eyebrow">Plan</div><h2>Choose Day</h2></div></div><div class="day-row vertical" id="workoutDayControls"></div><div class="card timer-card" style="margin-top:12px;"><div class="eyebrow">Rest timer</div><div class="timer-display" id="timerDisplay">00:00</div><div class="timer-controls"><button class="btn ghost" data-timer="60">60s</button><button class="btn ghost" data-timer="90">90s</button><button class="btn ghost" data-timer="120">2m</button><button class="btn ghost" data-timer="180">3m</button><button class="btn primary" id="timerStart">Start</button><button class="btn danger" id="timerReset">Reset</button></div></div></aside>
-        <div class="stack"><div class="card"><div class="section-title"><div><div class="eyebrow" id="workoutDayTag">Day 1</div><h2 id="workoutTitle">Upper Body Strength</h2><p class="muted" id="workoutNote"></p></div></div><div class="chip-row" id="weekControlsWorkout"></div></div><div id="exerciseList" class="stack"></div></div>
+        <aside class="card workout-side">
+          <div class="section-title">
+            <h2>Choose Day</h2>
+          </div>
+          <div class="day-row vertical" id="workoutDayControls"></div>
+
+          <div class="card timer-card">
+            <span class="tag core">Rest Timer</span>
+            <div class="timer-display" id="timerDisplay">00:00</div>
+            <div class="timer-controls">
+              <button class="secondary" data-timer="60">60s</button>
+              <button class="secondary" data-timer="90">90s</button>
+              <button class="secondary" data-timer="120">2 min</button>
+              <button class="secondary" data-timer="180">3 min</button>
+              <button class="primary" id="timerStart">Start</button>
+              <button class="danger" id="timerReset">Reset</button>
+            </div>
+          </div>
+        </aside>
+
+        <div class="stack">
+          <div class="card">
+            <div class="section-title">
+              <div>
+                <span class="tag" id="workoutDayTag">Day 1</span>
+                <h2 id="workoutTitle" style="margin-top:8px;">Upper Body Strength</h2>
+                <p class="muted" id="workoutNote" style="margin-bottom:0;"></p>
+              </div>
+            </div>
+            <div class="week-row" id="weekControlsWorkout"></div>
+          </div>
+
+          <div id="exerciseList" class="stack"></div>
+        </div>
       </div>
     </section>
 
-    <section class="screen" id="session">
-      <div class="card session-hero"><div class="eyebrow" style="color:var(--ink-1);opacity:.75" id="sessionKicker">Live session</div><h2 id="sessionName">Exercise</h2><p style="font-weight:800;line-height:1.35" id="sessionMeta"></p><div class="progress" style="background:rgba(0,0,0,.25);border-color:rgba(0,0,0,.25)"><span id="sessionProgress"></span></div></div>
-      <div class="card stack" style="margin-top:12px;"><div class="tag-row" id="sessionTags"></div><p class="muted" id="sessionNotes"></p><div class="plan-grid" id="sessionPlan"></div><div class="log-grid" id="sessionLog"></div><details class="tutorial-box" open><summary>Tutorial Mode <span>＋</span></summary><div class="tutorial-content" id="sessionTutorial"></div></details><div class="hero-actions"><button class="btn ghost" id="prevExercise">Previous</button><button class="btn primary" id="nextExercise">Next Exercise</button></div></div>
-      <div class="card timer-card" style="margin-top:12px;"><div class="eyebrow">Rest timer</div><div class="timer-display" id="timerDisplaySession">00:00</div><div class="timer-controls"><button class="btn ghost" data-timer="60">60s</button><button class="btn ghost" data-timer="90">90s</button><button class="btn ghost" data-timer="120">2m</button><button class="btn ghost" data-timer="180">3m</button><button class="btn primary" id="timerStartSession">Start</button><button class="btn danger" id="timerResetSession">Reset</button></div></div>
+    <section class="screen" id="tracker">
+      <div class="card stack">
+        <div class="section-title">
+          <div>
+            <h2>Progress Tracker</h2>
+            <p class="muted" style="margin:6px 0 0;">Mobile friendly log cards instead of a hard to use spreadsheet table.</p>
+          </div>
+        </div>
+        <div class="week-row" id="weekControlsTracker"></div>
+        <div class="day-row" id="trackerDayFilters"></div>
+      </div>
+      <div id="trackerList" class="stack tracker-list" style="margin-top:12px;"></div>
     </section>
 
-    <section class="screen" id="tracker"><div class="card stack"><div class="section-title"><div><div class="eyebrow">Receipts</div><h2>Progress Log</h2><p class="muted">Mobile cards instead of a spreadsheet table.</p></div></div><div class="chip-row" id="weekControlsTracker"></div><div class="day-row" id="trackerDayFilters"></div></div><div id="trackerList" class="stack tracker-list" style="margin-top:12px;"></div></section>
+    <section class="screen" id="rpe">
+      <div class="card stack">
+        <h2 style="margin:0;">RPE Guide</h2>
+        <p class="muted" style="margin:0;">RPE means Rate of Perceived Exertion. It tells you how hard the set felt based on how many good reps you had left.</p>
+        <div id="rpeList" class="stack"></div>
+      </div>
 
-    <section class="screen" id="rpe"><div class="card stack"><div><div class="eyebrow">Training language</div><h2 style="font-family:var(--font-display);font-size:52px;line-height:.85;margin:8px 0 0;text-transform:uppercase">RPE Guide</h2></div><p class="muted">RPE means Rate of Perceived Exertion. It tells you how hard the set felt based on how many good reps you had left.</p><div id="rpeList" class="stack"></div></div><div class="card heat stack" style="margin-top:12px;"><div class="eyebrow">Rules</div><p class="muted"><b style="color:var(--bone-1)">Add weight</b> when you hit the top of the rep range with clean form and target RPE.</p><p class="muted"><b style="color:var(--bone-1)">Keep weight the same</b> when form was good but you are not at the top of the rep range yet.</p><p class="muted"><b style="color:var(--bone-1)">Lower weight</b> if form breaks, pain shows up, or the set feels like RPE 9 to 10.</p></div></section>
+      <div class="card stack" style="margin-top:12px;">
+        <h2 style="margin:0;">Progression Rules</h2>
+        <p class="muted"><b style="color:white;">Add weight</b> when you hit the top of the rep range with clean form and target RPE.</p>
+        <p class="muted"><b style="color:white;">Keep weight the same</b> when form was good but you are not at the top of the rep range yet.</p>
+        <p class="muted"><b style="color:white;">Lower weight</b> if form breaks, pain shows up, or the set feels like RPE 9 to 10.</p>
+        <p class="muted"><b style="color:white;">Skip optional cardio</b> when recovery is low or legs feel beat up.</p>
+      </div>
+    </section>
   </main>
 
   <script>
-    const DATA = {"weeklyPlan": [{"day": "Day 1", "focus": "Upper Body Strength", "goal": "Build strength and upper body muscle", "summary": "Bench press, pulldown, rows, shoulder press, arms, core", "optional": "25 to 35 min easy cardio", "length": "45 to 60 min", "note": "Keep RPE mostly 6 to 7 during the first two weeks."}, {"day": "Day 2", "focus": "Lower Body Strength", "goal": "Build lower body strength", "summary": "Squat or leg press, RDL, lunges, leg curl, calves, plank", "optional": "10 to 15 min mobility", "length": "45 to 60 min", "note": "Pick stable variations first. Technique before load."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "goal": "Improve conditioning and mobility", "summary": "Trail jog, walk jog, treadmill, bike, mobility", "optional": "Extra easy walk", "length": "45 to 60 min", "note": "This day should not feel exhausting."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "goal": "Upper body muscle growth", "summary": "Incline press, row, chest press, lateral raises, arms", "optional": "20 to 30 min Zone 2 cardio", "length": "45 to 60 min", "note": "Aim for clean reps and a pump, not failure."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "goal": "Lower body muscle growth and conditioning", "summary": "Deadlift variation, split squat, leg isolation, glutes, core", "optional": "Trail intervals", "length": "45 to 60 min", "note": "Skip intervals if fatigue is high."}], "exercises": [{"day": "Day 1", "name": "Barbell or Machine Bench Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Choose machine bench if barbell setup feels unstable.", "cues": ["Shoulder blades back and down", "Feet planted and core tight", "Lower under control, press without bouncing"], "mistakes": ["Flaring elbows too wide", "Letting shoulders roll forward", "Using a weight that kills range of motion"], "subs": ["Machine chest press", "Dumbbell press", "Push ups"], "videoUrl": "https://www.youtube.com/results?search_query=Barbell+or+Machine+Bench+Press+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Barbell+or+Machine+Bench+Press+exercise+form+guide"}, {"day": "Day 1", "name": "Lat Pulldown", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Controlled reps. Pause briefly at the bottom.", "cues": ["Chest tall and ribs down", "Pull elbows toward your pockets", "Control the weight back up"], "mistakes": ["Leaning way back", "Shrugging shoulders", "Pulling with arms only"], "subs": ["Assisted pull up", "Cable pullover", "Band pulldown"], "videoUrl": "https://www.youtube.com/results?search_query=Lat+Pulldown+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Lat+Pulldown+exercise+form+guide"}, {"day": "Day 1", "name": "Seated Cable Row", "sets": 3, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Keep torso stable and pull elbows back.", "cues": ["Brace before you pull", "Drive elbows back", "Pause and squeeze upper back"], "mistakes": ["Jerking with lower back", "Letting shoulders shrug", "Cutting the rep short"], "subs": ["One arm dumbbell row", "Machine row", "Resistance band row"], "videoUrl": "https://www.youtube.com/results?search_query=Seated+Cable+Row+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Seated+Cable+Row+exercise+form+guide"}, {"day": "Day 1", "name": "Dumbbell Shoulder Press", "sets": 2, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Use a neutral grip if shoulders prefer it.", "cues": ["Brace ribs down", "Press slightly back over ears", "Keep wrists stacked over elbows"], "mistakes": ["Overarching low back", "Pressing too far forward", "Going too heavy too soon"], "subs": ["Machine shoulder press", "Landmine press", "Seated dumbbell press"], "videoUrl": "https://www.youtube.com/results?search_query=Dumbbell+Shoulder+Press+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Dumbbell+Shoulder+Press+exercise+form+guide"}, {"day": "Day 1", "name": "Cable Triceps Pressdown", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Keep elbows fixed.", "cues": ["Keep elbows still", "Fully straighten at the bottom", "Control the return"], "mistakes": ["Letting elbows drift", "Using body swing", "Short reps"], "subs": ["Rope pressdown", "Bench dips", "Dumbbell skull crusher"], "videoUrl": "https://www.youtube.com/results?search_query=Cable+Triceps+Pressdown+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Cable+Triceps+Pressdown+exercise+form+guide"}, {"day": "Day 1", "name": "Dumbbell Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Avoid swinging.", "cues": ["Elbows stay close", "Curl without swinging", "Squeeze at the top"], "mistakes": ["Rocking the torso", "Letting wrists bend back", "Dropping the weight fast"], "subs": ["Cable curl", "Hammer curl", "EZ bar curl"], "videoUrl": "https://www.youtube.com/results?search_query=Dumbbell+Curl+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Dumbbell+Curl+exercise+form+guide"}, {"day": "Day 1", "name": "Dead Bug", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 6, "category": "Core", "notes": "Slow, controlled core work.", "cues": ["Low back gently pressed down", "Move slow", "Exhale as arm and leg extend"], "mistakes": ["Arching the back", "Rushing reps", "Moving too far before you can control it"], "subs": ["Bird dog", "Plank", "Heel taps"], "videoUrl": "https://www.youtube.com/results?search_query=Dead+Bug+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Dead+Bug+exercise+form+guide"}, {"day": "Day 1", "name": "Optional Easy Trail Walk or Incline Treadmill", "sets": 1, "reps": "25 to 35 min", "rpe": 4, "category": "Cardio", "notes": "Only if using split sessions or feeling recovered.", "cues": ["Start easier than you think", "Keep breathing controlled", "Finish with energy left"], "mistakes": ["Turning easy cardio into a sprint", "Skipping warm up", "Ignoring knee or shin pain"], "subs": ["Incline walk", "Stationary bike", "Elliptical"], "videoUrl": "https://www.youtube.com/results?search_query=Optional+Easy+Trail+Walk+or+Incline+Treadmill+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Optional+Easy+Trail+Walk+or+Incline+Treadmill+exercise+form+guide"}, {"day": "Day 2", "name": "Squat or Leg Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Pick leg press if squat technique is not yet comfortable.", "cues": ["Brace first", "Knees track with toes", "Use a depth you can control"], "mistakes": ["Knees collapsing inward", "Rounding low back", "Bouncing out of the bottom"], "subs": ["Goblet squat", "Hack squat", "Leg press"], "videoUrl": "https://www.youtube.com/results?search_query=Squat+or+Leg+Press+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Squat+or+Leg+Press+exercise+form+guide"}, {"day": "Day 2", "name": "Romanian Deadlift", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Hip hinge. Keep spine neutral.", "cues": ["Push hips back", "Keep dumbbells close", "Feel hamstrings stretch"], "mistakes": ["Turning it into a squat", "Rounding the back", "Reaching too low just to go lower"], "subs": ["Dumbbell RDL", "Cable pull through", "Back extension"], "videoUrl": "https://www.youtube.com/results?search_query=Romanian+Deadlift+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Romanian+Deadlift+exercise+form+guide"}, {"day": "Day 2", "name": "Walking Lunges", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Accessory", "notes": "Shorter stride targets quads. Longer stride targets more glutes.", "cues": ["Tall chest", "Step with control", "Push through the whole front foot"], "mistakes": ["Crashing into the front knee", "Losing balance from rushing", "Taking tiny uneven steps"], "subs": ["Reverse lunge", "Split squat", "Step up"], "videoUrl": "https://www.youtube.com/results?search_query=Walking+Lunges+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Walking+Lunges+exercise+form+guide"}, {"day": "Day 2", "name": "Seated or Lying Leg Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Control the lowering part.", "cues": ["Set hips firmly", "Curl smoothly", "Slowly lower"], "mistakes": ["Lifting hips off pad", "Using momentum", "Not controlling the negative"], "subs": ["Seated leg curl", "Lying leg curl", "Stability ball curl"], "videoUrl": "https://www.youtube.com/results?search_query=Seated+or+Lying+Leg+Curl+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Seated+or+Lying+Leg+Curl+exercise+form+guide"}, {"day": "Day 2", "name": "Standing Calf Raise", "sets": 3, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch at bottom.", "cues": ["Full stretch at bottom", "Pause at the top", "Do not bounce"], "mistakes": ["Tiny range of motion", "Fast bouncing reps", "Letting ankles roll"], "subs": ["Standing calf raise", "Seated calf raise", "Single leg calf raise"], "videoUrl": "https://www.youtube.com/results?search_query=Standing+Calf+Raise+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Standing+Calf+Raise+exercise+form+guide"}, {"day": "Day 2", "name": "Plank", "sets": 3, "reps": "30 to 60 sec", "rpe": 6, "category": "Core", "notes": "Stop before form breaks.", "cues": ["Squeeze glutes", "Ribs down", "Straight line from head to heels"], "mistakes": ["Hips sagging", "Holding breath", "Shrugging shoulders"], "subs": ["Knee plank", "Dead bug", "Side plank"], "videoUrl": "https://www.youtube.com/results?search_query=Plank+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Plank+exercise+form+guide"}, {"day": "Day 2", "name": "Hips Hamstrings Calves and Ankles Mobility", "sets": 1, "reps": "10 to 15 min", "rpe": 3, "category": "Mobility", "notes": "Keep it easy and restorative.", "cues": ["Move slowly", "Breathe through the stretch", "Stay away from sharp pain"], "mistakes": ["Forcing range", "Bouncing aggressively", "Holding your breath"], "subs": ["Gentle walk", "Dynamic warm up", "Foam rolling"], "videoUrl": "https://www.youtube.com/results?search_query=Hips+Hamstrings+Calves+and+Ankles+Mobility+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hips+Hamstrings+Calves+and+Ankles+Mobility+exercise+form+guide"}, {"day": "Day 3", "name": "Trail Jog or Walk Jog Intervals", "sets": 1, "reps": "30 to 40 min", "rpe": 5, "category": "Cardio", "notes": "Easy enough to hold a conversation most of the time.", "cues": ["Start easier than you think", "Keep breathing controlled", "Finish with energy left"], "mistakes": ["Turning easy cardio into a sprint", "Skipping warm up", "Ignoring knee or shin pain"], "subs": ["Incline walk", "Stationary bike", "Elliptical"], "videoUrl": "https://www.youtube.com/results?search_query=Trail+Jog+or+Walk+Jog+Intervals+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Trail+Jog+or+Walk+Jog+Intervals+exercise+form+guide"}, {"day": "Day 3", "name": "Incline Treadmill Walk or Bike", "sets": 1, "reps": "15 to 20 min", "rpe": 5, "category": "Cardio", "notes": "Steady non exhausting pace.", "cues": ["Start easier than you think", "Keep breathing controlled", "Finish with energy left"], "mistakes": ["Turning easy cardio into a sprint", "Skipping warm up", "Ignoring knee or shin pain"], "subs": ["Incline walk", "Stationary bike", "Elliptical"], "videoUrl": "https://www.youtube.com/results?search_query=Incline+Treadmill+Walk+or+Bike+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Incline+Treadmill+Walk+or+Bike+exercise+form+guide"}, {"day": "Day 3", "name": "Hip Flexor Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Relax into the stretch.", "cues": ["Move slowly", "Breathe through the stretch", "Stay away from sharp pain"], "mistakes": ["Forcing range", "Bouncing aggressively", "Holding your breath"], "subs": ["Gentle walk", "Dynamic warm up", "Foam rolling"], "videoUrl": "https://www.youtube.com/results?search_query=Hip+Flexor+Stretch+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hip+Flexor+Stretch+exercise+form+guide"}, {"day": "Day 3", "name": "Hamstring Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "No aggressive bouncing.", "cues": ["Move slowly", "Breathe through the stretch", "Stay away from sharp pain"], "mistakes": ["Forcing range", "Bouncing aggressively", "Holding your breath"], "subs": ["Gentle walk", "Dynamic warm up", "Foam rolling"], "videoUrl": "https://www.youtube.com/results?search_query=Hamstring+Stretch+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hamstring+Stretch+exercise+form+guide"}, {"day": "Day 3", "name": "Lat Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Breathe slowly.", "cues": ["Move slowly", "Breathe through the stretch", "Stay away from sharp pain"], "mistakes": ["Forcing range", "Bouncing aggressively", "Holding your breath"], "subs": ["Gentle walk", "Dynamic warm up", "Foam rolling"], "videoUrl": "https://www.youtube.com/results?search_query=Lat+Stretch+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Lat+Stretch+exercise+form+guide"}, {"day": "Day 3", "name": "Thoracic Rotations", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 3, "category": "Mobility", "notes": "Rotate through upper back.", "cues": ["Move slowly", "Breathe through the stretch", "Stay away from sharp pain"], "mistakes": ["Forcing range", "Bouncing aggressively", "Holding your breath"], "subs": ["Gentle walk", "Dynamic warm up", "Foam rolling"], "videoUrl": "https://www.youtube.com/results?search_query=Thoracic+Rotations+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Thoracic+Rotations+exercise+form+guide"}, {"day": "Day 3", "name": "Deep Squat Hold or Goblet Squat Hold", "sets": 2, "reps": "30 to 45 sec", "rpe": 4, "category": "Mobility", "notes": "Use support if needed.", "cues": ["Brace first", "Knees track with toes", "Use a depth you can control"], "mistakes": ["Knees collapsing inward", "Rounding low back", "Bouncing out of the bottom"], "subs": ["Goblet squat", "Hack squat", "Leg press"], "videoUrl": "https://www.youtube.com/results?search_query=Deep+Squat+Hold+or+Goblet+Squat+Hold+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Deep+Squat+Hold+or+Goblet+Squat+Hold+exercise+form+guide"}, {"day": "Day 4", "name": "Incline Dumbbell Press", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Controlled tempo.", "cues": ["Shoulder blades back and down", "Feet planted and core tight", "Lower under control, press without bouncing"], "mistakes": ["Flaring elbows too wide", "Letting shoulders roll forward", "Using a weight that kills range of motion"], "subs": ["Machine chest press", "Dumbbell press", "Push ups"], "videoUrl": "https://www.youtube.com/results?search_query=Incline+Dumbbell+Press+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Incline+Dumbbell+Press+exercise+form+guide"}, {"day": "Day 4", "name": "Chest Supported Row", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Reduce lower back fatigue.", "cues": ["Brace before you pull", "Drive elbows back", "Pause and squeeze upper back"], "mistakes": ["Jerking with lower back", "Letting shoulders shrug", "Cutting the rep short"], "subs": ["One arm dumbbell row", "Machine row", "Resistance band row"], "videoUrl": "https://www.youtube.com/results?search_query=Chest+Supported+Row+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Chest+Supported+Row+exercise+form+guide"}, {"day": "Day 4", "name": "Machine Chest Press or Push Ups", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Use a range that feels stable.", "cues": ["Shoulder blades back and down", "Feet planted and core tight", "Lower under control, press without bouncing"], "mistakes": ["Flaring elbows too wide", "Letting shoulders roll forward", "Using a weight that kills range of motion"], "subs": ["Machine chest press", "Dumbbell press", "Push ups"], "videoUrl": "https://www.youtube.com/results?search_query=Machine+Chest+Press+or+Push+Ups+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Machine+Chest+Press+or+Push+Ups+exercise+form+guide"}, {"day": "Day 4", "name": "Cable or Dumbbell Lateral Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7.5, "category": "Accessory", "notes": "Light weight, clean reps.", "cues": ["Soft elbows", "Lead with elbows", "Stop around shoulder height"], "mistakes": ["Swinging heavy weight", "Shrugging traps", "Going too high"], "subs": ["Cable lateral raise", "Machine lateral raise", "Lean away lateral raise"], "videoUrl": "https://www.youtube.com/results?search_query=Cable+or+Dumbbell+Lateral+Raise+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Cable+or+Dumbbell+Lateral+Raise+exercise+form+guide"}, {"day": "Day 4", "name": "Face Pull", "sets": 2, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Upper back and rear delt focus.", "cues": ["Pull toward forehead", "Elbows high", "Squeeze rear delts"], "mistakes": ["Using too much weight", "Low elbow path", "Arching back"], "subs": ["Reverse pec deck", "Band face pull", "Rear delt fly"], "videoUrl": "https://www.youtube.com/results?search_query=Face+Pull+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Face+Pull+exercise+form+guide"}, {"day": "Day 4", "name": "Cable Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Smooth reps.", "cues": ["Elbows stay close", "Curl without swinging", "Squeeze at the top"], "mistakes": ["Rocking the torso", "Letting wrists bend back", "Dropping the weight fast"], "subs": ["Cable curl", "Hammer curl", "EZ bar curl"], "videoUrl": "https://www.youtube.com/results?search_query=Cable+Curl+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Cable+Curl+exercise+form+guide"}, {"day": "Day 4", "name": "Overhead Cable Triceps Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Emphasize long head triceps stretch.", "cues": ["Keep elbows still", "Fully straighten at the bottom", "Control the return"], "mistakes": ["Letting elbows drift", "Using body swing", "Short reps"], "subs": ["Rope pressdown", "Bench dips", "Dumbbell skull crusher"], "videoUrl": "https://www.youtube.com/results?search_query=Overhead+Cable+Triceps+Extension+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Overhead+Cable+Triceps+Extension+exercise+form+guide"}, {"day": "Day 4", "name": "Optional Easy Zone 2 Cardio", "sets": 1, "reps": "20 to 30 min", "rpe": 4, "category": "Cardio", "notes": "Keep it easy. Do not turn it into a hard workout.", "cues": ["Start easier than you think", "Keep breathing controlled", "Finish with energy left"], "mistakes": ["Turning easy cardio into a sprint", "Skipping warm up", "Ignoring knee or shin pain"], "subs": ["Incline walk", "Stationary bike", "Elliptical"], "videoUrl": "https://www.youtube.com/results?search_query=Optional+Easy+Zone+2+Cardio+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Optional+Easy+Zone+2+Cardio+exercise+form+guide"}, {"day": "Day 5", "name": "Trap Bar Deadlift or Dumbbell Deadlift", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Use dumbbells if trap bar is unavailable.", "cues": ["Brace hard", "Push floor away", "Keep weight close"], "mistakes": ["Rounding back", "Yanking from the floor", "Letting hips shoot up first"], "subs": ["Trap bar deadlift", "Dumbbell deadlift", "Rack pull"], "videoUrl": "https://www.youtube.com/results?search_query=Trap+Bar+Deadlift+or+Dumbbell+Deadlift+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Trap+Bar+Deadlift+or+Dumbbell+Deadlift+exercise+form+guide"}, {"day": "Day 5", "name": "Bulgarian Split Squat", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Hypertrophy", "notes": "Use support for balance if needed.", "cues": ["Brace first", "Knees track with toes", "Use a depth you can control"], "mistakes": ["Knees collapsing inward", "Rounding low back", "Bouncing out of the bottom"], "subs": ["Goblet squat", "Hack squat", "Leg press"], "videoUrl": "https://www.youtube.com/results?search_query=Bulgarian+Split+Squat+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Bulgarian+Split+Squat+exercise+form+guide"}, {"day": "Day 5", "name": "Leg Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Pause at top if comfortable.", "cues": ["Back against pad", "Lift smoothly", "Pause at the top"], "mistakes": ["Swinging the stack", "Locking out aggressively", "Setting pad incorrectly"], "subs": ["Goblet squat", "Leg press", "Step up"], "videoUrl": "https://www.youtube.com/results?search_query=Leg+Extension+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Leg+Extension+exercise+form+guide"}, {"day": "Day 5", "name": "Hamstring Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Controlled reps.", "cues": ["Set hips firmly", "Curl smoothly", "Slowly lower"], "mistakes": ["Lifting hips off pad", "Using momentum", "Not controlling the negative"], "subs": ["Seated leg curl", "Lying leg curl", "Stability ball curl"], "videoUrl": "https://www.youtube.com/results?search_query=Hamstring+Curl+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hamstring+Curl+exercise+form+guide"}, {"day": "Day 5", "name": "Hip Thrust or Glute Bridge", "sets": 2, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Full lockout without overextending low back.", "cues": ["Ribs down", "Chin tucked", "Squeeze glutes at top"], "mistakes": ["Overarching low back", "Feet too far away", "Not reaching full lockout"], "subs": ["Glute bridge", "Cable pull through", "Back extension"], "videoUrl": "https://www.youtube.com/results?search_query=Hip+Thrust+or+Glute+Bridge+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hip+Thrust+or+Glute+Bridge+exercise+form+guide"}, {"day": "Day 5", "name": "Seated Calf Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch and controlled top.", "cues": ["Full stretch at bottom", "Pause at the top", "Do not bounce"], "mistakes": ["Tiny range of motion", "Fast bouncing reps", "Letting ankles roll"], "subs": ["Standing calf raise", "Seated calf raise", "Single leg calf raise"], "videoUrl": "https://www.youtube.com/results?search_query=Seated+Calf+Raise+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Seated+Calf+Raise+exercise+form+guide"}, {"day": "Day 5", "name": "Hanging Knee Raise or Cable Crunch", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Core", "notes": "Use cable crunch if hanging grip is limiting.", "cues": ["Curl pelvis up", "Move with control", "Exhale on the crunch"], "mistakes": ["Swinging legs", "Using hip flexors only", "Rushing reps"], "subs": ["Reverse crunch", "Dead bug", "Machine crunch"], "videoUrl": "https://www.youtube.com/results?search_query=Hanging+Knee+Raise+or+Cable+Crunch+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Hanging+Knee+Raise+or+Cable+Crunch+exercise+form+guide"}, {"day": "Day 5", "name": "Trail Intervals", "sets": 6, "reps": "30 sec faster plus 90 sec easy walk", "rpe": 7, "category": "Cardio", "notes": "Optional finisher. Skip if legs feel overly fatigued.", "cues": ["Start easier than you think", "Keep breathing controlled", "Finish with energy left"], "mistakes": ["Turning easy cardio into a sprint", "Skipping warm up", "Ignoring knee or shin pain"], "subs": ["Incline walk", "Stationary bike", "Elliptical"], "videoUrl": "https://www.youtube.com/results?search_query=Trail+Intervals+proper+form+tutorial", "searchUrl": "https://www.google.com/search?q=Trail+Intervals+exercise+form+guide"}], "rpeGuide": [{"rpe": "3 to 4", "title": "Easy", "meaning": "Warm ups, mobility, and easy cardio. You should feel fully in control."}, {"rpe": "5 to 6", "title": "Moderate", "meaning": "Good working effort with plenty left. Best for endurance days and early build up."}, {"rpe": "7", "title": "Challenging but clean", "meaning": "About 3 good reps left. This is the main target for most lifts."}, {"rpe": "8", "title": "Hard", "meaning": "About 2 good reps left. Useful sometimes, but do not live here every set."}, {"rpe": "9 to 10", "title": "Near max or failure", "meaning": "Avoid this for now unless testing later. It creates more fatigue than needed."}]};
-    const weeks = [1,2,3,4];
-    const days = DATA.weeklyPlan.map(d => d.day);
-    let state = {screen:'dashboard',week:Number(localStorage.getItem('forge_week')||1),day:localStorage.getItem('forge_day')||'Day 1',trackerDay:localStorage.getItem('forge_tracker_day')||'All',sessionIndex:Number(localStorage.getItem('forge_session_index')||0),logs:readStore('forge_logs',{}),completedDays:readStore('forge_days',{}),timerSeconds:0,timerTotal:0,timerRunning:false,timerInterval:null};
-    function readStore(k,f){try{return JSON.parse(localStorage.getItem(k))||f}catch{return f}} function writeStore(k,v){localStorage.setItem(k,JSON.stringify(v))} function slug(v){return String(v).toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_|_$/g,'')} function exerciseKey(w,i){return `w${w}_ex${i}`} function dayKey(w,d){return `w${w}_${slug(d)}`} function planFor(d){return DATA.weeklyPlan.find(x=>x.day===d)||DATA.weeklyPlan[0]} function exercisesFor(d){return DATA.exercises.map((x,i)=>({...x,index:i})).filter(x=>x.day===d)} function currentExercises(){return exercisesFor(state.day)} function currentSessionExercise(){const list=currentExercises(); if(state.sessionIndex>=list.length) state.sessionIndex=Math.max(0,list.length-1); return list[state.sessionIndex]||list[0]} function cls(c){c=String(c||'').toLowerCase(); if(c.includes('strength'))return'strength'; if(c.includes('hypertrophy'))return'hypertrophy'; if(c.includes('accessory'))return'accessory'; if(c.includes('core'))return'core'; if(c.includes('cardio'))return'cardio'; if(c.includes('mobility'))return'mobility'; return''} function save(){localStorage.setItem('forge_week',String(state.week));localStorage.setItem('forge_day',state.day);localStorage.setItem('forge_tracker_day',state.trackerDay);localStorage.setItem('forge_session_index',String(state.sessionIndex));writeStore('forge_logs',state.logs);writeStore('forge_days',state.completedDays)} function esc(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[ch]))}
-    function allKeys(){return DATA.exercises.flatMap((_,i)=>weeks.map(w=>exerciseKey(w,i)))} function calcStats(){const totalDays=days.length*weeks.length, doneDays=Object.values(state.completedDays).filter(Boolean).length, keys=allKeys(), doneEx=keys.filter(k=>state.logs[k]?.done).length, rpes=keys.map(k=>Number(state.logs[k]?.actualRpe)).filter(v=>Number.isFinite(v)&&v>0), avg=rpes.length?(rpes.reduce((a,b)=>a+b,0)/rpes.length).toFixed(1):'0.0', sets=DATA.exercises.reduce((s,e)=>s+Number(e.sets||0),0); return{totalDays,doneDays,doneEx,totalEx:keys.length,avg,sets,dayPct:Math.round(doneDays/totalDays*100),exPct:Math.round(doneEx/keys.length*100)}}
-    function renderStats(){const s=calcStats();document.getElementById('stats').innerHTML=`<article class="card stat"><small>Days done</small><b>${s.doneDays}/${s.totalDays}</b></article><article class="card stat"><small>Exercise complete</small><b>${s.exPct}%</b></article><article class="card stat"><small>Weekly sets</small><b>${s.sets}</b></article><article class="card stat"><small>Avg RPE</small><b>${s.avg}</b></article>`;document.getElementById('progressBar').style.width=`${s.dayPct}%`}
-    function renderWeekControls(id){const el=document.getElementById(id);if(!el)return;el.innerHTML=weeks.map(w=>`<button class="chip ${state.week===w?'active':''}" data-action="set-week" data-week="${w}">Week ${w}</button>`).join('')}
-    function renderDayControls(){document.getElementById('workoutDayControls').innerHTML=DATA.weeklyPlan.map(d=>`<button class="chip ${state.day===d.day?'active':''} ${state.completedDays[dayKey(state.week,d.day)]?'done':''}" data-action="set-day" data-day="${d.day}">${d.day}<br><span style="font-weight:700;color:var(--bone-3)">${d.focus}</span></button>`).join('')}
-    function renderDashboardDays(){document.getElementById('dashboardDays').innerHTML=DATA.weeklyPlan.map(d=>{const done=!!state.completedDays[dayKey(state.week,d.day)];return`<button class="day-card ${done?'done':''}" data-action="open-day" data-day="${d.day}"><div class="day-card-top"><span class="tag">${d.day}</span><span class="tag ${done?'core':''}">${done?'Done':'Open'}</span></div><h3>${d.focus}</h3><p class="muted" style="margin:0">${d.length}</p></button>`}).join('')}
-    function renderToday(){const p=planFor(state.day), done=!!state.completedDays[dayKey(state.week,state.day)];document.getElementById('todayDayTag').textContent=`${p.day} • Week ${state.week}`;document.getElementById('todayTitle').textContent=p.focus;document.getElementById('todayGoal').textContent=p.goal;document.getElementById('todayDetails').innerHTML=`<p style="margin:0;font-weight:800"><b>Main:</b> ${p.summary}</p><p style="margin:0;font-weight:800"><b>Optional:</b> ${p.optional}</p><p style="margin:0;font-weight:800"><b>Coach:</b> ${p.note}</p>`;document.getElementById('toggleToday').textContent=done?'Marked Complete':'Mark Day Complete'}
-    function renderWorkoutHeader(){const p=planFor(state.day);document.getElementById('workoutDayTag').textContent=`${p.day} • Week ${state.week}`;document.getElementById('workoutTitle').textContent=p.focus;document.getElementById('workoutNote').textContent=p.note}
-    function listItems(arr){return arr.map(x=>`<li>${esc(x)}</li>`).join('')} function lastBest(i){for(const w of weeks.filter(w=>w<state.week).reverse()){const l=state.logs[exerciseKey(w,i)];if(l&&(l.load||l.actualReps||l.actualRpe))return`W${w}: ${l.load||'no load'} • ${l.actualReps||'no reps'} • RPE ${l.actualRpe||'?'}`}return'No previous best yet'}
-    function exerciseCard(ex){const k=exerciseKey(state.week,ex.index),log=state.logs[k]||{};return`<article class="exercise-card"><div class="exercise-top"><button class="check ${log.done?'done':''}" data-action="toggle-exercise" data-index="${ex.index}">✓</button><div style="min-width:0"><div class="tag-row"><span class="tag ${cls(ex.category)}">${ex.category}</span><span class="tag">RPE ${ex.rpe}</span></div><h3>${ex.name}</h3><p class="muted" style="margin:0">${ex.notes}</p></div></div><div class="plan-grid"><div class="plan-cell"><small>Sets</small><b>${ex.sets}</b></div><div class="plan-cell"><small>Reps</small><b>${ex.reps}</b></div><div class="plan-cell"><small>Best</small><b>${lastBest(ex.index)}</b></div></div><div class="log-grid"><div class="field"><label>Load</label><input inputmode="decimal" placeholder="lbs" value="${esc(log.load||'')}" data-input-key="${k}" data-field="load"></div><div class="field"><label>Actual reps or time</label><input placeholder="8,8,7 or 32 min" value="${esc(log.actualReps||'')}" data-input-key="${k}" data-field="actualReps"></div><div class="field"><label>Actual RPE</label><input inputmode="decimal" placeholder="1 to 10" value="${esc(log.actualRpe||'')}" data-input-key="${k}" data-field="actualRpe"></div><div class="field wide"><label>Notes</label><input placeholder="Form, energy, pain, wins" value="${esc(log.notes||'')}" data-input-key="${k}" data-field="notes"></div></div><details class="tutorial-box"><summary>Tutorial Mode <span>＋</span></summary><div class="tutorial-content"><div class="hero-actions"><a class="btn primary" href="${ex.videoUrl}" target="_blank" rel="noopener">Watch Tutorial</a><a class="btn ghost" href="${ex.searchUrl}" target="_blank" rel="noopener">Form Guide</a></div><div><span class="tag core">Form cues</span><ul class="mini-list">${listItems(ex.cues)}</ul></div><div><span class="tag strength">Common mistakes</span><ul class="mini-list">${listItems(ex.mistakes)}</ul></div><div><span class="tag accessory">Substitutions</span><ul class="mini-list">${listItems(ex.subs)}</ul></div></div></details></article>`}
-    function renderExercises(){document.getElementById('exerciseList').innerHTML=exercisesFor(state.day).map(exerciseCard).join('')}
-    function renderTrackerFilters(){document.getElementById('trackerDayFilters').innerHTML=['All',...days].map(d=>`<button class="chip ${state.trackerDay===d?'active':''}" data-action="set-tracker-day" data-day="${d}">${d}</button>`).join('')}
-    function renderTracker(){const list=state.trackerDay==='All'?DATA.exercises.map((x,i)=>({...x,index:i})):exercisesFor(state.trackerDay);document.getElementById('trackerList').innerHTML=list.map(ex=>{const k=exerciseKey(state.week,ex.index),log=state.logs[k]||{};return`<article class="exercise-card"><div class="exercise-top"><button class="check ${log.done?'done':''}" data-action="toggle-exercise" data-index="${ex.index}">✓</button><div><div class="tag-row"><span class="tag">${ex.day}</span><span class="tag ${cls(ex.category)}">${ex.category}</span></div><h3>${ex.name}</h3></div></div><div class="tracker-grid"><div class="data-cell"><small>Plan</small><b>${ex.sets} sets • ${ex.reps}</b></div><div class="data-cell"><small>Target RPE</small><b>${ex.rpe}</b></div><div class="data-cell"><small>Load</small><b>${esc(log.load||'Not logged')}</b></div><div class="data-cell"><small>Actual reps</small><b>${esc(log.actualReps||'Not logged')}</b></div><div class="data-cell"><small>Actual RPE</small><b>${esc(log.actualRpe||'Not logged')}</b></div><div class="data-cell"><small>Notes</small><b>${esc(log.notes||'No notes')}</b></div></div></article>`}).join('')}
-    function renderRpe(){document.getElementById('rpeList').innerHTML=DATA.rpeGuide.map(x=>`<article class="day-card"><div class="day-card-top"><span class="tag cardio">RPE ${x.rpe}</span><span class="tag">${x.title}</span></div><p class="muted" style="margin:10px 0 0">${x.meaning}</p></article>`).join('')}
-    function renderSession(){const list=currentExercises(),ex=currentSessionExercise(); if(!ex)return;const k=exerciseKey(state.week,ex.index),log=state.logs[k]||{},pos=state.sessionIndex+1;document.getElementById('sessionKicker').textContent=`${state.day} • Week ${state.week} • ${pos} of ${list.length}`;document.getElementById('sessionName').textContent=ex.name;document.getElementById('sessionMeta').textContent=`${ex.sets} sets • ${ex.reps} • Target RPE ${ex.rpe}`;document.getElementById('sessionProgress').style.width=`${Math.round(pos/list.length*100)}%`;document.getElementById('sessionTags').innerHTML=`<span class="tag ${cls(ex.category)}">${ex.category}</span><span class="tag">Previous: ${lastBest(ex.index)}</span>`;document.getElementById('sessionNotes').textContent=ex.notes;document.getElementById('sessionPlan').innerHTML=`<div class="plan-cell"><small>Sets</small><b>${ex.sets}</b></div><div class="plan-cell"><small>Reps</small><b>${ex.reps}</b></div><div class="plan-cell"><small>RPE</small><b>${ex.rpe}</b></div>`;document.getElementById('sessionLog').innerHTML=`<div class="field"><label>Load</label><input inputmode="decimal" placeholder="lbs" value="${esc(log.load||'')}" data-input-key="${k}" data-field="load"></div><div class="field"><label>Actual reps or time</label><input placeholder="8,8,7 or 32 min" value="${esc(log.actualReps||'')}" data-input-key="${k}" data-field="actualReps"></div><div class="field"><label>Actual RPE</label><input inputmode="decimal" placeholder="1 to 10" value="${esc(log.actualRpe||'')}" data-input-key="${k}" data-field="actualRpe"></div><div class="field wide"><label>Notes</label><input placeholder="Form, energy, pain, wins" value="${esc(log.notes||'')}" data-input-key="${k}" data-field="notes"></div>`;document.getElementById('sessionTutorial').innerHTML=`<div class="hero-actions"><a class="btn primary" href="${ex.videoUrl}" target="_blank" rel="noopener">Watch Tutorial</a><a class="btn ghost" href="${ex.searchUrl}" target="_blank" rel="noopener">Form Guide</a></div><div><span class="tag core">Form cues</span><ul class="mini-list">${listItems(ex.cues)}</ul></div><div><span class="tag strength">Mistakes</span><ul class="mini-list">${listItems(ex.mistakes)}</ul></div><div><span class="tag accessory">Subs</span><ul class="mini-list">${listItems(ex.subs)}</ul></div>`}
-    function renderNav(){document.querySelectorAll('.nav-btn[data-screen]').forEach(b=>b.classList.toggle('active',b.dataset.screen===state.screen));document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id===state.screen))} function formatTimer(){const m=String(Math.floor(state.timerSeconds/60)).padStart(2,'0'),s=String(state.timerSeconds%60).padStart(2,'0');return`${m}:${s}`} function renderTimer(){document.getElementById('timerDisplay').textContent=formatTimer();document.getElementById('timerDisplaySession').textContent=formatTimer();document.getElementById('timerStart').textContent=state.timerRunning?'Pause':'Start';document.getElementById('timerStartSession').textContent=state.timerRunning?'Pause':'Start'}
-    function renderAll(){save();renderNav();renderStats();renderWeekControls('weekControls');renderWeekControls('weekControlsWorkout');renderWeekControls('weekControlsTracker');renderDayControls();renderDashboardDays();renderToday();renderWorkoutHeader();renderExercises();renderTrackerFilters();renderTracker();renderRpe();renderSession();renderTimer()} function setScreen(s){state.screen=s;renderAll();scrollTo({top:0,behavior:'smooth'})} function resetProgress(){if(!confirm('Reset all workout progress and logs?'))return;state.logs={};state.completedDays={};state.sessionIndex=0;renderAll()}
-    function startTimer(){if(state.timerRunning){clearInterval(state.timerInterval);state.timerRunning=false;renderTimer();return} if(state.timerSeconds<=0)state.timerSeconds=state.timerTotal||90;state.timerRunning=true;state.timerInterval=setInterval(()=>{state.timerSeconds-=1;if(state.timerSeconds<=0){clearInterval(state.timerInterval);state.timerSeconds=0;state.timerRunning=false;if('vibrate'in navigator)navigator.vibrate([180,80,180])}renderTimer()},1000);renderTimer()} function resetTimer(){clearInterval(state.timerInterval);state.timerRunning=false;state.timerSeconds=state.timerTotal||0;renderTimer()}
-    document.addEventListener('click',e=>{const b=e.target.closest('button'); if(!b)return; if(b.dataset.screen){setScreen(b.dataset.screen);return} if(b.dataset.screenJump){setScreen(b.dataset.screenJump);return} if(b.dataset.timer){state.timerTotal=Number(b.dataset.timer);state.timerSeconds=state.timerTotal;state.timerRunning=false;clearInterval(state.timerInterval);renderTimer();return} const a=b.dataset.action; if(a==='set-week'){state.week=Number(b.dataset.week);renderAll();return} if(a==='set-day'){state.day=b.dataset.day;state.sessionIndex=0;renderAll();return} if(a==='open-day'){state.day=b.dataset.day;state.sessionIndex=0;setScreen('workouts');return} if(a==='set-tracker-day'){state.trackerDay=b.dataset.day;renderAll();return} if(a==='toggle-exercise'){const i=Number(b.dataset.index),k=exerciseKey(state.week,i);state.logs[k]=state.logs[k]||{};state.logs[k].done=!state.logs[k].done;renderAll();return}});
-    document.addEventListener('input',e=>{const i=e.target.closest('[data-input-key]'); if(!i)return;const k=i.dataset.inputKey,f=i.dataset.field;state.logs[k]=state.logs[k]||{};state.logs[k][f]=i.value;save();renderStats()});
-    document.getElementById('toggleToday').addEventListener('click',()=>{const k=dayKey(state.week,state.day);state.completedDays[k]=!state.completedDays[k];renderAll()});document.getElementById('resetMobile').addEventListener('click',resetProgress);document.getElementById('timerStart').addEventListener('click',startTimer);document.getElementById('timerStartSession').addEventListener('click',startTimer);document.getElementById('timerReset').addEventListener('click',resetTimer);document.getElementById('timerResetSession').addEventListener('click',resetTimer);document.getElementById('prevExercise').addEventListener('click',()=>{state.sessionIndex=Math.max(0,state.sessionIndex-1);renderAll()});document.getElementById('nextExercise').addEventListener('click',()=>{const list=currentExercises();const ex=currentSessionExercise();if(ex){const k=exerciseKey(state.week,ex.index);state.logs[k]=state.logs[k]||{};state.logs[k].done=true}state.sessionIndex=(state.sessionIndex+1)%Math.max(1,list.length);renderAll()});renderAll();
+    const DATA = {"weeklyPlan": [{"day": "Day 1", "focus": "Upper Body Strength", "goal": "Build strength and upper body muscle", "summary": "Pressing, pulldown, rows, shoulders, arms, core", "optional": "25 to 35 min easy cardio", "length": "45 to 60 min", "note": "Keep RPE mostly 6 to 7 during the first two weeks."}, {"day": "Day 2", "focus": "Lower Body Strength", "goal": "Build lower body strength", "summary": "Squat or leg press, RDL, lunges, leg curl, calves, plank", "optional": "10 to 15 min mobility", "length": "45 to 60 min", "note": "Pick stable variations first. Technique before load."}, {"day": "Day 3", "focus": "Endurance and Flexibility", "goal": "Improve conditioning and mobility", "summary": "Trail jog, walk jog, treadmill, bike, mobility", "optional": "Extra easy walk", "length": "45 to 60 min", "note": "This day should not feel exhausting."}, {"day": "Day 4", "focus": "Upper Body Hypertrophy", "goal": "Upper body muscle growth", "summary": "Incline press, row, chest press, raises, arms", "optional": "20 to 30 min Zone 2 cardio", "length": "45 to 60 min", "note": "Aim for clean reps and a pump, not failure."}, {"day": "Day 5", "focus": "Lower Body Hypertrophy and Conditioning", "goal": "Lower body muscle growth and conditioning", "summary": "Deadlift variation, split squat, leg isolation, glutes, core", "optional": "Trail intervals", "length": "45 to 60 min", "note": "Skip intervals if fatigue is high."}], "exercises": [{"day": "Day 1", "name": "Barbell or Machine Bench Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Choose machine bench if barbell setup feels unstable."}, {"day": "Day 1", "name": "Lat Pulldown", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Controlled reps. Pause briefly at the bottom."}, {"day": "Day 1", "name": "Seated Cable Row", "sets": 3, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Keep torso stable and pull elbows back."}, {"day": "Day 1", "name": "Dumbbell Shoulder Press", "sets": 2, "reps": "8 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Use a neutral grip if shoulders prefer it."}, {"day": "Day 1", "name": "Cable Triceps Pressdown", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Keep elbows fixed."}, {"day": "Day 1", "name": "Dumbbell Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Avoid swinging."}, {"day": "Day 1", "name": "Dead Bug", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 6, "category": "Core", "notes": "Slow, controlled core work."}, {"day": "Day 1", "name": "Optional Easy Trail Walk or Incline Treadmill", "sets": 1, "reps": "25 to 35 min", "rpe": 4, "category": "Cardio", "notes": "Only if using split sessions or feeling recovered."}, {"day": "Day 2", "name": "Squat or Leg Press", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Pick leg press if squat technique is not yet comfortable."}, {"day": "Day 2", "name": "Romanian Deadlift", "sets": 3, "reps": "6 to 10 reps", "rpe": 7, "category": "Strength", "notes": "Hip hinge. Keep spine neutral."}, {"day": "Day 2", "name": "Walking Lunges", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Accessory", "notes": "Shorter stride targets quads. Longer stride targets more glutes."}, {"day": "Day 2", "name": "Seated or Lying Leg Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Control the lowering part."}, {"day": "Day 2", "name": "Standing Calf Raise", "sets": 3, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch at bottom."}, {"day": "Day 2", "name": "Plank", "sets": 3, "reps": "30 to 60 sec", "rpe": 6, "category": "Core", "notes": "Stop before form breaks."}, {"day": "Day 2", "name": "Hips Hamstrings Calves and Ankles Mobility", "sets": 1, "reps": "10 to 15 min", "rpe": 3, "category": "Mobility", "notes": "Keep it easy and restorative."}, {"day": "Day 3", "name": "Trail Jog or Walk Jog Intervals", "sets": 1, "reps": "30 to 40 min", "rpe": 5, "category": "Cardio", "notes": "Easy enough to hold a conversation most of the time."}, {"day": "Day 3", "name": "Incline Treadmill Walk or Bike", "sets": 1, "reps": "15 to 20 min", "rpe": 5, "category": "Cardio", "notes": "Steady non exhausting pace."}, {"day": "Day 3", "name": "Hip Flexor Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Relax into the stretch."}, {"day": "Day 3", "name": "Hamstring Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "No aggressive bouncing."}, {"day": "Day 3", "name": "Lat Stretch", "sets": 2, "reps": "30 to 45 sec per side", "rpe": 3, "category": "Mobility", "notes": "Breathe slowly."}, {"day": "Day 3", "name": "Thoracic Rotations", "sets": 2, "reps": "8 to 12 reps per side", "rpe": 3, "category": "Mobility", "notes": "Rotate through upper back."}, {"day": "Day 3", "name": "Deep Squat Hold or Goblet Squat Hold", "sets": 2, "reps": "30 to 45 sec", "rpe": 4, "category": "Mobility", "notes": "Use support if needed."}, {"day": "Day 4", "name": "Incline Dumbbell Press", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Controlled tempo."}, {"day": "Day 4", "name": "Chest Supported Row", "sets": 3, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Reduce lower back fatigue."}, {"day": "Day 4", "name": "Machine Chest Press or Push Ups", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Use a range that feels stable."}, {"day": "Day 4", "name": "Cable or Dumbbell Lateral Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7.5, "category": "Accessory", "notes": "Light weight, clean reps."}, {"day": "Day 4", "name": "Face Pull", "sets": 2, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Upper back and rear delt focus."}, {"day": "Day 4", "name": "Cable Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Smooth reps."}, {"day": "Day 4", "name": "Overhead Cable Triceps Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Emphasize long head triceps stretch."}, {"day": "Day 4", "name": "Optional Easy Zone 2 Cardio", "sets": 1, "reps": "20 to 30 min", "rpe": 4, "category": "Cardio", "notes": "Keep it easy. Do not turn it into a hard workout."}, {"day": "Day 5", "name": "Trap Bar Deadlift or Dumbbell Deadlift", "sets": 3, "reps": "5 to 8 reps", "rpe": 7, "category": "Strength", "notes": "Use dumbbells if trap bar is unavailable."}, {"day": "Day 5", "name": "Bulgarian Split Squat", "sets": 2, "reps": "8 to 12 reps per leg", "rpe": 7, "category": "Hypertrophy", "notes": "Use support for balance if needed."}, {"day": "Day 5", "name": "Leg Extension", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Pause at top if comfortable."}, {"day": "Day 5", "name": "Hamstring Curl", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Accessory", "notes": "Controlled reps."}, {"day": "Day 5", "name": "Hip Thrust or Glute Bridge", "sets": 2, "reps": "8 to 12 reps", "rpe": 7, "category": "Hypertrophy", "notes": "Full lockout without overextending low back."}, {"day": "Day 5", "name": "Seated Calf Raise", "sets": 3, "reps": "12 to 20 reps", "rpe": 7, "category": "Accessory", "notes": "Full stretch and controlled top."}, {"day": "Day 5", "name": "Hanging Knee Raise or Cable Crunch", "sets": 2, "reps": "10 to 15 reps", "rpe": 7, "category": "Core", "notes": "Use cable crunch if hanging grip is limiting."}, {"day": "Day 5", "name": "Trail Intervals", "sets": 6, "reps": "30 sec faster plus 90 sec easy walk", "rpe": 7, "category": "Cardio", "notes": "Optional finisher. Skip if legs feel overly fatigued."}], "rpeGuide": [{"rpe": "3 to 4", "title": "Easy", "meaning": "Warm ups, mobility, and easy cardio. You should feel fully in control."}, {"rpe": "5 to 6", "title": "Moderate", "meaning": "Good working effort with plenty left. Best for endurance days and early build up."}, {"rpe": "7", "title": "Challenging but clean", "meaning": "About 3 good reps left. This is the main target for most lifts."}, {"rpe": "8", "title": "Hard", "meaning": "About 2 good reps left. Useful sometimes, but do not live here every set."}, {"rpe": "9 to 10", "title": "Near max or failure", "meaning": "Avoid this for now unless testing later. It creates more fatigue than needed."}]};
+    const weeks = [1, 2, 3, 4];
+    const days = DATA.weeklyPlan.map(day => day.day);
+
+    let state = {
+      screen: "dashboard",
+      week: Number(localStorage.getItem("wp_week_mobile_fixed") || 1),
+      day: localStorage.getItem("wp_day_mobile_fixed") || "Day 1",
+      trackerDay: localStorage.getItem("wp_tracker_day_mobile_fixed") || "All",
+      logs: readStore("wp_logs_mobile_fixed", {}),
+      completedDays: readStore("wp_days_mobile_fixed", {}),
+      timerSeconds: 0,
+      timerTotal: 0,
+      timerRunning: false,
+      timerInterval: null
+    };
+
+    function readStore(key, fallback) {
+      try {
+        return JSON.parse(localStorage.getItem(key)) || fallback;
+      } catch {
+        return fallback;
+      }
+    }
+
+    function writeStore(key, value) {
+      localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    function slug(value) {
+      return String(value).toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+    }
+
+    function exerciseKey(week, index) {
+      return `w${week}_ex${index}`;
+    }
+
+    function dayKey(week, day) {
+      return `w${week}_${slug(day)}`;
+    }
+
+    function planFor(day) {
+      return DATA.weeklyPlan.find(item => item.day === day) || DATA.weeklyPlan[0];
+    }
+
+    function exercisesFor(day) {
+      return DATA.exercises
+        .map((exercise, index) => ({ ...exercise, index }))
+        .filter(exercise => exercise.day === day);
+    }
+
+    function classForCategory(category) {
+      const value = String(category || "").toLowerCase();
+      if (value.includes("strength")) return "strength";
+      if (value.includes("hypertrophy")) return "hypertrophy";
+      if (value.includes("accessory")) return "accessory";
+      if (value.includes("core")) return "core";
+      if (value.includes("cardio")) return "cardio";
+      if (value.includes("mobility")) return "mobility";
+      return "";
+    }
+
+    function saveState() {
+      localStorage.setItem("wp_week_mobile_fixed", String(state.week));
+      localStorage.setItem("wp_day_mobile_fixed", state.day);
+      localStorage.setItem("wp_tracker_day_mobile_fixed", state.trackerDay);
+      writeStore("wp_logs_mobile_fixed", state.logs);
+      writeStore("wp_days_mobile_fixed", state.completedDays);
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      }[char]));
+    }
+
+    function stats() {
+      const totalDays = days.length * weeks.length;
+      const completedDayCount = Object.values(state.completedDays).filter(Boolean).length;
+      const allExerciseKeys = DATA.exercises.flatMap((_, index) => weeks.map(week => exerciseKey(week, index)));
+      const completedExercises = allExerciseKeys.filter(key => state.logs[key]?.done).length;
+      const totalExercises = allExerciseKeys.length;
+      const rpes = allExerciseKeys.map(key => Number(state.logs[key]?.actualRpe)).filter(value => Number.isFinite(value) && value > 0);
+      const averageRpe = rpes.length ? (rpes.reduce((sum, value) => sum + value, 0) / rpes.length).toFixed(1) : "0.0";
+      const weeklySets = DATA.exercises.reduce((sum, exercise) => sum + Number(exercise.sets || 0), 0);
+
+      return {
+        totalDays,
+        completedDayCount,
+        totalExercises,
+        completedExercises,
+        averageRpe,
+        weeklySets,
+        dayPercent: Math.round((completedDayCount / totalDays) * 100),
+        exercisePercent: Math.round((completedExercises / totalExercises) * 100)
+      };
+    }
+
+    function renderStats() {
+      const current = stats();
+      document.getElementById("stats").innerHTML = `
+        <article class="card stat"><small>Training days done</small><b>${current.completedDayCount}/${current.totalDays}</b></article>
+        <article class="card stat"><small>Exercise completion</small><b>${current.exercisePercent}%</b></article>
+        <article class="card stat"><small>Weekly planned sets</small><b>${current.weeklySets}</b></article>
+        <article class="card stat"><small>Average actual RPE</small><b>${current.averageRpe}</b></article>
+      `;
+      document.getElementById("progressBar").style.width = `${current.dayPercent}%`;
+    }
+
+    function renderWeekControls(targetId) {
+      const target = document.getElementById(targetId);
+      if (!target) return;
+      target.innerHTML = weeks.map(week => `
+        <button class="chip ${state.week === week ? "active" : ""}" data-action="set-week" data-week="${week}">
+          Week ${week}
+        </button>
+      `).join("");
+    }
+
+    function renderDayControls() {
+      document.getElementById("workoutDayControls").innerHTML = DATA.weeklyPlan.map(day => `
+        <button class="chip ${state.day === day.day ? "active" : ""} ${state.completedDays[dayKey(state.week, day.day)] ? "done" : ""}" data-action="set-day" data-day="${day.day}">
+          ${day.day}<br><span style="font-weight:700; color:var(--muted);">${day.focus}</span>
+        </button>
+      `).join("");
+    }
+
+    function renderDashboardDays() {
+      document.getElementById("dashboardDays").innerHTML = DATA.weeklyPlan.map(day => {
+        const done = Boolean(state.completedDays[dayKey(state.week, day.day)]);
+        return `
+          <button class="day-card ${done ? "done" : ""}" data-action="open-day" data-day="${day.day}">
+            <div class="day-card-top">
+              <span class="tag">${day.day}</span>
+              <span class="tag ${done ? "core" : ""}">${done ? "Done" : "Open"}</span>
+            </div>
+            <h3>${day.focus}</h3>
+            <p class="muted" style="margin:0;">${day.length}</p>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function renderToday() {
+      const plan = planFor(state.day);
+      const complete = Boolean(state.completedDays[dayKey(state.week, state.day)]);
+      document.getElementById("todayDayTag").textContent = `${plan.day} • Week ${state.week}`;
+      document.getElementById("todayTitle").textContent = plan.focus;
+      document.getElementById("todayGoal").textContent = plan.goal;
+      document.getElementById("todayDetails").innerHTML = `
+        <p class="muted" style="margin:0;"><b style="color:white;">Main work:</b> ${plan.summary}</p>
+        <p class="muted" style="margin:0;"><b style="color:white;">Optional:</b> ${plan.optional}</p>
+        <p class="muted" style="margin:0;"><b style="color:white;">Coach note:</b> ${plan.note}</p>
+      `;
+      document.getElementById("toggleToday").textContent = complete ? "Marked Complete" : "Mark Day Complete";
+    }
+
+    function renderWorkoutHeader() {
+      const plan = planFor(state.day);
+      document.getElementById("workoutDayTag").textContent = `${plan.day} • Week ${state.week}`;
+      document.getElementById("workoutTitle").textContent = plan.focus;
+      document.getElementById("workoutNote").textContent = plan.note;
+    }
+
+    function renderExercises() {
+      document.getElementById("exerciseList").innerHTML = exercisesFor(state.day).map(exercise => {
+        const key = exerciseKey(state.week, exercise.index);
+        const log = state.logs[key] || {};
+        return `
+          <article class="exercise-card">
+            <div class="exercise-top">
+              <button class="check ${log.done ? "done" : ""}" data-action="toggle-exercise" data-index="${exercise.index}">✓</button>
+              <div style="min-width:0;">
+                <div class="tag-row">
+                  <span class="tag ${classForCategory(exercise.category)}">${exercise.category}</span>
+                  <span class="tag">RPE ${exercise.rpe}</span>
+                </div>
+                <h3>${exercise.name}</h3>
+                <p class="muted" style="margin:0;">${exercise.notes}</p>
+              </div>
+            </div>
+
+            <div class="plan-grid">
+              <div class="plan-cell"><small>Sets</small><b>${exercise.sets}</b></div>
+              <div class="plan-cell"><small>Reps or Time</small><b>${exercise.reps}</b></div>
+              <div class="plan-cell"><small>Previous Best</small><b>${lastBestFor(exercise.index)}</b></div>
+            </div>
+
+            <div class="log-grid">
+              <div class="field">
+                <label>Load</label>
+                <input inputmode="decimal" placeholder="lbs" value="${escapeHtml(log.load || "")}" data-input-key="${key}" data-field="load" />
+              </div>
+              <div class="field">
+                <label>Actual reps or time</label>
+                <input placeholder="8, 8, 7 or 32 min" value="${escapeHtml(log.actualReps || "")}" data-input-key="${key}" data-field="actualReps" />
+              </div>
+              <div class="field">
+                <label>Actual RPE</label>
+                <input inputmode="decimal" placeholder="1 to 10" value="${escapeHtml(log.actualRpe || "")}" data-input-key="${key}" data-field="actualRpe" />
+              </div>
+              <div class="field wide">
+                <label>Notes</label>
+                <input placeholder="Form, energy, pain, wins" value="${escapeHtml(log.notes || "")}" data-input-key="${key}" data-field="notes" />
+              </div>
+            </div>
+
+            ${(() => {
+              const tutorial = tutorialData(exercise.name);
+              const videoUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent(exercise.name + " proper form tutorial");
+              const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(exercise.name + " exercise form guide");
+              return `<details class="tutorial-box">
+                <summary>Exercise Tutorial Mode <span>+</span></summary>
+                <div class="tutorial-content">
+                  <div class="button-row">
+                    <a class="link-btn" href="${videoUrl}" target="_blank" rel="noopener noreferrer">Watch Tutorial</a>
+                    <a class="link-btn" href="${searchUrl}" target="_blank" rel="noopener noreferrer">Form Guide Search</a>
+                  </div>
+                  <div><span class="tag core">Form Cues</span><ul class="mini-list">${listItems(tutorial.cues)}</ul></div>
+                  <div><span class="tag strength">Common Mistakes</span><ul class="mini-list">${listItems(tutorial.mistakes)}</ul></div>
+                  <div><span class="tag accessory">Substitutions</span><ul class="mini-list">${listItems(tutorial.subs)}</ul></div>
+                </div>
+              </details>`;
+            })()}
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderTrackerFilters() {
+      const options = ["All", ...days];
+      document.getElementById("trackerDayFilters").innerHTML = options.map(day => `
+        <button class="chip ${state.trackerDay === day ? "active" : ""}" data-action="set-tracker-day" data-day="${day}">
+          ${day}
+        </button>
+      `).join("");
+    }
+
+    function renderTracker() {
+      const list = state.trackerDay === "All"
+        ? DATA.exercises.map((exercise, index) => ({ ...exercise, index }))
+        : exercisesFor(state.trackerDay);
+
+      document.getElementById("trackerList").innerHTML = list.map(exercise => {
+        const key = exerciseKey(state.week, exercise.index);
+        const log = state.logs[key] || {};
+        return `
+          <article class="tracker-card">
+            <div class="exercise-top">
+              <button class="check ${log.done ? "done" : ""}" data-action="toggle-exercise" data-index="${exercise.index}">✓</button>
+              <div style="min-width:0;">
+                <div class="tag-row">
+                  <span class="tag">${exercise.day}</span>
+                  <span class="tag ${classForCategory(exercise.category)}">${exercise.category}</span>
+                </div>
+                <h3 style="margin:8px 0 0; font-size:18px; line-height:1.12;">${exercise.name}</h3>
+              </div>
+            </div>
+            <div class="tracker-grid">
+              <div class="data-cell"><small>Plan</small><b>${exercise.sets} sets, ${exercise.reps}</b></div>
+              <div class="data-cell"><small>Target RPE</small><b>${exercise.rpe}</b></div>
+              <div class="data-cell"><small>Load</small><b>${escapeHtml(log.load || "Not logged")}</b></div>
+              <div class="data-cell"><small>Actual reps</small><b>${escapeHtml(log.actualReps || "Not logged")}</b></div>
+              <div class="data-cell"><small>Actual RPE</small><b>${escapeHtml(log.actualRpe || "Not logged")}</b></div>
+              <div class="data-cell"><small>Notes</small><b>${escapeHtml(log.notes || "No notes")}</b></div>
+            </div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function renderRpe() {
+      document.getElementById("rpeList").innerHTML = DATA.rpeGuide.map(item => `
+        <article class="day-card">
+          <div class="day-card-top">
+            <span class="tag cardio">RPE ${item.rpe}</span>
+            <span class="tag">${item.title}</span>
+          </div>
+          <p class="muted" style="margin:10px 0 0;">${item.meaning}</p>
+        </article>
+      `).join("");
+    }
+
+    function renderNav() {
+      document.querySelectorAll(".nav-btn[data-screen]").forEach(button => {
+        button.classList.toggle("active", button.dataset.screen === state.screen);
+      });
+      document.querySelectorAll(".screen").forEach(screen => {
+        screen.classList.toggle("active", screen.id === state.screen);
+      });
+    }
+
+
+
+    function renderTimer() {
+      const display = document.getElementById("timerDisplay");
+      const button = document.getElementById("timerStart");
+      if (!display || !button) return;
+      const minutes = String(Math.floor(state.timerSeconds / 60)).padStart(2, "0");
+      const seconds = String(state.timerSeconds % 60).padStart(2, "0");
+      display.textContent = `${minutes}:${seconds}`;
+      button.textContent = state.timerRunning ? "Pause" : "Start";
+    }
+
+    function startTimer() {
+      if (state.timerRunning) {
+        clearInterval(state.timerInterval);
+        state.timerRunning = false;
+        renderTimer();
+        return;
+      }
+      if (state.timerSeconds <= 0) state.timerSeconds = state.timerTotal || 90;
+      state.timerRunning = true;
+      state.timerInterval = setInterval(() => {
+        state.timerSeconds -= 1;
+        if (state.timerSeconds <= 0) {
+          clearInterval(state.timerInterval);
+          state.timerSeconds = 0;
+          state.timerRunning = false;
+          if ("vibrate" in navigator) navigator.vibrate([180, 80, 180]);
+        }
+        renderTimer();
+      }, 1000);
+      renderTimer();
+    }
+
+    function resetTimer() {
+      clearInterval(state.timerInterval);
+      state.timerRunning = false;
+      state.timerSeconds = state.timerTotal || 0;
+      renderTimer();
+    }
+
+    function renderAll() {
+      saveState();
+      renderNav();
+      renderStats();
+      renderWeekControls("weekControls");
+      renderWeekControls("weekControlsWorkout");
+      renderWeekControls("weekControlsTracker");
+      renderDayControls();
+      renderDashboardDays();
+      renderToday();
+      renderWorkoutHeader();
+      renderExercises();
+      renderTrackerFilters();
+      renderTracker();
+      renderRpe();
+      renderTimer();
+    }
+
+
+
+    function tutorialData(name) {
+      const n = String(name).toLowerCase();
+      if (n.includes("bench press") || n.includes("chest press") || n.includes("push ups") || n.includes("incline dumbbell")) return { cues:["Shoulder blades back and down","Feet planted and core tight","Lower under control, press without bouncing"], mistakes:["Flaring elbows too wide","Letting shoulders roll forward","Using a weight that kills range of motion"], subs:["Machine chest press","Dumbbell press","Push ups"] };
+      if (n.includes("lat pulldown")) return { cues:["Chest tall and ribs down","Pull elbows toward your pockets","Control the weight back up"], mistakes:["Leaning way back","Shrugging shoulders","Pulling with arms only"], subs:["Assisted pull up","Cable pullover","Band pulldown"] };
+      if (n.includes("row")) return { cues:["Brace before you pull","Drive elbows back","Pause and squeeze upper back"], mistakes:["Jerking with lower back","Letting shoulders shrug","Cutting the rep short"], subs:["One arm dumbbell row","Machine row","Resistance band row"] };
+      if (n.includes("shoulder press")) return { cues:["Brace ribs down","Press slightly back over ears","Keep wrists stacked over elbows"], mistakes:["Overarching low back","Pressing too far forward","Going too heavy too soon"], subs:["Machine shoulder press","Landmine press","Seated dumbbell press"] };
+      if (n.includes("triceps")) return { cues:["Keep elbows still","Fully straighten at the bottom","Control the return"], mistakes:["Letting elbows drift","Using body swing","Short reps"], subs:["Rope pressdown","Bench dips","Dumbbell skull crusher"] };
+      if (n.includes("curl") && !n.includes("leg") && !n.includes("hamstring")) return { cues:["Elbows stay close","Curl without swinging","Squeeze at the top"], mistakes:["Rocking the torso","Letting wrists bend back","Dropping the weight fast"], subs:["Cable curl","Hammer curl","EZ bar curl"] };
+      if (n.includes("dead bug")) return { cues:["Low back gently pressed down","Move slow","Exhale as arm and leg extend"], mistakes:["Arching the back","Rushing reps","Moving too far before you can control it"], subs:["Bird dog","Plank","Heel taps"] };
+      if (n.includes("squat") || n.includes("leg press")) return { cues:["Brace first","Knees track with toes","Use a depth you can control"], mistakes:["Knees collapsing inward","Rounding low back","Bouncing out of the bottom"], subs:["Goblet squat","Hack squat","Leg press"] };
+      if (n.includes("romanian")) return { cues:["Push hips back","Keep dumbbells close","Feel hamstrings stretch"], mistakes:["Turning it into a squat","Rounding the back","Reaching too low just to go lower"], subs:["Dumbbell RDL","Cable pull through","Back extension"] };
+      if (n.includes("lunge")) return { cues:["Tall chest","Step with control","Push through the whole front foot"], mistakes:["Crashing into the front knee","Losing balance from rushing","Taking tiny uneven steps"], subs:["Reverse lunge","Split squat","Step up"] };
+      if (n.includes("leg curl") || n.includes("hamstring curl")) return { cues:["Set hips firmly","Curl smoothly","Slowly lower"], mistakes:["Lifting hips off pad","Using momentum","Not controlling the negative"], subs:["Seated leg curl","Lying leg curl","Stability ball curl"] };
+      if (n.includes("calf")) return { cues:["Full stretch at bottom","Pause at the top","Do not bounce"], mistakes:["Tiny range of motion","Fast bouncing reps","Letting ankles roll"], subs:["Standing calf raise","Seated calf raise","Single leg calf raise"] };
+      if (n.includes("plank")) return { cues:["Squeeze glutes","Ribs down","Straight line from head to heels"], mistakes:["Hips sagging","Holding breath","Shrugging shoulders"], subs:["Knee plank","Dead bug","Side plank"] };
+      if (n.includes("stretch") || n.includes("mobility") || n.includes("rotations") || n.includes("squat hold")) return { cues:["Move slowly","Breathe through the stretch","Stay away from sharp pain"], mistakes:["Forcing range","Bouncing aggressively","Holding your breath"], subs:["Gentle walk","Dynamic warm up","Foam rolling"] };
+      if (n.includes("trail") || n.includes("treadmill") || n.includes("bike") || n.includes("zone 2")) return { cues:["Start easier than you think","Keep breathing controlled","Finish with energy left"], mistakes:["Turning easy cardio into a sprint","Skipping warm up","Ignoring knee or shin pain"], subs:["Incline walk","Stationary bike","Elliptical"] };
+      if (n.includes("lateral raise")) return { cues:["Soft elbows","Lead with elbows","Stop around shoulder height"], mistakes:["Swinging heavy weight","Shrugging traps","Going too high"], subs:["Cable lateral raise","Machine lateral raise","Lean away lateral raise"] };
+      if (n.includes("face pull")) return { cues:["Pull toward forehead","Elbows high","Squeeze rear delts"], mistakes:["Using too much weight","Low elbow path","Arching back"], subs:["Reverse pec deck","Band face pull","Rear delt fly"] };
+      if (n.includes("deadlift")) return { cues:["Brace hard","Push floor away","Keep weight close"], mistakes:["Rounding back","Yanking from the floor","Letting hips shoot up first"], subs:["Trap bar deadlift","Dumbbell deadlift","Rack pull"] };
+      if (n.includes("bulgarian")) return { cues:["Set front foot stable","Control the descent","Drive through front foot"], mistakes:["Front foot too close","Rushing reps","Letting knee cave inward"], subs:["Split squat","Reverse lunge","Step up"] };
+      if (n.includes("leg extension")) return { cues:["Back against pad","Lift smoothly","Pause at the top"], mistakes:["Swinging the stack","Locking out aggressively","Setting pad incorrectly"], subs:["Goblet squat","Leg press","Step up"] };
+      if (n.includes("hip thrust") || n.includes("glute bridge")) return { cues:["Ribs down","Chin tucked","Squeeze glutes at top"], mistakes:["Overarching low back","Feet too far away","Not reaching full lockout"], subs:["Glute bridge","Cable pull through","Back extension"] };
+      if (n.includes("knee raise") || n.includes("cable crunch")) return { cues:["Curl pelvis up","Move with control","Exhale on the crunch"], mistakes:["Swinging legs","Using hip flexors only","Rushing reps"], subs:["Reverse crunch","Dead bug","Machine crunch"] };
+      return { cues:["Start light","Control the movement","Stop if sharp pain appears"], mistakes:["Rushing","Going too heavy","Ignoring form"], subs:["Machine version","Dumbbell version","Bodyweight version"] };
+    }
+
+    function listItems(items) {
+      return items.map(item => `<li>${escapeHtml(item)}</li>`).join("");
+    }
+
+    function lastBestFor(index) {
+      const previousWeeks = weeks.filter(week => week < state.week).reverse();
+      for (const week of previousWeeks) {
+        const log = state.logs[exerciseKey(week, index)];
+        if (log && (log.load || log.actualReps || log.actualRpe)) {
+          return `Week ${week}: ${log.load || "no load"} • ${log.actualReps || "no reps"} • RPE ${log.actualRpe || "?"}`;
+        }
+      }
+      return "No previous best yet";
+    }
+
+    function setScreen(screen) {
+      state.screen = screen;
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function resetProgress() {
+      if (!confirm("Reset all workout progress and logs?")) return;
+      state.logs = {};
+      state.completedDays = {};
+      renderAll();
+    }
+
+    document.addEventListener("click", event => {
+      const button = event.target.closest("button");
+      if (!button) return;
+
+      if (button.dataset.screen) {
+        setScreen(button.dataset.screen);
+        return;
+      }
+
+      if (button.dataset.screenJump) {
+        setScreen(button.dataset.screenJump);
+        return;
+      }
+
+      if (button.dataset.timer) {
+        state.timerTotal = Number(button.dataset.timer);
+        state.timerSeconds = state.timerTotal;
+        state.timerRunning = false;
+        clearInterval(state.timerInterval);
+        renderTimer();
+        return;
+      }
+
+      const action = button.dataset.action;
+
+      if (action === "set-week") {
+        state.week = Number(button.dataset.week);
+        renderAll();
+        return;
+      }
+
+      if (action === "set-day") {
+        state.day = button.dataset.day;
+        renderAll();
+        return;
+      }
+
+      if (action === "open-day") {
+        state.day = button.dataset.day;
+        setScreen("workouts");
+        return;
+      }
+
+      if (action === "set-tracker-day") {
+        state.trackerDay = button.dataset.day;
+        renderAll();
+        return;
+      }
+
+      if (action === "toggle-exercise") {
+        const index = Number(button.dataset.index);
+        const key = exerciseKey(state.week, index);
+        state.logs[key] = state.logs[key] || {};
+        state.logs[key].done = !state.logs[key].done;
+        renderAll();
+        return;
+      }
+    });
+
+    document.addEventListener("input", event => {
+      const input = event.target.closest("[data-input-key]");
+      if (!input) return;
+      const key = input.dataset.inputKey;
+      const field = input.dataset.field;
+      state.logs[key] = state.logs[key] || {};
+      state.logs[key][field] = input.value;
+      saveState();
+      renderStats();
+    });
+
+    document.getElementById("toggleToday").addEventListener("click", () => {
+      const key = dayKey(state.week, state.day);
+      state.completedDays[key] = !state.completedDays[key];
+      renderAll();
+    });
+
+    document.getElementById("resetMobile").addEventListener("click", resetProgress);
+    document.getElementById("timerStart").addEventListener("click", startTimer);
+    document.getElementById("timerReset").addEventListener("click", resetTimer);
+    document.getElementById("resetDesktop").addEventListener("click", resetProgress);
+
+    renderAll();
   </script>
 </body>
 </html>
