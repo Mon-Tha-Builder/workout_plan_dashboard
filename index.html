@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Workout Plan Dashboard v2 Tutorials</title>
+  <meta name="theme-color" content="#0A0D0F" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="FORGE Workout" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <title>FORGE Workout Dashboard Pro</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@600;700;800&family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap');
 
@@ -495,7 +500,7 @@
     /* ============ PLAN / DATA GRIDS ============ */
     .plan-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 6px;
       margin-top: 14px;
     }
@@ -609,7 +614,10 @@
       font-family: var(--font-mono);
       font-size: 20px;
     }
+    .tutorial-box[open] summary > span { color: var(--heat-500); }
     .tutorial-box[open] summary > span::before { content: '−'; }
+    .tutorial-box[open] summary > span { font-size: 0; }
+    .tutorial-box[open] summary > span::before { font-size: 20px; }
     .tutorial-box summary::-webkit-details-marker { display: none; }
     .tutorial-content {
       border-top: 1px solid var(--ink-4);
@@ -745,6 +753,201 @@
 
     .desktop-only { display: none; }
 
+
+    /* ============ REGULAR WEB APP UTILITIES ============ */
+    .utility-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .utility-note {
+      border-left: 3px solid var(--volt-500);
+      padding: 10px 12px;
+      background: var(--ink-3);
+      color: var(--bone-2);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .file-input-wrap {
+      position: relative;
+      overflow: hidden;
+      min-height: 48px;
+    }
+    .file-input-wrap input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    /* ============ PRO WEB APP UPGRADES ============ */
+    .bottom-nav {
+      grid-template-columns: repeat(5, minmax(0,1fr));
+    }
+
+    .coach-card {
+      border-left: 4px solid var(--volt-500);
+    }
+
+    .coach-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .coach-box {
+      border: 1px solid var(--ink-4);
+      background: var(--ink-3);
+      border-radius: 2px;
+      padding: 12px;
+    }
+
+    .coach-box small {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .coach-box b {
+      display: block;
+      margin-top: 7px;
+      color: var(--bone-1);
+      font-family: var(--font-mono);
+      font-size: 18px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .session-hero {
+      background: var(--volt-500);
+      color: var(--ink-1);
+      border-color: var(--volt-500);
+    }
+
+    .session-hero h2,
+    .session-hero h3,
+    .session-hero .muted,
+    .session-hero .muted b {
+      color: var(--ink-1) !important;
+    }
+
+    .session-hero .tag {
+      background: var(--ink-1);
+      color: var(--volt-500);
+      border-color: var(--ink-1);
+    }
+
+    .session-title {
+      margin: 12px 0 8px;
+      font-family: var(--font-display);
+      font-size: 46px;
+      line-height: .9;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+    }
+
+    .session-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .swap-box {
+      margin-top: 14px;
+      border: 1px solid var(--ink-4);
+      background: var(--ink-1);
+      border-radius: 2px;
+      padding: 12px;
+    }
+
+    .swap-box label {
+      display: block;
+      color: var(--bone-3);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      margin-bottom: 6px;
+    }
+
+    .swap-box select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--ink-5);
+      background: var(--ink-3);
+      color: var(--bone-1);
+      border-radius: 2px;
+      padding: 12px;
+      font-family: var(--font-body);
+      font-weight: 700;
+    }
+
+    .suggestion {
+      color: var(--volt-500) !important;
+    }
+
+    .body-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0,1fr));
+      gap: 10px;
+    }
+
+    .body-grid .wide {
+      grid-column: 1 / -1;
+    }
+
+    .install-box {
+      border: 1px solid var(--volt-500);
+      background: rgba(215,255,30,0.06);
+    }
+
+    @media (min-width: 720px) {
+      .bottom-nav {
+        grid-template-columns: repeat(6, minmax(0,1fr));
+      }
+      .coach-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+      }
+      .plan-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+      }
+      .body-grid {
+        grid-template-columns: repeat(4, minmax(0,1fr));
+      }
+      .body-grid .wide {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .bottom-nav .nav-btn {
+        font-size: 9px;
+        letter-spacing: 0.08em;
+      }
+      .session-title {
+        font-size: 38px;
+      }
+      .session-actions {
+        grid-template-columns: 1fr;
+      }
+      .coach-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (min-width: 720px) {
+      .utility-grid {
+        grid-template-columns: repeat(3, minmax(0,1fr));
+      }
+    }
+
     @media (min-width: 720px) {
       body { padding-bottom: 28px; }
       .app { padding: 24px; }
@@ -792,9 +995,9 @@
 <body>
   <main class="app">
     <header class="hero">
-      <div class="badge">v2 · No nonsense</div>
+      <div class="badge">FORGE · Regular Web Version</div>
       <h1>The couch isn't going anywhere.</h1>
-      <p class="hero-text">A cleaner phone friendly version of your 5 day plan. Tutorial buttons, form cues, common mistakes, substitutions, rest timer, and previous best tracking. Lift first. Sit later.</p>
+      <p class="hero-text">Your best regular web version: mobile friendly dashboard, tutorial buttons, form cues, common mistakes, substitutions, rest timer, previous best tracking, and backup/restore for your progress. No Apple Health. No iOS app build required.</p>
       <div class="hero-meta">
         <div class="mini"><small>Goal</small><b>Muscle, strength, endurance, flexibility</b></div>
         <div class="mini"><small>Setup</small><b>Building gym plus trails</b></div>
@@ -807,6 +1010,10 @@
       </button>
       <button class="nav-btn" data-screen="workouts">
         <svg viewBox="0 0 24 24"><path d="M6 4v16M18 4v16M3 8h3M3 16h3M18 8h3M18 16h3M6 12h12"/></svg>Workouts
+      </button>
+
+      <button class="nav-btn" data-screen="start">
+        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>Start
       </button>
       <button class="nav-btn" data-screen="tracker">
         <svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg>Tracker
@@ -821,6 +1028,18 @@
 
     <section class="screen active" id="dashboard">
       <div class="grid2" id="stats"></div>
+
+      <div class="card coach-card stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Weekly Coach Recap</h2>
+            <p class="muted" style="margin:6px 0 0;">A quick read on your current week based on completed days, logged sets, and RPE.</p>
+          </div>
+        </div>
+        <div id="weeklyRecap" class="coach-grid"></div>
+        <p class="muted" id="weeklyCoachNote" style="margin:0;"></p>
+      </div>
+
 
       <div class="card stack" style="margin-top:12px;">
         <div class="section-title">
@@ -849,6 +1068,40 @@
           <h2>Training Days</h2>
         </div>
         <div class="day-grid" id="dashboardDays"></div>
+      </div>
+
+
+      <div class="card stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Progress Backup</h2>
+            <p class="muted" style="margin:6px 0 0;">Your progress saves in this browser. Use backup before switching phones, clearing browser data, or updating this file.</p>
+          </div>
+        </div>
+        <div class="utility-grid">
+          <button class="primary" id="exportProgress">Export Backup</button>
+          <label class="secondary file-input-wrap">
+            Import Backup
+            <input id="importProgress" type="file" accept="application/json,.json" />
+          </label>
+          <button class="secondary" id="copyProgress">Copy Backup Text</button>
+        </div>
+        <div class="utility-note" id="backupStatus">Regular web version: works from GitHub Pages or by opening the HTML file directly. No Apple Health or native app required.</div>
+      </div>
+
+
+      <div class="card install-box stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Install Mode</h2>
+            <p class="muted" style="margin:6px 0 0;">Use this dashboard like an app from your phone home screen. Works best after uploading the included files to GitHub Pages.</p>
+          </div>
+        </div>
+        <div class="button-row">
+          <button class="primary" id="installPwa">Install If Available</button>
+          <button class="secondary" id="showInstallHelp">How To Add To Home Screen</button>
+        </div>
+        <p class="muted" id="installStatus" style="margin:0;">On iPhone: open in Safari, tap Share, then Add to Home Screen.</p>
       </div>
 
       <button class="danger" id="resetMobile" style="width:100%; margin-top:12px;">Reset Progress</button>
@@ -890,6 +1143,61 @@
 
           <div id="exerciseList" class="stack"></div>
         </div>
+      </div>
+    </section>
+
+
+    <section class="screen" id="start">
+      <div class="card session-hero">
+        <span class="tag" id="sessionWeekTag">Week 1</span>
+        <h2 class="session-title" id="sessionExerciseName">Start Workout</h2>
+        <p class="muted" id="sessionExercisePlan">Choose your day and start moving.</p>
+        <div class="coach-grid" style="margin-top:14px;">
+          <div class="coach-box"><small>Exercise</small><b id="sessionExerciseCounter">1/1</b></div>
+          <div class="coach-box"><small>Set</small><b id="sessionSetCounter">1/1</b></div>
+          <div class="coach-box"><small>Target RPE</small><b id="sessionRpe">7</b></div>
+          <div class="coach-box"><small>Next Move</small><b id="sessionSuggestion" style="font-size:14px; line-height:1.15;">Log first set</b></div>
+        </div>
+        <div class="session-actions">
+          <button class="primary" id="completeSessionSet">Complete Set</button>
+          <button class="secondary" id="nextSessionExercise">Next Exercise</button>
+          <button class="secondary" id="previousSessionExercise">Previous Exercise</button>
+          <button class="secondary" data-screen-jump="workouts">Open Full Workout</button>
+        </div>
+      </div>
+
+      <div class="card stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Session Day</h2>
+            <p class="muted" style="margin:6px 0 0;">Start mode uses the same day and week as the main dashboard.</p>
+          </div>
+        </div>
+        <div class="week-row" id="weekControlsStart"></div>
+        <div class="day-row" id="startDayControls"></div>
+      </div>
+
+      <div class="card timer-card" style="margin-top:12px;">
+        <span class="tag core">Session Rest Timer</span>
+        <div class="timer-display" id="sessionTimerDisplay">00:00</div>
+        <div class="timer-controls">
+          <button class="secondary" data-timer="60">60s</button>
+          <button class="secondary" data-timer="90">90s</button>
+          <button class="secondary" data-timer="120">2 min</button>
+          <button class="secondary" data-timer="180">3 min</button>
+          <button class="primary" id="sessionTimerStart">Start</button>
+          <button class="danger" id="sessionTimerReset">Reset</button>
+        </div>
+      </div>
+
+      <div class="card stack" style="margin-top:12px;">
+        <div class="section-title">
+          <div>
+            <h2>Log Current Exercise</h2>
+            <p class="muted" style="margin:6px 0 0;">This writes to the same log as the workout and tracker tabs.</p>
+          </div>
+        </div>
+        <div id="sessionLogFields"></div>
       </div>
     </section>
 
@@ -942,6 +1250,12 @@
       timerInterval: null
     };
 
+    state.sessionIndex = Number(localStorage.getItem("wp_session_index_pro") || 0);
+    state.sessionSet = Number(localStorage.getItem("wp_session_set_pro") || 1);
+    state.swaps = readStore("wp_swaps_pro", {});
+    state.bodyLog = readStore("wp_body_log_pro", {});
+    state.installPrompt = null;
+
     function readStore(key, fallback) {
       try {
         return JSON.parse(localStorage.getItem(key)) || fallback;
@@ -993,6 +1307,10 @@
       localStorage.setItem("wp_tracker_day_mobile_fixed", state.trackerDay);
       writeStore("wp_logs_mobile_fixed", state.logs);
       writeStore("wp_days_mobile_fixed", state.completedDays);
+      localStorage.setItem("wp_session_index_pro", String(state.sessionIndex || 0));
+      localStorage.setItem("wp_session_set_pro", String(state.sessionSet || 1));
+      writeStore("wp_swaps_pro", state.swaps);
+      writeStore("wp_body_log_pro", state.bodyLog);
     }
 
     function escapeHtml(value) {
@@ -1097,6 +1415,8 @@
       document.getElementById("exerciseList").innerHTML = exercisesFor(state.day).map(exercise => {
         const key = exerciseKey(state.week, exercise.index);
         const log = state.logs[key] || {};
+        const displayName = effectiveExerciseName(exercise);
+        const swapOptions = swapOptionsFor(exercise.name);
         return `
           <article class="exercise-card">
             <div class="exercise-top">
@@ -1106,7 +1426,7 @@
                   <span class="tag ${classForCategory(exercise.category)}">${exercise.category}</span>
                   <span class="tag">RPE ${exercise.rpe}</span>
                 </div>
-                <h3>${exercise.name}</h3>
+                <h3>${displayName}</h3>
                 <p class="muted" style="margin:0;">${exercise.notes}</p>
               </div>
             </div>
@@ -1115,6 +1435,15 @@
               <div class="plan-cell"><small>Sets</small><b>${exercise.sets}</b></div>
               <div class="plan-cell"><small>Reps or Time</small><b>${exercise.reps}</b></div>
               <div class="plan-cell"><small>Previous Best</small><b>${lastBestFor(exercise.index)}</b></div>
+              <div class="plan-cell"><small>Next Move</small><b class="suggestion">${progressionSuggestion(exercise.index)}</b></div>
+            </div>
+
+
+            <div class="swap-box">
+              <label>Exercise Swap</label>
+              <select data-swap-index="${exercise.index}">
+                ${swapOptions.map(option => `<option value="${escapeHtml(option)}" ${option === displayName ? "selected" : ""}>${escapeHtml(option)}</option>`).join("")}
+              </select>
             </div>
 
             <div class="log-grid">
@@ -1137,9 +1466,9 @@
             </div>
 
             ${(() => {
-              const tutorial = tutorialData(exercise.name);
-              const videoUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent(exercise.name + " proper form tutorial");
-              const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(exercise.name + " exercise form guide");
+              const tutorial = tutorialData(displayName);
+              const videoUrl = "https://www.youtube.com/results?search_query=" + encodeURIComponent(displayName + " proper form tutorial");
+              const searchUrl = "https://www.google.com/search?q=" + encodeURIComponent(displayName + " exercise form guide");
               return `<details class="tutorial-box">
                 <summary>Exercise Tutorial Mode <span>+</span></summary>
                 <div class="tutorial-content">
@@ -1194,6 +1523,7 @@
               <div class="data-cell"><small>Actual reps</small><b>${escapeHtml(log.actualReps || "Not logged")}</b></div>
               <div class="data-cell"><small>Actual RPE</small><b>${escapeHtml(log.actualRpe || "Not logged")}</b></div>
               <div class="data-cell"><small>Notes</small><b>${escapeHtml(log.notes || "No notes")}</b></div>
+              <div class="data-cell"><small>Next Move</small><b class="suggestion">${progressionSuggestion(exercise.index)}</b></div>
             </div>
           </article>
         `;
@@ -1230,7 +1560,11 @@
       const minutes = String(Math.floor(state.timerSeconds / 60)).padStart(2, "0");
       const seconds = String(state.timerSeconds % 60).padStart(2, "0");
       display.textContent = `${minutes}:${seconds}`;
+      const sessionDisplay = document.getElementById("sessionTimerDisplay");
+      if (sessionDisplay) sessionDisplay.textContent = `${minutes}:${seconds}`;
+      const sessionButton = document.getElementById("sessionTimerStart");
       button.textContent = state.timerRunning ? "Pause" : "Start";
+      if (sessionButton) sessionButton.textContent = state.timerRunning ? "Pause" : "Start";
     }
 
     function startTimer() {
@@ -1266,15 +1600,19 @@
       saveState();
       renderNav();
       renderStats();
+      renderWeeklyRecap();
+      renderStartDayControls();
       renderWeekControls("weekControls");
       renderWeekControls("weekControlsWorkout");
       renderWeekControls("weekControlsTracker");
+      renderWeekControls("weekControlsStart");
       renderDayControls();
       renderDashboardDays();
       renderToday();
       renderWorkoutHeader();
       renderExercises();
       renderTrackerFilters();
+      renderStartSession();
       renderTracker();
       renderRpe();
       renderTimer();
@@ -1324,6 +1662,313 @@
       return "No previous best yet";
     }
 
+
+    function backupPayload() {
+      return {
+        app: "FORGE Workout Dashboard",
+        version: "regular-web-v1",
+        exportedAt: new Date().toISOString(),
+        week: state.week,
+        day: state.day,
+        trackerDay: state.trackerDay,
+        logs: state.logs,
+        completedDays: state.completedDays
+      };
+    }
+
+    function setBackupStatus(message) {
+      const status = document.getElementById("backupStatus");
+      if (status) status.textContent = message;
+    }
+
+    function exportProgressBackup() {
+      const payload = backupPayload();
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement("a");
+      const date = new Date().toISOString().slice(0, 10);
+      anchor.href = url;
+      anchor.download = `forge_workout_backup_${date}.json`;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      URL.revokeObjectURL(url);
+      setBackupStatus("Backup exported. Keep that JSON file somewhere safe.");
+    }
+
+    async function copyProgressBackup() {
+      const text = JSON.stringify(backupPayload(), null, 2);
+      try {
+        await navigator.clipboard.writeText(text);
+        setBackupStatus("Backup text copied to clipboard.");
+      } catch {
+        setBackupStatus("Clipboard copy failed. Use Export Backup instead.");
+      }
+    }
+
+    function importProgressBackup(file) {
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const payload = JSON.parse(String(reader.result || "{}"));
+          if (!payload.logs || !payload.completedDays) {
+            throw new Error("This does not look like a FORGE workout backup.");
+          }
+          state.week = Number(payload.week || 1);
+          state.day = payload.day || "Day 1";
+          state.trackerDay = payload.trackerDay || "All";
+          state.logs = payload.logs || {};
+          state.completedDays = payload.completedDays || {};
+          renderAll();
+          setBackupStatus("Backup imported successfully.");
+        } catch (error) {
+          setBackupStatus("Import failed: " + (error.message || String(error)));
+        }
+      };
+      reader.readAsText(file);
+    }
+
+
+
+    function effectiveExerciseName(exercise) {
+      return state.swaps && state.swaps[String(exercise.index)] ? state.swaps[String(exercise.index)] : exercise.name;
+    }
+
+    function swapOptionsFor(name) {
+      const tutorial = tutorialData(name);
+      return [name, ...(tutorial.subs || [])].filter((item, index, arr) => arr.indexOf(item) === index);
+    }
+
+    function progressionSuggestion(index) {
+      const current = state.logs[exerciseKey(state.week, index)] || {};
+      const previousWeeks = weeks.filter(week => week < state.week).reverse();
+
+      let previous = null;
+      for (const week of previousWeeks) {
+        const log = state.logs[exerciseKey(week, index)];
+        if (log && (log.load || log.actualReps || log.actualRpe)) {
+          previous = log;
+          break;
+        }
+      }
+
+      const rpe = Number(current.actualRpe || previous?.actualRpe || 0);
+      const load = current.load || previous?.load || "";
+      const reps = String(current.actualReps || previous?.actualReps || "").toLowerCase();
+
+      if (!load && !reps && !rpe) return "Log first session";
+      if (rpe >= 9) return "Lower weight next time";
+      if (rpe >= 8) return "Repeat weight";
+      if (rpe > 0 && rpe <= 7 && reps) return "Add small weight";
+      if (previous) return "Beat previous best";
+      return "Build clean reps";
+    }
+
+    function renderWeeklyRecap() {
+      const target = document.getElementById("weeklyRecap");
+      if (!target) return;
+
+      const completed = days.filter(day => state.completedDays[dayKey(state.week, day)]).length;
+      const weekExerciseKeys = DATA.exercises.map((_, index) => exerciseKey(state.week, index));
+      const logged = weekExerciseKeys.filter(key => {
+        const log = state.logs[key] || {};
+        return log.done || log.load || log.actualReps || log.actualRpe || log.notes;
+      }).length;
+      const rpes = weekExerciseKeys.map(key => Number(state.logs[key]?.actualRpe)).filter(value => Number.isFinite(value) && value > 0);
+      const avg = rpes.length ? (rpes.reduce((sum, value) => sum + value, 0) / rpes.length).toFixed(1) : "0.0";
+      const score = Math.round((completed / days.length) * 100);
+
+      target.innerHTML = `
+        <div class="coach-box"><small>Week</small><b>${state.week}</b></div>
+        <div class="coach-box"><small>Days Done</small><b>${completed}/${days.length}</b></div>
+        <div class="coach-box"><small>Logged Items</small><b>${logged}</b></div>
+        <div class="coach-box"><small>Consistency</small><b>${score}%</b></div>
+      `;
+
+      const note = document.getElementById("weeklyCoachNote");
+      let message = "Start logging workouts and this will turn into your weekly coach recap.";
+      if (completed >= 5) message = `Week ${state.week} is complete. Next focus: recover, review best lifts, and start the next week with controlled RPE.`;
+      else if (completed >= 3) message = `Solid week. You are at ${completed}/5 sessions with average RPE ${avg}. Finish strong but do not chase failure.`;
+      else if (completed >= 1) message = `You started the week. Keep the next session simple: show up, hit clean reps, and log it.`;
+      note.textContent = message;
+    }
+
+    function renderStartDayControls() {
+      const target = document.getElementById("startDayControls");
+      if (!target) return;
+      target.innerHTML = DATA.weeklyPlan.map(day => `
+        <button class="chip ${state.day === day.day ? "active" : ""}" data-action="set-day" data-day="${day.day}">
+          ${day.day}
+        </button>
+      `).join("");
+    }
+
+    function sessionExercises() {
+      return exercisesFor(state.day);
+    }
+
+    function activeSessionExercise() {
+      const list = sessionExercises();
+      if (!list.length) return null;
+      if (state.sessionIndex < 0) state.sessionIndex = 0;
+      if (state.sessionIndex >= list.length) state.sessionIndex = list.length - 1;
+      return list[state.sessionIndex];
+    }
+
+    function renderStartSession() {
+      const exercise = activeSessionExercise();
+      if (!exercise) return;
+
+      const displayName = effectiveExerciseName(exercise);
+      const key = exerciseKey(state.week, exercise.index);
+      const log = state.logs[key] || {};
+      const totalSets = Number(exercise.sets || 1);
+      if (!state.sessionSet || state.sessionSet < 1) state.sessionSet = 1;
+      if (state.sessionSet > totalSets) state.sessionSet = totalSets;
+
+      
+document.getElementById("sessionWeekTag").textContent = `${state.day} • Week ${state.week}`;
+      document.getElementById("sessionExerciseName").textContent = displayName;
+      document.getElementById("sessionExercisePlan").innerHTML = `<b>Plan:</b> ${exercise.sets} sets • ${exercise.reps} • target RPE ${exercise.rpe}`;
+      document.getElementById("sessionExerciseCounter").textContent = `${state.sessionIndex + 1}/${sessionExercises().length}`;
+      document.getElementById("sessionSetCounter").textContent = `${state.sessionSet}/${totalSets}`;
+      document.getElementById("sessionRpe").textContent = exercise.rpe;
+      document.getElementById("sessionSuggestion").textContent = progressionSuggestion(exercise.index);
+
+      document.getElementById("sessionLogFields").innerHTML = `
+        <div class="log-grid">
+          <div class="field">
+            <label>Load</label>
+            <input inputmode="decimal" placeholder="lbs" value="${escapeHtml(log.load || "")}" data-input-key="${key}" data-field="load" />
+          </div>
+          <div class="field">
+            <label>Actual reps or time</label>
+            <input placeholder="8, 8, 7 or 32 min" value="${escapeHtml(log.actualReps || "")}" data-input-key="${key}" data-field="actualReps" />
+          </div>
+          <div class="field">
+            <label>Actual RPE</label>
+            <input inputmode="decimal" placeholder="1 to 10" value="${escapeHtml(log.actualRpe || "")}" data-input-key="${key}" data-field="actualRpe" />
+          </div>
+          <div class="field wide">
+            <label>Notes</label>
+            <input placeholder="Form, energy, pain, wins" value="${escapeHtml(log.notes || "")}" data-input-key="${key}" data-field="notes" />
+          </div>
+        </div>
+        <p class="muted" style="margin:10px 0 0;"><b style="color:white;">Previous best:</b> ${lastBestFor(exercise.index)}</p>
+      `;
+    }
+
+    function completeSessionSet() {
+      const exercise = activeSessionExercise();
+      if (!exercise) return;
+      const totalSets = Number(exercise.sets || 1);
+      const key = exerciseKey(state.week, exercise.index);
+      state.logs[key] = state.logs[key] || {};
+
+      if (state.sessionSet < totalSets) {
+        state.sessionSet += 1;
+        state.timerTotal = state.timerTotal || 90;
+        state.timerSeconds = state.timerTotal;
+      } else {
+        state.logs[key].done = true;
+        state.sessionSet = 1;
+        const list = sessionExercises();
+        state.sessionIndex = Math.min(state.sessionIndex + 1, list.length - 1);
+        state.timerTotal = state.timerTotal || 90;
+        state.timerSeconds = state.timerTotal;
+      }
+      renderAll();
+    }
+
+    function nextSessionExercise() {
+      const list = sessionExercises();
+      state.sessionIndex = Math.min((state.sessionIndex || 0) + 1, list.length - 1);
+      state.sessionSet = 1;
+      renderAll();
+    }
+
+    function previousSessionExercise() {
+      state.sessionIndex = Math.max((state.sessionIndex || 0) - 1, 0);
+      state.sessionSet = 1;
+      renderAll();
+    }
+
+    function todayISODate() {
+      return new Date().toISOString().slice(0, 10);
+    }
+
+    function renderBodyTracker() {
+      const dateInput = document.getElementById("bodyDate");
+      if (!dateInput) return;
+
+      if (!dateInput.value) dateInput.value = todayISODate();
+      const entry = state.bodyLog[dateInput.value] || {};
+      document.getElementById("bodyWeight").value = entry.weight || "";
+      document.getElementById("bodyWaist").value = entry.waist || "";
+      document.getElementById("bodyChest").value = entry.chest || "";
+      document.getElementById("bodyArms").value = entry.arms || "";
+      document.getElementById("bodyLegs").value = entry.legs || "";
+      document.getElementById("bodyNotes").value = entry.notes || "";
+
+      const dates = Object.keys(state.bodyLog || {}).sort();
+      const status = document.getElementById("bodyStatus");
+      if (dates.length) {
+        const lastDate = dates[dates.length - 1];
+        const last = state.bodyLog[lastDate] || {};
+        status.textContent = `Last check in: ${lastDate} • Weight: ${last.weight || "not logged"} • Waist: ${last.waist || "not logged"}`;
+      } else {
+        status.textContent = "No body check in saved yet.";
+      }
+    }
+
+    function saveBodyCheckin() {
+      const date = document.getElementById("bodyDate").value || todayISODate();
+      state.bodyLog[date] = {
+        weight: document.getElementById("bodyWeight").value,
+        waist: document.getElementById("bodyWaist").value,
+        chest: document.getElementById("bodyChest").value,
+        arms: document.getElementById("bodyArms").value,
+        legs: document.getElementById("bodyLegs").value,
+        notes: document.getElementById("bodyNotes").value
+      };
+      saveState();
+      renderBodyTracker();
+    }
+
+    function loadLastBodyCheckin() {
+      const dates = Object.keys(state.bodyLog || {}).sort();
+      if (!dates.length) return;
+      document.getElementById("bodyDate").value = dates[dates.length - 1];
+      renderBodyTracker();
+    }
+
+    function renderInstallStatus() {
+      const status = document.getElementById("installStatus");
+      if (!status) return;
+      if (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) {
+        status.textContent = "Installed mode active. You are running FORGE like an app.";
+      }
+    }
+
+    async function installPwa() {
+      const status = document.getElementById("installStatus");
+      if (state.installPrompt) {
+        state.installPrompt.prompt();
+        const choice = await state.installPrompt.userChoice;
+        status.textContent = choice.outcome === "accepted" ? "Install accepted." : "Install dismissed.";
+        state.installPrompt = null;
+      } else {
+        status.textContent = "On iPhone: open in Safari, tap Share, then Add to Home Screen. On Android/Chrome: use browser menu, then Install app.";
+      }
+    }
+
+    function showInstallHelp() {
+      const status = document.getElementById("installStatus");
+      if (status) status.textContent = "iPhone: Safari → Share button → Add to Home Screen. Android: Chrome menu → Add to Home screen or Install app.";
+    }
+
+
     function setScreen(screen) {
       state.screen = screen;
       renderAll();
@@ -1370,12 +2015,16 @@
 
       if (action === "set-day") {
         state.day = button.dataset.day;
+        state.sessionIndex = 0;
+        state.sessionSet = 1;
         renderAll();
         return;
       }
 
       if (action === "open-day") {
         state.day = button.dataset.day;
+        state.sessionIndex = 0;
+        state.sessionSet = 1;
         setScreen("workouts");
         return;
       }
@@ -1417,6 +2066,72 @@
     document.getElementById("timerStart").addEventListener("click", startTimer);
     document.getElementById("timerReset").addEventListener("click", resetTimer);
     document.getElementById("resetDesktop").addEventListener("click", resetProgress);
+
+
+    const exportProgressButton = document.getElementById("exportProgress");
+    if (exportProgressButton) exportProgressButton.addEventListener("click", exportProgressBackup);
+
+    const copyProgressButton = document.getElementById("copyProgress");
+    if (copyProgressButton) copyProgressButton.addEventListener("click", copyProgressBackup);
+
+    const importProgressInput = document.getElementById("importProgress");
+    if (importProgressInput) importProgressInput.addEventListener("change", event => {
+      importProgressBackup(event.target.files && event.target.files[0]);
+      event.target.value = "";
+    });
+
+
+    document.addEventListener("change", event => {
+      const swap = event.target.closest("[data-swap-index]");
+      if (swap) {
+        state.swaps[String(swap.dataset.swapIndex)] = swap.value;
+        saveState();
+        renderAll();
+      }
+    });
+
+    const completeSessionSetButton = document.getElementById("completeSessionSet");
+    if (completeSessionSetButton) completeSessionSetButton.addEventListener("click", completeSessionSet);
+
+    const nextSessionExerciseButton = document.getElementById("nextSessionExercise");
+    if (nextSessionExerciseButton) nextSessionExerciseButton.addEventListener("click", nextSessionExercise);
+
+    const previousSessionExerciseButton = document.getElementById("previousSessionExercise");
+    if (previousSessionExerciseButton) previousSessionExerciseButton.addEventListener("click", previousSessionExercise);
+
+    const sessionTimerStart = document.getElementById("sessionTimerStart");
+    if (sessionTimerStart) sessionTimerStart.addEventListener("click", startTimer);
+
+    const sessionTimerReset = document.getElementById("sessionTimerReset");
+    if (sessionTimerReset) sessionTimerReset.addEventListener("click", resetTimer);
+
+    const saveBodyCheckinButton = document.getElementById("saveBodyCheckin");
+    if (saveBodyCheckinButton) saveBodyCheckinButton.addEventListener("click", saveBodyCheckin);
+
+    const loadLastBodyCheckinButton = document.getElementById("loadLastBodyCheckin");
+    if (loadLastBodyCheckinButton) loadLastBodyCheckinButton.addEventListener("click", loadLastBodyCheckin);
+
+    const bodyDateInput = document.getElementById("bodyDate");
+    if (bodyDateInput) bodyDateInput.addEventListener("change", renderBodyTracker);
+
+    const installPwaButton = document.getElementById("installPwa");
+    if (installPwaButton) installPwaButton.addEventListener("click", installPwa);
+
+    const showInstallHelpButton = document.getElementById("showInstallHelp");
+    if (showInstallHelpButton) showInstallHelpButton.addEventListener("click", showInstallHelp);
+
+    window.addEventListener("beforeinstallprompt", event => {
+      event.preventDefault();
+      state.installPrompt = event;
+      const status = document.getElementById("installStatus");
+      if (status) status.textContent = "Install is available on this device. Tap Install If Available.";
+    });
+
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+      });
+    }
 
     renderAll();
   </script>
