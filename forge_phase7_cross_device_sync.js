@@ -1,8 +1,8 @@
-// FORGE Phase 7: ATLAS style cross device sync
-// Goal: mobile and desktop stay on the same cloud snapshot instead of drifting apart.
+// FORGE Phase 7B: ATLAS style cloud first cross device sync
+// Goal: mobile and desktop stay on the same cloud snapshot without a fresh device overwriting real cloud data.
 
 (() => {
-  const PHASE_KEY = 'forgeFitnessCrossDeviceSync.v1';
+  const PHASE_KEY = 'forgeFitnessCrossDeviceSync.v2';
   const SYNC_LOCK_KEY = 'forgeFitnessCrossDeviceSync.lock';
   const STARTUP_DELAY_MS = 1400;
   const FOCUS_SYNC_COOLDOWN_MS = 60 * 1000;
@@ -22,6 +22,7 @@
         lastDeviceAction: null,
         lastError: null,
         autoSyncEnabled: true,
+        hasTrustedCloudBase: false,
         ...JSON.parse(localStorage.getItem(PHASE_KEY) || '{}')
       };
     } catch (error) {
@@ -32,7 +33,8 @@
         lastCloudUpdatedAt: null,
         lastDeviceAction: null,
         lastError: null,
-        autoSyncEnabled: true
+        autoSyncEnabled: true,
+        hasTrustedCloudBase: false
       };
     }
   }
@@ -84,6 +86,46 @@
     saveState();
   }
 
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    }[char]));
+  }
+
+  function dataScore(payload) {
+    if (!payload || typeof payload !== 'object') return 0;
+    let score = 0;
+    if (payload.ready && Object.keys(payload.ready).length) score += 3;
+    if (payload.ratings && Object.keys(payload.ratings).length) score += 3;
+    if (payload.prs && Object.keys(payload.prs).length) score += 4;
+    if (payload.body && Array.isArray(payload.body)) score += payload.body.length * 3;
+    if (payload.summaries && Array.isArray(payload.summaries)) score += payload.summaries.length * 5;
+    if (payload.coach && Array.isArray(payload.coach)) score += payload.coach.length;
+    if (payload.calendar && Object.keys(payload.calendar).length) score += Object.keys(payload.calendar).length;
+    if (payload.sessions && typeof payload.sessions === 'object') {
+      Object.values(payload.sessions).forEach(session => {
+        if (!session) return;
+        if (session.status && session.status !== 'Not started') score += 3;
+        if (Array.isArray(session.exercises)) {
+          score += session.exercises.filter(ex => ex.done || ex.actualWeight || ex.actualReps || ex.notes).length * 3;
+        }
+      });
+    }
+    return score;
+  }
+
+  function localDataScore() {
+    try {
+      return dataScore(db);
+    } catch (error) {
+      return 0;
+    }
+  }
+
   function ensurePanel() {
     const cloudCard = document.getElementById('cloudWorkerUrl')?.closest('.card');
     if (!cloudCard) return null;
@@ -107,16 +149,17 @@
     const connected = cloudConfigured();
     const device = typeof cloud !== 'undefined' && cloud.deviceId ? cloud.deviceId : 'this device';
     const owner = typeof cloud !== 'undefined' && cloud.ownerId ? cloud.ownerId : 'not set';
+    const score = localDataScore();
     const error = syncState.lastError ? `<p class="muted">Last sync issue: ${escapeHtml(syncState.lastError)}</p>` : '';
 
     panel.innerHTML = `
       <div class="top">
         <strong>ATLAS style cross device sync</strong>
-        <span class="pill ${connected ? 'good' : 'warn'}">${connected ? 'Ready' : 'Needs token'}</span>
+        <span class="pill ${connected ? 'good' : 'warn'}">${connected ? 'Cloud first' : 'Needs token'}</span>
       </div>
-      <p class="muted">Owner: ${escapeHtml(owner)} • Device: ${escapeHtml(device)}</p>
+      <p class="muted">Owner: ${escapeHtml(owner)} • Device: ${escapeHtml(device)} • Local data score: ${score}</p>
       <p class="muted">Auto sync: ${syncState.autoSyncEnabled ? 'On' : 'Off'} • Last auto sync: ${label(syncState.lastAutoSync)} • Pulled: ${label(syncState.lastPulledAt)} • Pushed: ${label(syncState.lastPushedAt)}</p>
-      <p class="small">FORGE now checks cloud on startup and when you return to the app. If cloud is newer, this device pulls it. If this device is newer, it pushes it.</p>
+      <p class="small">Cloud first mode means a new or empty device pulls the cloud copy first. A device will not automatically overwrite cloud unless it has a trusted cloud base or you force push it.</p>
       ${error}
       <div class="btns">
         <button class="btn primary" id="phase7SyncNow">Sync This Device Now</button>
@@ -133,16 +176,6 @@
     if (pushButton) pushButton.onclick = () => forcePush();
   }
 
-  function escapeHtml(value) {
-    return String(value || '').replace(/[&<>"']/g, char => ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#39;'
-    }[char]));
-  }
-
   async function loadCloudSnapshot() {
     if (typeof workerFetch !== 'function') throw new Error('Worker connection is not ready.');
     const response = await workerFetch('/sync/load?owner=' + encodeURIComponent(cloud.ownerId), { method: 'GET' });
@@ -151,7 +184,8 @@
     return {
       payload,
       updatedAt: response.snapshot.updated_at,
-      deviceId: response.snapshot.device_id || ''
+      deviceId: response.snapshot.device_id || '',
+      score: dataScore(payload)
     };
   }
 
@@ -161,12 +195,13 @@
     if (typeof K === 'undefined') throw new Error('FORGE storage key is not ready.');
 
     db = norm(snapshot.payload);
-    db.lastSaved = new Date().toISOString();
+    db.lastSaved = snapshot.updatedAt || new Date().toISOString();
     localStorage.setItem(K, JSON.stringify(db));
 
     syncState.lastPulledAt = new Date().toISOString();
     syncState.lastCloudUpdatedAt = snapshot.updatedAt;
     syncState.lastDeviceAction = 'pulled_cloud';
+    syncState.hasTrustedCloudBase = true;
     clearFail();
 
     if (typeof render === 'function') render();
@@ -180,6 +215,7 @@
     syncState.lastAutoSync = syncState.lastPushedAt;
     syncState.lastCloudUpdatedAt = syncState.lastPushedAt;
     syncState.lastDeviceAction = `pushed_${reason}`;
+    syncState.hasTrustedCloudBase = true;
     clearFail();
     renderPanel();
   }
@@ -206,6 +242,12 @@
     localStorage.removeItem(SYNC_LOCK_KEY);
   }
 
+  function hasTrustedLocalEdits(localTime, cloudTime) {
+    if (!syncState.hasTrustedCloudBase) return false;
+    if (localDataScore() <= 0) return false;
+    return localTime > cloudTime + 2000;
+  }
+
   async function reconcile(reason = 'auto') {
     if (running || !syncState.autoSyncEnabled || !cloudConfigured()) {
       renderPanel();
@@ -216,14 +258,33 @@
     running = true;
 
     try {
-      setCloudStatus('Checking cloud sync...');
+      setCloudStatus('Checking ATLAS style cloud sync...');
       const snapshot = await loadCloudSnapshot();
       const localTime = getMs(localUpdatedAt());
       const cloudTime = getMs(snapshot?.updatedAt);
+      const localScore = localDataScore();
+      const cloudScore = snapshot ? snapshot.score : 0;
 
       if (!snapshot) {
-        await pushLocal(reason);
-        setCloudStatus('No cloud copy found. This device created the cloud version.');
+        if (localScore > 0) {
+          await pushLocal(reason);
+          setCloudStatus('No cloud copy found. This device created the cloud version.');
+        } else {
+          setCloudStatus('No cloud copy found yet. Add data or force push this device.');
+        }
+        return;
+      }
+
+      if (!syncState.hasTrustedCloudBase) {
+        if (cloudScore >= localScore) {
+          await pullCloud(snapshot, 'cloud_first_new_device');
+          setCloudStatus('Cloud first sync pulled the shared FORGE version.');
+          return;
+        }
+        syncState.lastError = 'This device has local data but has not been matched with cloud yet. Choose Force Push This Device or Force Use Cloud Version.';
+        saveState();
+        renderPanel();
+        setCloudStatus('Choose which version should win before syncing.');
         return;
       }
 
@@ -232,7 +293,7 @@
         return;
       }
 
-      if (localTime > cloudTime + 2000) {
+      if (hasTrustedLocalEdits(localTime, cloudTime)) {
         if (localTime - cloudTime < CONFLICT_WINDOW_MS && snapshot.deviceId && snapshot.deviceId !== cloud.deviceId) {
           setCloudStatus('Possible recent edit on another device. Use Sync This Device Now after checking both devices.');
           syncState.lastError = 'Recent edits detected on multiple devices. No overwrite was made.';
@@ -248,6 +309,7 @@
       syncState.lastAutoSync = new Date().toISOString();
       syncState.lastCloudUpdatedAt = snapshot.updatedAt;
       syncState.lastDeviceAction = 'already_matched';
+      syncState.hasTrustedCloudBase = true;
       clearFail();
       setCloudStatus('Mobile and computer are already matched.');
       renderPanel();
@@ -275,6 +337,7 @@
   async function forcePush() {
     if (!confirm('Push this device to cloud? This becomes the version other devices will load.')) return;
     try {
+      syncState.hasTrustedCloudBase = true;
       await pushLocal('force');
       setCloudStatus('This device was pushed to cloud at ' + label(syncState.lastPushedAt));
     } catch (error) {
@@ -323,7 +386,7 @@
     });
 
     window.addEventListener('online', () => reconcile('online'));
-    console.info('FORGE Phase 7 cross device sync loaded');
+    console.info('FORGE Phase 7B cloud first sync loaded');
   }
 
   if (document.readyState === 'loading') {
