@@ -1,5 +1,5 @@
-const CACHE_NAME = 'forge-fitness-os-v5-phase5b';
-const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js'];
+const CACHE_NAME = 'forge-fitness-os-v6-structured-ai';
+const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js', './forge_phase6.js'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -17,11 +17,15 @@ self.addEventListener('activate', event => {
   );
 });
 
-async function injectPhase5(response) {
-  const html = await response.text();
-  if (html.includes('forge_phase5.js')) return new Response(html, response);
-  const injected = html.replace('</body>', '<script src="./forge_phase5.js"></script>\n</body>');
-  return new Response(injected, {
+async function injectForgeScripts(response) {
+  let html = await response.text();
+  if (!html.includes('forge_phase5.js')) {
+    html = html.replace('</body>', '<script src="./forge_phase5.js"></script>\n</body>');
+  }
+  if (!html.includes('forge_phase6.js')) {
+    html = html.replace('</body>', '<script src="./forge_phase6.js"></script>\n</body>');
+  }
+  return new Response(html, {
     status: response.status,
     statusText: response.statusText,
     headers: { 'content-type': 'text/html; charset=utf-8' }
@@ -37,8 +41,8 @@ self.addEventListener('fetch', event => {
   if (isNavigation) {
     event.respondWith(
       fetch(request)
-        .then(response => injectPhase5(response.clone()))
-        .catch(() => caches.match('./index.html').then(cached => cached ? injectPhase5(cached.clone()) : cached))
+        .then(response => injectForgeScripts(response.clone()))
+        .catch(() => caches.match('./index.html').then(cached => cached ? injectForgeScripts(cached.clone()) : cached))
     );
     return;
   }
