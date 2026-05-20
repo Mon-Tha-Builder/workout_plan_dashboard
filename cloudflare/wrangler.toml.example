@@ -1,0 +1,21 @@
+# FORGE Cloudflare Worker example config
+# Copy this file to wrangler.toml locally or configure these values in the Cloudflare dashboard.
+# Do not commit real secrets.
+
+name = "forge-fitness-worker"
+main = "worker.js"
+compatibility_date = "2026-05-20"
+
+# Replace database_name and database_id after creating your D1 database.
+[[d1_databases]]
+binding = "FORGE_DB"
+database_name = "forge_fitness_db"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
+
+# Secrets to set with Wrangler or the Cloudflare dashboard:
+# wrangler secret put FORGE_SYNC_TOKEN
+# wrangler secret put ANTHROPIC_API_KEY
+
+# Optional non-secret variable. The Worker defaults to claude-sonnet-4-6 if omitted.
+[vars]
+ANTHROPIC_MODEL = "claude-sonnet-4-6"
