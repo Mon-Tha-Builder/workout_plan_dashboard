@@ -1,6 +1,17 @@
-const CACHE_NAME = 'forge-fitness-os-v8-force-latest-sync';
-const SCRIPT_VERSION = 'v8_force_latest_sync';
-const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js', './forge_phase6.js', './forge_phase7_cross_device_sync.js'];
+// FORGE service worker · simplified
+// The phase scripts are now in index.html directly. The SW just caches files
+// for offline use — it no longer rewrites HTML.
+
+const CACHE_NAME = 'forge-fitness-os-v8-iron-ember';
+const CORE_ASSETS = [
+  './',
+  './index.html',
+  './manifest.webmanifest',
+  './icon-512.png',
+  './forge_phase5.js',
+  './forge_phase6.js',
+  './forge_phase7_cross_device_sync.js'
+];
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -13,49 +24,42 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
-      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(keys => Promise.all(
+        keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))
+      ))
       .then(() => self.clients.claim())
   );
 });
-
-async function injectForgeScripts(response) {
-  let html = await response.text();
-
-  html = html
-    .replace(/<script[^>]+forge_phase5\.js[^>]*><\/script>/g, '')
-    .replace(/<script[^>]+forge_phase6\.js[^>]*><\/script>/g, '')
-    .replace(/<script[^>]+forge_phase7_cross_device_sync\.js[^>]*><\/script>/g, '');
-
-  const scripts = [
-    `<script src="./forge_phase5.js?${SCRIPT_VERSION}"></script>`,
-    `<script src="./forge_phase6.js?${SCRIPT_VERSION}"></script>`,
-    `<script src="./forge_phase7_cross_device_sync.js?${SCRIPT_VERSION}"></script>`
-  ].join('\n');
-
-  html = html.replace('</body>', `${scripts}\n</body>`);
-
-  return new Response(html, {
-    status: response.status,
-    statusText: response.statusText,
-    headers: { 'content-type': 'text/html; charset=utf-8' }
-  });
-}
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
 
   const request = event.request;
+  const url = new URL(request.url);
+
+  // Never intercept the Cloudflare Worker or any cross-origin requests —
+  // they must hit the network directly (cloud sync + Claude calls).
+  if (url.origin !== self.location.origin) return;
+
   const isNavigation = request.mode === 'navigate' || request.destination === 'document';
 
+  // Network-first for navigations, falling back to cache when offline
   if (isNavigation) {
     event.respondWith(
       fetch(request, { cache: 'no-store' })
-        .then(response => injectForgeScripts(response.clone()))
-        .catch(() => caches.match('./index.html').then(cached => cached ? injectForgeScripts(cached.clone()) : cached))
+        .then(response => {
+          if (response && response.ok) {
+            const copy = response.clone();
+            caches.open(CACHE_NAME).then(cache => cache.put('./index.html', copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match('./index.html'))
     );
     return;
   }
 
+  // Network-first for static assets, cache fallback
   event.respondWith(
     fetch(request, { cache: 'no-store' })
       .then(response => {
