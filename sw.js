@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forge-fitness-os-v5-phase5';
+const CACHE_NAME = 'forge-fitness-os-v5-phase5b';
 const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js'];
 
 self.addEventListener('install', event => {
