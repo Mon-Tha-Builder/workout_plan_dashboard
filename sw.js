@@ -1,8 +1,5 @@
-// FORGE service worker · simplified
-// The phase scripts are now in index.html directly. The SW just caches files
-// for offline use — it no longer rewrites HTML.
-
-const CACHE_NAME = 'forge-fitness-os-v8-iron-ember';
+// FORGE service worker · Phase 2 command center
+const CACHE_NAME = 'forge-fitness-os-v9-command-center';
 const CORE_ASSETS = [
   './',
   './index.html',
@@ -37,13 +34,11 @@ self.addEventListener('fetch', event => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // Never intercept the Cloudflare Worker or any cross-origin requests —
-  // they must hit the network directly (cloud sync + Claude calls).
+  // Never intercept cross-origin requests (Cloudflare Worker, Claude, etc.)
   if (url.origin !== self.location.origin) return;
 
   const isNavigation = request.mode === 'navigate' || request.destination === 'document';
 
-  // Network-first for navigations, falling back to cache when offline
   if (isNavigation) {
     event.respondWith(
       fetch(request, { cache: 'no-store' })
@@ -59,7 +54,6 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Network-first for static assets, cache fallback
   event.respondWith(
     fetch(request, { cache: 'no-store' })
       .then(response => {
