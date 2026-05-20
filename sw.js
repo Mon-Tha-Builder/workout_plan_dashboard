@@ -1,4 +1,4 @@
-const CACHE_NAME = 'forge-fitness-os-v7-cross-device-sync';
+const CACHE_NAME = 'forge-fitness-os-v7b-cloud-first-sync';
 const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js', './forge_phase6.js', './forge_phase7_cross_device_sync.js'];
 
 self.addEventListener('install', event => {
