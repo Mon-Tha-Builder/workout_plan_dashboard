@@ -1,12 +1,20 @@
 # FORGE Personal Fitness OS
 
-FORGE is a private personal fitness operating system for training, recovery, body tracking, progress review, and adaptive coach logic.
+FORGE is a private personal fitness operating system for training, recovery, body tracking, progress review, workout summaries, and adaptive coach logic.
 
 ## Current status
 
-Phase 0 repair, Phase 1 local save foundation, and the adaptive split design are active.
+FORGE currently has a working local first frontend and Cloudflare backend prep files.
 
-## Working features
+Active phases:
+
+- Phase 0: core repo repair complete
+- Phase 1: local save foundation complete
+- Phase 2: adaptive split engine complete
+- Phase 3: cleanup and workout summary upgrade complete
+- Phase 4: Cloudflare sync prep started
+
+## Working frontend features
 
 - Repaired `index.html` as the real app entry file
 - Repaired `manifest.webmanifest` as the real PWA manifest
@@ -15,12 +23,32 @@ Phase 0 repair, Phase 1 local save foundation, and the adaptive split design are
 - Export and import JSON backup
 - Reset with confirmation
 - Readiness check in
+- Day 1 starts today, not Monday
+- Next best session scheduling
 - Automatic workout loading
-- Adaptive workout changes from readiness, pain, time, and recovery
+- Equipment aware exercise choices
+- Separate barbell bench and barbell squat access settings
+- Exercise rating system
+- Adaptive workout changes from readiness, pain, time, equipment, and recovery
+- Time targets instead of forced timers
+- Start session and finish workout flow
+- Workout summaries with next time recommendations
 - Body logging
 - PR vault
 - Battle calendar
 - Local Coach Brain logic
+
+## Cloudflare backend prep
+
+The repo now includes Cloudflare prep files in the `cloudflare/` folder:
+
+- `cloudflare/schema.sql`
+- `cloudflare/worker.js`
+- `cloudflare/README.md`
+
+These files prepare FORGE for real cloud saving through Cloudflare D1 and a protected Worker.
+
+Important: the frontend is still local first. Do not add a visible cloud sync button until the Worker is deployed and tested.
 
 ## FORGE training goal
 
@@ -81,14 +109,12 @@ The default plan should assume basic gym equipment:
 - Treadmill, bike, or trail cardio options
 - Mats or floor space
 
-The app should let the user update equipment access, including separate toggles for:
+The app lets the user update equipment access, including separate toggles for:
 
 - Barbell bench access
 - Barbell squat access
-- Both available
-- Neither available
 
-The AI coach should choose exercises based on equipment profile, pain notes, readiness, and exercise preference ratings.
+The coach chooses exercises based on equipment profile, pain notes, readiness, and exercise preference ratings.
 
 ## Product rules
 
@@ -98,4 +124,5 @@ The AI coach should choose exercises based on equipment profile, pain notes, rea
 - No dead buttons
 - No useless files
 - No placeholder AI that does not do anything
+- No visible cloud sync button until the Worker is deployed and tested
 - Claude integration must go through Cloudflare later
