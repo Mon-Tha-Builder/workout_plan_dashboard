@@ -1,21 +1,55 @@
-const CACHE_NAME = 'forge-fitness-os-v1';
-const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png'];
+const CACHE_NAME = 'forge-fitness-os-v5-phase5';
+const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then(cache => cache.addAll(CORE_ASSETS))
+      .then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener('activate', event => {
   event.waitUntil(
-    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())
+    caches.keys()
+      .then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key))))
+      .then(() => self.clients.claim())
   );
 });
 
+async function injectPhase5(response) {
+  const html = await response.text();
+  if (html.includes('forge_phase5.js')) return new Response(html, response);
+  const injected = html.replace('</body>', '<script src="./forge_phase5.js"></script>\n</body>');
+  return new Response(injected, {
+    status: response.status,
+    statusText: response.statusText,
+    headers: { 'content-type': 'text/html; charset=utf-8' }
+  });
+}
+
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
+
+  const request = event.request;
+  const isNavigation = request.mode === 'navigate' || request.destination === 'document';
+
+  if (isNavigation) {
+    event.respondWith(
+      fetch(request)
+        .then(response => injectPhase5(response.clone()))
+        .catch(() => caches.match('./index.html').then(cached => cached ? injectPhase5(cached.clone()) : cached))
+    );
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request).then(cached => cached || fetch(event.request).catch(() => caches.match('./index.html')))
+    caches.match(request).then(cached => cached || fetch(request).then(response => {
+      if (response && response.ok) {
+        const copy = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(request, copy));
+      }
+      return response;
+    }).catch(() => caches.match('./index.html')))
   );
 });
