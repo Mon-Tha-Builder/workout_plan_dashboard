@@ -186,6 +186,11 @@
     button.__phase5Wrapped = true;
   }
 
+  function bindButton(id, fn) {
+    const button = document.getElementById(id);
+    if (button && typeof fn === 'function') button.onclick = fn;
+  }
+
   function hardenCloudFunctions() {
     if (typeof pushToCloud === 'function' && !pushToCloud.__phase5DirectWrapped) {
       const originalPush = pushToCloud;
@@ -198,6 +203,9 @@
         return result;
       };
       pushToCloud.__phase5DirectWrapped = true;
+      bindButton('pushCloud', pushToCloud);
+      bindButton('pushCloudToday', pushToCloud);
+      bindButton('saveCloudBeforeAi', pushToCloud);
     }
 
     if (typeof testCloudConnection === 'function' && !testCloudConnection.__phase5DirectWrapped) {
@@ -211,6 +219,7 @@
         return result;
       };
       testCloudConnection.__phase5DirectWrapped = true;
+      bindButton('testCloud', testCloudConnection);
     }
 
     if (typeof pullFromCloud === 'function' && !pullFromCloud.__phase5DirectWrapped) {
@@ -231,8 +240,7 @@
         return result;
       };
       pullFromCloud.__phase5DirectWrapped = true;
-      const pullBtn = document.getElementById('pullCloud');
-      if (pullBtn) pullBtn.onclick = pullFromCloud;
+      bindButton('pullCloud', pullFromCloud);
     }
 
     if (typeof askClaudeCoach === 'function' && !askClaudeCoach.__phase5DirectWrapped) {
@@ -253,8 +261,7 @@
         return result;
       };
       askClaudeCoach.__phase5DirectWrapped = true;
-      const askButton = document.getElementById('askClaude');
-      if (askButton) askButton.onclick = askClaudeCoach;
+      bindButton('askClaude', askClaudeCoach);
     }
   }
 
