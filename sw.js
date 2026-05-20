@@ -1,22 +1,21 @@
-{
-  "name": "FORGE Workout Dashboard",
-  "short_name": "FORGE",
-  "description": "FORGE workout tracker with Start Workout mode, tutorials, rest timer, weekly recap, body tracker, and progress backup.",
-  "start_url": "./index.html",
-  "scope": "./",
-  "display": "standalone",
-  "background_color": "#0A0D0F",
-  "theme_color": "#0A0D0F",
-  "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
-  ]
-}
+const CACHE_NAME = 'forge-fitness-os-v1';
+const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png'];
+
+self.addEventListener('install', event => {
+  event.waitUntil(
+    caches.open(CACHE_NAME).then(cache => cache.addAll(CORE_ASSETS)).then(() => self.skipWaiting())
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.filter(key => key !== CACHE_NAME).map(key => caches.delete(key)))).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', event => {
+  if (event.request.method !== 'GET') return;
+  event.respondWith(
+    caches.match(event.request).then(cached => cached || fetch(event.request).catch(() => caches.match('./index.html')))
+  );
+});
