@@ -1,5 +1,5 @@
-const CACHE_NAME = 'forge-fitness-os-v6-structured-ai';
-const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js', './forge_phase6.js'];
+const CACHE_NAME = 'forge-fitness-os-v7-cross-device-sync';
+const CORE_ASSETS = ['./', './index.html', './manifest.webmanifest', './icon-512.png', './forge_phase5.js', './forge_phase6.js', './forge_phase7_cross_device_sync.js'];
 
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -24,6 +24,9 @@ async function injectForgeScripts(response) {
   }
   if (!html.includes('forge_phase6.js')) {
     html = html.replace('</body>', '<script src="./forge_phase6.js"></script>\n</body>');
+  }
+  if (!html.includes('forge_phase7_cross_device_sync.js')) {
+    html = html.replace('</body>', '<script src="./forge_phase7_cross_device_sync.js"></script>\n</body>');
   }
   return new Response(html, {
     status: response.status,
