@@ -378,7 +378,7 @@ ${JSON.stringify({ readinessData, equipment, ratings, lastSummary, session: comp
   if (document.getElementById('forgePhase9DailyMissionScript')) return;
   const script = document.createElement('script');
   script.id = 'forgePhase9DailyMissionScript';
-  script.src = './forge_phase9_daily_mission.js?v=9.0.1';
+  script.src = './forge_phase9_daily_mission.js?v=9.0.2';
   script.defer = true;
   document.body.appendChild(script);
 })();
