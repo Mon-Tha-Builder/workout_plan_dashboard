@@ -372,3 +372,13 @@ ${JSON.stringify({ readinessData, equipment, ratings, lastSummary, session: comp
     boot();
   }
 })();
+
+// FORGE Phase 9 loader. Kept separate so the Daily Mission Command can be maintained independently.
+(() => {
+  if (document.getElementById('forgePhase9DailyMissionScript')) return;
+  const script = document.createElement('script');
+  script.id = 'forgePhase9DailyMissionScript';
+  script.src = './forge_phase9_daily_mission.js?v=9.0.0';
+  script.defer = true;
+  document.body.appendChild(script);
+})();
