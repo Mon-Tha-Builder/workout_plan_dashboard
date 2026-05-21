@@ -53,10 +53,10 @@
   function ensureDailyStore() {
     if (typeof db === 'undefined' || !db) return null;
     if (!db.dailyStandard || typeof db.dailyStandard !== 'object') {
-      db.dailyStandard = { version: '9.0.0', goals: { pushUps: 100, sitUps: 100 }, log: {} };
+      db.dailyStandard = { version: '9.0.1', goals: { pushUps: 100, sitUps: 100 }, log: {} };
     }
     const store = db.dailyStandard;
-    store.version = store.version || '9.0.0';
+    store.version = '9.0.1';
     store.goals = { pushUps: 100, sitUps: 100, ...(store.goals || {}) };
     store.log = store.log && typeof store.log === 'object' ? store.log : {};
     const key = getTodayKey();
@@ -97,6 +97,49 @@
     }
   }
 
+  function hasReadinessInputValues() {
+    return ['sleep', 'energy', 'sore', 'stress', 'motivation', 'time', 'pain'].some(id => {
+      const value = document.getElementById(id)?.value;
+      return String(value || '').trim().length > 0;
+    });
+  }
+
+  function revealReadinessForm() {
+    const sleepInput = document.getElementById('sleep');
+    const card = sleepInput?.closest('.card');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (sleepInput) setTimeout(() => sleepInput.focus(), 250);
+  }
+
+  function saveReadinessAndAdapt() {
+    if (!hasReadinessInputValues()) {
+      revealReadinessForm();
+      return;
+    }
+
+    if (typeof db === 'undefined' || !db) return;
+    if (!db.ready || typeof db.ready !== 'object') db.ready = {};
+
+    db.ready[getTodayKey()] = {
+      sleep: document.getElementById('sleep')?.value || '',
+      energy: document.getElementById('energy')?.value || '',
+      sore: document.getElementById('sore')?.value || '',
+      stress: document.getElementById('stress')?.value || '',
+      motivation: document.getElementById('motivation')?.value || '',
+      time: document.getElementById('time')?.value || '',
+      pain: document.getElementById('pain')?.value || ''
+    };
+
+    if (typeof applyCoach === 'function') {
+      applyCoach();
+    } else {
+      persist();
+    }
+
+    setTimeout(renderMission, 0);
+    setTimeout(renderMission, 400);
+  }
+
   function dayStatus(session, daily, ready) {
     if (workoutComplete(session) && dailyComplete(daily.entry, daily.store)) return 'Full Day Complete';
     if (workoutComplete(session)) return 'Workout Done';
@@ -107,7 +150,7 @@
 
   function primaryAction(session, daily, ready) {
     if (!readinessDone()) {
-      return { label: 'Run Readiness', action: 'readiness', tone: 'primary' };
+      return { label: 'Save Readiness And Adapt', action: 'readiness', tone: 'primary' };
     }
     if (!dailyComplete(daily.entry, daily.store)) {
       return { label: 'Build Daily Standard', action: 'standard', tone: 'primary' };
@@ -199,7 +242,7 @@
 
       <div class="phase9-mission-row">
         <div>
-          <div class="phase9-step ${readyMet ? 'done' : ''}"><strong>1. Readiness</strong><p class="muted">${readyMet ? safeText(ready.status + ' — ' + ready.msg) : 'Check sleep, energy, soreness, stress, motivation, time, and pain first.'}</p></div>
+          <div class="phase9-step ${readyMet ? 'done' : ''}"><strong>1. Readiness</strong><p class="muted">${readyMet ? safeText(ready.status + ' — ' + ready.msg) : 'Fill the readiness fields below, then press Save Readiness And Adapt.'}</p></div>
           <div class="phase9-step ${dailyMet ? 'done' : ''}"><strong>2. Daily Standard</strong><p class="muted">Push ${daily.entry.pushUps}/${pushGoal} • Sit ${daily.entry.sitUps}/${sitGoal}</p></div>
           <div class="phase9-step ${workoutMet ? 'done' : ''}"><strong>3. Workout</strong><p class="muted">${safeText(session?.programDay || 'Today')}: ${safeText(session?.name || 'Workout')} • Target ${safeText(target)} min • ${safeText(session?.status || 'Not started')}</p></div>
         </div>
@@ -266,7 +309,7 @@
 
   function handlePrimary(action) {
     if (action === 'readiness') {
-      document.getElementById('sleep')?.focus();
+      saveReadinessAndAdapt();
       return;
     }
     if (action === 'standard') {
