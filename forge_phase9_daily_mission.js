@@ -53,10 +53,10 @@
   function ensureDailyStore() {
     if (typeof db === 'undefined' || !db) return null;
     if (!db.dailyStandard || typeof db.dailyStandard !== 'object') {
-      db.dailyStandard = { version: '9.0.1', goals: { pushUps: 100, sitUps: 100 }, log: {} };
+      db.dailyStandard = { version: '9.0.2', goals: { pushUps: 100, sitUps: 100 }, log: {} };
     }
     const store = db.dailyStandard;
-    store.version = '9.0.1';
+    store.version = '9.0.2';
     store.goals = { pushUps: 100, sitUps: 100, ...(store.goals || {}) };
     store.log = store.log && typeof store.log === 'object' ? store.log : {};
     const key = getTodayKey();
@@ -111,6 +111,13 @@
     if (sleepInput) setTimeout(() => sleepInput.focus(), 250);
   }
 
+  function revealDailyControls() {
+    const card = document.getElementById('dailyMissionCommandCard');
+    if (card) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const firstLogButton = document.querySelector('[data-phase9-add="pushUps"]');
+    if (firstLogButton) setTimeout(() => firstLogButton.focus(), 250);
+  }
+
   function saveReadinessAndAdapt() {
     if (!hasReadinessInputValues()) {
       revealReadinessForm();
@@ -153,7 +160,7 @@
       return { label: 'Save Readiness And Adapt', action: 'readiness', tone: 'primary' };
     }
     if (!dailyComplete(daily.entry, daily.store)) {
-      return { label: 'Build Daily Standard', action: 'standard', tone: 'primary' };
+      return { label: 'Log Daily Standard', action: 'standard', tone: 'primary' };
     }
     if (!workoutComplete(session)) {
       return { label: session && session.status === 'In progress' ? 'Return To Workout' : 'Start Workout', action: 'train', tone: 'primary' };
@@ -226,7 +233,7 @@
       <div class="top">
         <div>
           <h2>Daily Mission Command</h2>
-          <p class="muted">Open FORGE, follow this card, and move. Details stay below only when you need them.</p>
+          <p class="muted">Open FORGE, follow this card, and move. It only logs reps when you press a rep button.</p>
         </div>
         <span class="pill ${workoutMet && dailyMet ? 'good' : ready.score < 45 && ready.score > 0 ? 'recovery' : 'warn'}">${safeText(status)}</span>
       </div>
@@ -257,8 +264,9 @@
             <button class="btn" data-phase9-add="pushUps" data-phase9-amount="25">+25 Push</button>
             <button class="btn" data-phase9-add="sitUps" data-phase9-amount="25">+25 Sit</button>
             <button class="btn good" id="phase9CompleteStandard">Mark Standard Done</button>
+            <button class="btn danger" id="phase9ResetStandard">Reset Standard</button>
           </div>
-          <p class="phase9-compact-note">Last saved: ${formatTime(db?.lastSaved)} • Full controls remain in Train, Progress, Coach, and Settings.</p>
+          <p class="phase9-compact-note">Last saved: ${formatTime(db?.lastSaved)} • The big mission button guides only. Reps change only when you press a rep button.</p>
         </div>
       </div>
     `;
@@ -300,6 +308,18 @@
     persist();
   }
 
+  function resetDailyStandard() {
+    const daily = ensureDailyStore();
+    if (!daily) return;
+    daily.entry.pushUps = 0;
+    daily.entry.sitUps = 0;
+    daily.entry.goals = { ...daily.store.goals };
+    daily.entry.completedAt = null;
+    daily.entry.updatedAt = new Date().toISOString();
+    daily.store.lastUpdated = daily.entry.updatedAt;
+    persist();
+  }
+
   function goToSection(id) {
     try {
       if (typeof show === 'function') show(id);
@@ -313,7 +333,7 @@
       return;
     }
     if (action === 'standard') {
-      addDaily('pushUps', 10);
+      revealDailyControls();
       return;
     }
     if (action === 'train') {
@@ -335,6 +355,7 @@
       if (!button) return;
       if (button.dataset.phase9Add) addDaily(button.dataset.phase9Add, button.dataset.phase9Amount);
       if (button.id === 'phase9CompleteStandard') completeDailyStandard();
+      if (button.id === 'phase9ResetStandard') resetDailyStandard();
       if (button.id === 'phase9PrimaryAction') handlePrimary(button.dataset.phase9Action);
     });
   }
