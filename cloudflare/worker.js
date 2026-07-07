@@ -6,7 +6,7 @@
 // ANTHROPIC_API_KEY: secret Anthropic API key for Claude coach calls
 //
 // Optional vars:
-// ANTHROPIC_MODEL: defaults to claude-sonnet-4-6
+// ANTHROPIC_MODEL: defaults to claude-sonnet-5
 //
 // Endpoints:
 // GET  /health
@@ -92,7 +92,7 @@ async function handleHealth(env) {
     dbReady: Boolean(env.FORGE_DB),
     syncTokenReady: Boolean(env.FORGE_SYNC_TOKEN),
     anthropicReady: Boolean(env.ANTHROPIC_API_KEY),
-    model: env.ANTHROPIC_MODEL || 'claude-sonnet-4-6'
+    model: env.ANTHROPIC_MODEL || 'claude-sonnet-5'
   });
 }
 
@@ -208,7 +208,7 @@ async function handleCoach(request, env) {
   const ownerId = body.ownerId || '';
   const deviceId = body.deviceId || '';
   const snapshot = ownerId ? await getSnapshot(env, ownerId) : null;
-  const model = body.model || env.ANTHROPIC_MODEL || 'claude-sonnet-4-6';
+  const model = body.model || env.ANTHROPIC_MODEL || 'claude-sonnet-5';
   const maxTokens = Math.min(Math.max(Number(body.maxTokens || 900), 200), 2000);
 
   const anthropicResponse = await fetch('https://api.anthropic.com/v1/messages', {
