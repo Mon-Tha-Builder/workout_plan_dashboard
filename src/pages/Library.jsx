@@ -40,7 +40,7 @@ export function Library() {
 
       <div className="card">
         <input className="search-input" placeholder="Search exercises..." value={query} onInput={e => setQuery(e.currentTarget.value)} />
-        <div className="filter-row">
+        <div className="tab-row">
           <button type="button" className={`chip${category === 'All' ? ' active' : ''}`} onClick={() => setCategory('All')}>All</button>
           {CATEGORIES.map(c => (
             <button key={c} type="button" className={`chip${category === c ? ' active' : ''}`} onClick={() => setCategory(c)}>{c}</button>

@@ -83,20 +83,30 @@
 .smart-action:disabled { opacity: .5; cursor: not-allowed; }
 
 /* ---------- Tag / pill ---------- */
+/*
+ * Status indicators are seamless — no bubble/capsule containers, no
+ * background fill, no border. A status is communicated by a small square
+ * tick (matching the app's sharp 2px radius, never a circle/pill) plus
+ * colored label text sitting directly on the card, the same way the hero's
+ * HUD corner brackets and nav underline ticks work elsewhere in the app.
+ */
 .pill, .tag {
   display: inline-flex; align-items: center; gap: 6px;
   font-family: var(--font-mono); font-size: 10px; font-weight: 600;
   letter-spacing: 0.14em; text-transform: uppercase;
-  padding: 5px 9px; border-radius: 20px;
-  border: 1px solid var(--line-strong); background: var(--card2); color: var(--muted);
+  color: var(--muted);
   max-width: 100%; overflow-wrap: anywhere;
 }
-.pill.good, .tag.good { color: var(--good); background: var(--good-soft); border-color: rgba(141,184,113,.4); }
-.pill.warn, .tag.warn { color: var(--warn); background: var(--warn-soft); border-color: rgba(244,185,67,.4); }
-.pill.bad, .tag.bad { color: var(--bad); background: var(--bad-soft); border-color: rgba(214,59,59,.4); }
-.pill.steel, .tag.steel { color: var(--steel); background: var(--steel-soft); border-color: rgba(110,163,199,.4); }
-.pill.recovery, .tag.recovery { color: var(--recovery); background: var(--recovery-soft); border-color: rgba(122,141,181,.4); }
-.pill.ember, .tag.ember { color: var(--ember-hi); background: var(--ember-soft); border-color: rgba(255,91,31,.4); }
+.pill::before, .tag::before {
+  content: ""; width: 6px; height: 6px; border-radius: 1px;
+  background: currentColor; flex: none;
+}
+.pill.good, .tag.good { color: var(--good); }
+.pill.warn, .tag.warn { color: var(--warn); }
+.pill.bad, .tag.bad { color: var(--bad); }
+.pill.steel, .tag.steel { color: var(--steel); }
+.pill.recovery, .tag.recovery { color: var(--recovery); }
+.pill.ember, .tag.ember { color: var(--ember-hi); }
 
 /* ---------- Stat tiles ---------- */
 .stat {
@@ -216,8 +226,8 @@
 .brand-mark { width: 26px; height: 26px; border-radius: 6px; background: linear-gradient(160deg, var(--ember), var(--ember-deep)); display: inline-block; box-shadow: 0 0 0 1px rgba(255,91,31,.4); }
 
 /* ---------- Progress bar ---------- */
-.progress-bar { height: 8px; border-radius: 20px; background: var(--bg-elevated); border: 1px solid var(--line); overflow: hidden; }
-.progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--ember-deep), var(--ember)); border-radius: 20px; transition: width .3s ease; }
+.progress-bar { height: 6px; border-radius: var(--r-sm); background: var(--bg-elevated); border: 1px solid var(--line); overflow: hidden; }
+.progress-bar .fill { height: 100%; background: linear-gradient(90deg, var(--ember-deep), var(--ember)); transition: width .3s ease; }
 .progress-bar.good .fill { background: linear-gradient(90deg, #5f8a45, var(--good)); }
 
 /* ---------- Exercise card ---------- */
@@ -287,14 +297,21 @@
 .calendar .day.future { opacity: .35; }
 .calendar .day.before { opacity: .25; }
 
-/* ---------- Library filters ---------- */
-.filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: var(--sp-3); }
+/* ---------- Filters / tag rows ----------
+ * .tab-row is for interactive chip filters — seamless underline tabs, same
+ * visual language as the nav's active-tab tick. .filter-row is for plain
+ * rows of seamless status tags (e.g. equipment on an exercise card) and
+ * carries no border of its own.
+ */
+.filter-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: var(--sp-3); }
+.tab-row { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: var(--sp-3); border-bottom: 1px solid var(--line); }
 .chip {
-  border: 1px solid var(--line-strong); background: var(--card2); color: var(--muted);
-  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase;
-  padding: 7px 12px; border-radius: 20px; cursor: pointer;
+  border: none; border-bottom: 2px solid transparent; background: transparent; color: var(--dim);
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 8px 0; cursor: pointer; margin-bottom: -1px;
 }
-.chip.active { border-color: var(--ember); background: var(--ember-soft); color: var(--ember-hi); }
+.chip:hover { color: var(--muted); }
+.chip.active { border-bottom-color: var(--ember); color: var(--ember-hi); }
 .search-input {
   width: 100%; background: var(--card2); border: 1px solid var(--line-strong); border-radius: var(--r-sm);
   padding: 12px 14px; min-height: 46px; color: var(--text); font-family: var(--font-body); font-size: 14px; margin-bottom: var(--sp-3);

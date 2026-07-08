@@ -104,7 +104,7 @@ export function Settings() {
               </div>
               <div className="field">
                 <label>Preferred Training Days</label>
-                <div className="filter-row">
+                <div className="tab-row">
                   {WEEKDAYS.map((label, d) => (
                     <button type="button" key={d} className={`chip${p.preferredDays.includes(d) ? ' active' : ''}`} onClick={() => toggleDay(d)}>{label}</button>
                   ))}
