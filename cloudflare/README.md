@@ -17,7 +17,7 @@ This folder prepares FORGE for real cloud saving and real Claude coaching withou
 5. Worker secret named `ANTHROPIC_API_KEY`
 6. Optional Worker variable named `ANTHROPIC_MODEL`
 
-Default model in the Worker is `claude-sonnet-4-6`.
+Default model in the Worker is `claude-sonnet-5`.
 
 ## Correct order
 
@@ -61,7 +61,7 @@ Expected shape:
   "dbReady": true,
   "syncTokenReady": true,
   "anthropicReady": true,
-  "model": "claude-sonnet-4-6"
+  "model": "claude-sonnet-5"
 }
 ```
 

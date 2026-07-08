@@ -1,0 +1,64 @@
+:root {
+  /* Iron & Ember palette */
+  --bg: #0a0806;
+  --bg-elevated: #13100c;
+  --card: #1a1611;
+  --card2: #221d17;
+  --bg-quiet: #0f0d09;
+  --line: #2a2319;
+  --line-strong: #3d3327;
+  --text: #f3ead9;
+  --muted: #a89b87;
+  --dim: #6b6052;
+  --faint: #4a4339;
+
+  --accent: #ff5b1f;
+  --ember: #ff5b1f;
+  --ember-hi: #ff7a3d;
+  --ember-deep: #c93f10;
+  --ember-soft: rgba(255, 91, 31, 0.12);
+  --ember-glow: rgba(255, 91, 31, 0.32);
+
+  --good: #8db871;
+  --good-soft: rgba(141, 184, 113, 0.14);
+  --warn: #f4b943;
+  --warn-soft: rgba(244, 185, 67, 0.14);
+  --bad: #d63b3b;
+  --bad-soft: rgba(214, 59, 59, 0.14);
+  --steel: #6ea3c7;
+  --steel-soft: rgba(110, 163, 199, 0.14);
+  --recovery: #7a8db5;
+  --recovery-soft: rgba(122, 141, 181, 0.14);
+
+  /* type */
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* spacing scale */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-7: 32px;
+  --sp-8: 40px;
+
+  /* radius */
+  --r-sm: 2px;
+  --r-md: 3px;
+  --r-lg: 4px;
+  --r-xl: 8px;
+
+  /* shadow */
+  --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.025) inset, 0 8px 22px rgba(0, 0, 0, 0.28);
+  --shadow-hero: 0 1px 0 rgba(255, 255, 255, 0.025) inset, 0 18px 40px rgba(0, 0, 0, 0.45);
+  --shadow-float: 0 12px 32px rgba(0, 0, 0, 0.5);
+
+  /* z-index */
+  --z-nav: 50;
+  --z-dialog: 100;
+
+  --nav-height: 68px;
+}
