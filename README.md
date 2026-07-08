@@ -4,22 +4,31 @@ FORGE is a private personal fitness operating system for training, recovery, bod
 
 ## Current status
 
-FORGE currently has a working local first frontend and Cloudflare backend prep files.
+FORGE is a Vite + Preact single-page app (`@preact/signals` for state), backed by a Cloudflare Worker for optional cloud sync and Claude coaching. There is no build-free vanilla-JS entry point anymore — `src/` is the real app.
 
-Active phases:
+- Core rebuild (onboarding, 7-section app shell, adaptive engine, local persistence) complete
+- Cloudflare sync prep complete, manual (explicit push/pull, no silent background overwrite)
 
-- Phase 0: core repo repair complete
-- Phase 1: local save foundation complete
-- Phase 2: adaptive split engine complete
-- Phase 3: cleanup and workout summary upgrade complete
-- Phase 4: Cloudflare sync prep started
+## Architecture
+
+- `src/main.jsx` / `src/app.jsx` — entry point and route shell
+- `src/router.js` — minimal hash-based router (`#/today`, `#/plan`, …)
+- `src/lib/store.js` — single signals-based store; all reads/writes to app state go through here
+- `src/lib/models.js` — data shapes (`UserProfile`, `WorkoutPlan`, `Workout`, `Exercise`, `WorkoutLog`, `RecoveryLog`, `ProgressMetric`) and their `fresh*` factories
+- `src/lib/adaptiveEngine.js` — readiness scoring, equipment-aware exercise selection, pain-aware swaps
+- `src/lib/planTemplates.js` — the 7 plan templates (including FORGE Hybrid Frame Split)
+- `src/lib/exerciseLibrary.js` — the exercise reference data used by Library, Plan, and Train
+- `src/lib/coach.js` / `src/lib/workerClient.js` — structured AI update flow, wired to the unchanged Cloudflare Worker
+- `src/lib/cloudSync.js` — explicit, manual cloud sync (push/pull), never automatic
+- `src/lib/avaExport.js` — read-only readiness/context export for a future Ava integration
+- `src/pages/` — the 7 app sections: Today, Plan, Train, Progress, Recovery, Library, Settings (plus Onboarding)
+- `src/components/` — shared UI (charts, gauges, pills, dialogs, rest timer)
+
+Legacy browser data (`forgeFitnessOS.v1`–`v7`) migrates automatically to the current store shape (`forge.v10`) on first load — no manual export/import needed for existing users.
 
 ## Working frontend features
 
-- Repaired `index.html` as the real app entry file
-- Repaired `manifest.webmanifest` as the real PWA manifest
-- Repaired `sw.js` as the real service worker
-- Local autosave with browser storage
+- Local autosave with browser storage (with automatic legacy-data migration)
 - Export and import JSON backup
 - Reset with confirmation
 - Readiness check in
@@ -37,6 +46,15 @@ Active phases:
 - PR vault
 - Battle calendar
 - Local Coach Brain logic
+
+## Development
+
+```bash
+npm install
+npm run dev      # local dev server
+npm run build     # production build to dist/
+npm run preview   # serve the production build locally
+```
 
 ## Cloudflare backend prep
 

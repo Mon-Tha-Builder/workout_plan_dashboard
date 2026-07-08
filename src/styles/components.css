@@ -285,6 +285,7 @@
 .calendar .day.missed { background: var(--bad-soft); border-color: rgba(214,59,59,.35); color: var(--bad); }
 .calendar .day.today-marker { border-color: var(--ember); box-shadow: 0 0 0 1px var(--ember-soft); }
 .calendar .day.future { opacity: .35; }
+.calendar .day.before { opacity: .25; }
 
 /* ---------- Library filters ---------- */
 .filter-row { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: var(--sp-3); }
