@@ -1,0 +1,473 @@
+# Instincts generated from https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+# Generated: 2026-07-08T14:19:01.557Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: workout_plan_dashboard-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Commit Length
+
+## Action
+
+Write moderate-length commit messages (~64 characters)
+
+## Evidence
+
+- Average commit message length: 64 chars
+- Based on 3 commits
+
+---
+id: workout_plan_dashboard-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Naming Files
+
+## Action
+
+Use camelCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: camelCase
+
+---
+id: workout_plan_dashboard-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: workout_plan_dashboard-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: workout_plan_dashboard-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: components, lib, pages, styles
+
+---
+id: workout_plan_dashboard-test-colocate
+trigger: "when writing tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Test Colocate
+
+## Action
+
+Place test file next to the source file (e.g., Button.test.tsx next to Button.tsx)
+
+## Evidence
+
+- Colocated test pattern detected
+- Tests live alongside source files
+
+---
+id: workout_plan_dashboard-workflow-feature-implementation-with-ui-and-lib-changes
+trigger: "when doing feature implementation with ui and lib changes"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Workflow Feature Implementation With Ui And Lib Changes
+
+## Action
+
+Follow the feature-implementation-with-ui-and-lib-changes workflow:
+1. Update or create relevant files in src/components/ and/or src/pages/ for UI changes.
+2. Modify or add logic in src/lib/ for business logic, data models, or utility functions.
+3. Adjust or add styles in src/styles/ as needed.
+4. Optionally update documentation (README.md) if the change is significant.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/components/*.jsx, src/pages/*.jsx, src/lib/*.js
+
+---
+id: workout_plan_dashboard-workflow-design-polish-and-pwa-assets
+trigger: "when doing design polish and pwa assets"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Workflow Design Polish And Pwa Assets
+
+## Action
+
+Follow the design-polish-and-pwa-assets workflow:
+1. Update styles in src/styles/ to reflect new design choices.
+2. Add or replace icon files in public/ for various sizes.
+3. Modify index.html and manifest.webmanifest to reference new assets.
+4. Self-host or update fonts in public/fonts/ and src/styles/fonts.css.
+5. Update package.json and vite.config.js if build or asset handling changes.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/styles/*.css, public/icon-*.png, public/fonts/*.woff2
+
+---
+id: workout_plan_dashboard-workflow-add-or-update-tests-for-core-modules
+trigger: "when doing add or update tests for core modules"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Workflow Add Or Update Tests For Core Modules
+
+## Action
+
+Follow the add-or-update-tests-for-core-modules workflow:
+1. Create or update test files in src/lib/ (e.g., *.test.js) for the relevant modules.
+2. Run the test suite (e.g., npm run test) to verify correctness.
+3. Update or add test configuration files if needed (e.g., vitest.config.js).
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/lib/*.test.js, vitest.config.js
+
+---
+id: workout_plan_dashboard-instinct-file-naming
+trigger: "When creating or renaming files in the codebase"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct File Naming
+
+## Action
+
+Use camelCase for file names
+
+## Evidence
+
+- Pattern in namingConventions.files
+- Observed in src/components and src/lib
+
+---
+id: workout_plan_dashboard-instinct-function-naming
+trigger: "When defining new functions"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Function Naming
+
+## Action
+
+Use camelCase for function names
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: workout_plan_dashboard-instinct-class-naming
+trigger: "When defining new classes"
+confidence: 0.9
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Class Naming
+
+## Action
+
+Use PascalCase for class names
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: workout_plan_dashboard-instinct-constant-naming
+trigger: "When defining constants"
+confidence: 0.85
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Constant Naming
+
+## Action
+
+Use SCREAMING_SNAKE_CASE for constant names
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: workout_plan_dashboard-instinct-import-style
+trigger: "When importing modules"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Import Style
+
+## Action
+
+Use relative import paths
+
+## Evidence
+
+- Pattern in importStyle
+
+---
+id: workout_plan_dashboard-instinct-export-style
+trigger: "When exporting modules or functions"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Export Style
+
+## Action
+
+Use named exports
+
+## Evidence
+
+- Pattern in exportStyle
+
+---
+id: workout_plan_dashboard-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Test Location
+
+## Action
+
+Colocate test files (e.g., *.test.js) alongside the modules they test in src/lib/
+
+## Evidence
+
+- Pattern in architecture.testLocation
+- Pattern in add-or-update-tests-for-core-modules workflow
+
+---
+id: workout_plan_dashboard-instinct-test-coverage
+trigger: "When adding new logic to core modules"
+confidence: 0.85
+domain: testing
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Test Coverage
+
+## Action
+
+Create or update corresponding test files (e.g., module.test.js) in src/lib/
+
+## Evidence
+
+- Pattern in add-or-update-tests-for-core-modules workflow
+
+---
+id: workout_plan_dashboard-instinct-run-tests
+trigger: "When tests are added or updated"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Run Tests
+
+## Action
+
+Run the test suite (e.g., npm run test) to verify correctness
+
+## Evidence
+
+- Pattern in add-or-update-tests-for-core-modules workflow
+
+---
+id: workout_plan_dashboard-instinct-test-config-update
+trigger: "When test configuration needs to change"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Test Config Update
+
+## Action
+
+Update or add test configuration files (e.g., vitest.config.js)
+
+## Evidence
+
+- Pattern in add-or-update-tests-for-core-modules workflow
+
+---
+id: workout_plan_dashboard-instinct-commit-format
+trigger: "When writing a commit message"
+confidence: 0.7
+domain: git
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Commit Format
+
+## Action
+
+Use a concise, imperative statement describing the change (no enforced prefix)
+
+## Evidence
+
+- Pattern in commits.examples
+- No prefix in commit messages
+
+---
+id: workout_plan_dashboard-instinct-feature-ui-lib
+trigger: "When implementing or refactoring a feature that affects both UI and business logic"
+confidence: 0.95
+domain: workflow
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Feature Ui Lib
+
+## Action
+
+Update/create files in src/components/ and/or src/pages/ for UI, modify/add logic in src/lib/, adjust/add styles in src/styles/, and optionally update README.md
+
+## Evidence
+
+- feature-implementation-with-ui-and-lib-changes workflow
+- Pattern in commitSequence
+
+---
+id: workout_plan_dashboard-instinct-design-polish-pwa
+trigger: "When refining design or updating PWA assets"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Design Polish Pwa
+
+## Action
+
+Update styles in src/styles/, add/replace icons in public/, modify index.html and manifest.webmanifest, self-host/update fonts, and update package.json/vite.config.js if needed
+
+## Evidence
+
+- design-polish-and-pwa-assets workflow
+- Pattern in commitSequence
+
+---
+id: workout_plan_dashboard-instinct-add-tests
+trigger: "When adding new logic to core modules or improving test coverage"
+confidence: 0.85
+domain: workflow
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Add Tests
+
+## Action
+
+Create or update test files in src/lib/, run the test suite, and update/add vitest.config.js if needed
+
+## Evidence
+
+- add-or-update-tests-for-core-modules workflow
+- Pattern in commitSequence
+
