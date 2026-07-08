@@ -1,5 +1,5 @@
 import { logs, recoveryLogs, sessions, plan } from '../lib/store.js';
-import { todayISO } from '../lib/models.js';
+import { todayISO, dateKey } from '../lib/models.js';
 
 function statusFor(dateKey, todayKey, planStartKey) {
   if (logs.value.some(l => l.date === dateKey)) return 'trained';
@@ -18,7 +18,7 @@ export function CalendarHeatmap({ pastDays = 27, futureDays = 6 }) {
   for (let i = pastDays; i >= -futureDays; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
+    const key = dateKey(d);
     cells.push({
       key,
       dayNumber: d.getDate(),
