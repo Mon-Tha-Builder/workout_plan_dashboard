@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
-import { logs, prs, metrics, streak, weeklyCompletion, plan, logBodyMetrics, coachNotes } from '../lib/store.js';
-import { todayISO } from '../lib/models.js';
+import { logs, prs, metrics, streak, weeklyCompletion, plan, profile, logBodyMetrics, coachNotes } from '../lib/store.js';
+import { todayISO, dateKey, parseDateKey } from '../lib/models.js';
 import { StatTile } from '../components/StatTile.jsx';
 import { SVGLineChart } from '../components/SVGLineChart.jsx';
 import { SVGBarChart } from '../components/SVGBarChart.jsx';
@@ -8,10 +8,12 @@ import { CalendarHeatmap } from '../components/CalendarHeatmap.jsx';
 import { EmptyState } from '../components/EmptyState.jsx';
 import { Pill } from '../components/Pill.jsx';
 
-const METRIC_FIELDS = [
-  ['weight', 'Weight', 'lb'], ['waist', 'Waist', 'in'], ['chest', 'Chest', 'in'],
-  ['arms', 'Arms', 'in'], ['shoulders', 'Shoulders', 'in'], ['thighs', 'Thighs', 'in'], ['bodyfat', 'Body Fat', '%']
-];
+function metricFields(weightUnit) {
+  return [
+    ['weight', 'Weight', weightUnit], ['waist', 'Waist', 'in'], ['chest', 'Chest', 'in'],
+    ['arms', 'Arms', 'in'], ['shoulders', 'Shoulders', 'in'], ['thighs', 'Thighs', 'in'], ['bodyfat', 'Body Fat', '%']
+  ];
+}
 
 function last8WeeksBars() {
   const now = new Date();
@@ -21,7 +23,7 @@ function last8WeeksBars() {
     start.setDate(now.getDate() - now.getDay() - w * 7);
     const keys = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(start); d.setDate(start.getDate() + i);
-      return d.toISOString().slice(0, 10);
+      return dateKey(d);
     });
     const count = logs.value.filter(l => keys.includes(l.date)).length;
     bars.push({ label: w === 0 ? 'Now' : `-${w}w`, value: count, highlight: w === 0 });
@@ -32,6 +34,8 @@ function last8WeeksBars() {
 export function Progress() {
   const [metricType, setMetricType] = useState('weight');
   const [metricForm, setMetricForm] = useState({});
+  const weightUnit = profile.value.unitPreference || 'lb';
+  const METRIC_FIELDS = metricFields(weightUnit);
 
   const week = weeklyCompletion.value;
   const sortedLogs = [...logs.value].sort((a, b) => a.date.localeCompare(b.date));
@@ -57,13 +61,13 @@ export function Progress() {
 
   const missedRecent = useMemo(() => {
     if (!plan.value) return 0;
-    const start = new Date(plan.value.startDate);
+    const start = parseDateKey(plan.value.startDate);
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 14);
     const from = start > cutoff ? start : cutoff;
     let missed = 0;
     for (let d = new Date(from); d < new Date(); d.setDate(d.getDate() + 1)) {
-      const key = d.toISOString().slice(0, 10);
+      const key = dateKey(d);
       if (key === todayISO()) continue;
       if (!logs.value.some(l => l.date === key)) missed += 1;
     }
@@ -98,7 +102,7 @@ export function Progress() {
         <div className="section-gap">
           <div className="card">
             <h2>Training Volume</h2>
-            {volumePoints.length >= 2 ? <div className="mt"><SVGLineChart points={volumePoints} unit=" lb" /></div> : <EmptyState icon="📊" title="Not Enough Data" body="Log weight and reps during workouts to see your volume trend." />}
+            {volumePoints.length >= 2 ? <div className="mt"><SVGLineChart points={volumePoints} unit={` ${weightUnit}`} /></div> : <EmptyState icon="📊" title="Not Enough Data" body="Log weight and reps during workouts to see your volume trend." />}
           </div>
 
           <div className="card">
@@ -133,7 +137,7 @@ export function Progress() {
               {prList.slice(0, 8).map(p => (
                 <div className="item" key={p.name}>
                   <strong>{p.name}</strong>
-                  <p className="small mt">Best weight {p.bestWeight} • Volume {p.bestVolume} • Est. 1RM {p.bestEst1RM}</p>
+                  <p className="small mt">Best weight {p.bestWeight}{weightUnit} • Volume {p.bestVolume} • Est. 1RM {p.bestEst1RM}{weightUnit}</p>
                 </div>
               ))}
               {!prList.length && <p className="muted center">Complete weighted exercises to build the vault.</p>}

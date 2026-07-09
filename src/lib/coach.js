@@ -4,6 +4,7 @@
 // state; nothing from the model writes to the store directly.
 import { workerFetch, cloudConfigured } from './workerClient.js';
 import { cloudSettings, swapExercise, updateSessionExercise, addCoachNote } from './store.js';
+import { todayISO } from './models.js';
 
 export { cloudConfigured };
 
@@ -78,7 +79,7 @@ export function applyProposal(date, proposal) {
 
 export function buildCoachContext({ session, recovery, ratings, profile, lastSummary }) {
   return {
-    today: new Date().toISOString().slice(0, 10),
+    today: todayISO(),
     readiness: recovery || null,
     currentSession: session || null,
     ratings,

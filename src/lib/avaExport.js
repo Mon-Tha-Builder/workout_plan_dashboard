@@ -3,7 +3,7 @@
 // is the single function it would call to read Forge's state; Ava can never
 // write back through this module.
 import { profile, plan, sessions, logs, recoveryLogs, streak, weeklyCompletion, coachNotes, rotationIndex } from './store.js';
-import { todayISO } from './models.js';
+import { todayISO, dateKey } from './models.js';
 
 export function buildAvaContext() {
   const today = todayISO();
@@ -15,7 +15,7 @@ export function buildAvaContext() {
   for (let i = 13; i >= 0; i--) {
     const d = new Date();
     d.setDate(d.getDate() - i);
-    const key = d.toISOString().slice(0, 10);
+    const key = dateKey(d);
     const hasLog = logs.value.some(l => l.date === key);
     last14.push({ date: key, trained: hasLog });
   }

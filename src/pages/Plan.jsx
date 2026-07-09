@@ -24,6 +24,12 @@ export function Plan() {
   const p = plan.value;
   const idx = rotationIndex();
   const today = new Date().getDay();
+  // Anchor the weekday preview to the real rotation index so today's cell always
+  // matches the Rotation/Upcoming lists below, instead of a fixed weekday mapping
+  // that drifts as soon as a training day is skipped or worked out of order.
+  const assignedSorted = [...p.assignedDays].sort((a, b) => a - b);
+  const todayAssignedPos = assignedSorted.indexOf(today);
+  const anchorPos = todayAssignedPos >= 0 ? todayAssignedPos : 0;
 
   function confirmSwitchTemplate() {
     const template = getTemplate(pendingTemplate);
@@ -53,8 +59,10 @@ export function Plan() {
             <h2>Weekly Schedule</h2>
             <div className="grid grid4 mt" style={{ gridTemplateColumns: 'repeat(7, 1fr)', gap: 6 }}>
               {WEEKDAYS.map((label, d) => {
-                const posInWeek = p.assignedDays.indexOf(d);
-                const workout = posInWeek >= 0 ? p.workouts[posInWeek % p.workouts.length] : null;
+                const assignedPos = assignedSorted.indexOf(d);
+                const workout = (assignedPos >= 0 && assignedSorted.length && p.workouts.length)
+                  ? p.workouts[(idx + (((assignedPos - anchorPos) % assignedSorted.length) + assignedSorted.length) % assignedSorted.length) % p.workouts.length]
+                  : null;
                 return (
                   <div key={d} className="stat" style={{ padding: '8px 4px', textAlign: 'center', borderColor: d === today ? 'var(--ember)' : 'var(--line)' }}>
                     <small>{label}</small>

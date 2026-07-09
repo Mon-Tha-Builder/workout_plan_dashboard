@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks';
 import {
-  sessions, plan, startWorkout, logSet, completeExercise, swapExercise,
+  sessions, plan, profile, startWorkout, logSet, completeExercise, swapExercise,
   addExerciseToSession, removeExerciseFromSession, finishWorkout
 } from '../lib/store.js';
 import { todayISO, freshExercise } from '../lib/models.js';
@@ -92,6 +92,7 @@ export function Train() {
             key={ex.id}
             ex={ex}
             date={today}
+            weightUnit={profile.value.unitPreference || 'lb'}
             active={ex.id === firstOpenId}
             onLogSet={(setData) => { logSet(today, ex.id, setData); if (ex.restSeconds > 0) setRestFor({ exerciseId: ex.id, seconds: ex.restSeconds }); }}
             onComplete={(data) => completeExercise(today, ex.id, data)}
@@ -131,7 +132,7 @@ export function Train() {
   );
 }
 
-function ExerciseConsole({ ex, date, active, onLogSet, onComplete, onSwap, onRemove }) {
+function ExerciseConsole({ ex, date, active, weightUnit, onLogSet, onComplete, onSwap, onRemove }) {
   const [weight, setWeight] = useState('');
   const [reps, setReps] = useState('');
   const [rpe, setRpe] = useState('');
@@ -172,7 +173,7 @@ function ExerciseConsole({ ex, date, active, onLogSet, onComplete, onSwap, onRem
 
       {!ex.done && (
         <div className="field-row cols-3 mt">
-          <div className="field"><label>Weight</label><input type="number" step="0.5" value={weight} onInput={e => setWeight(e.currentTarget.value)} /></div>
+          <div className="field"><label>Weight ({weightUnit})</label><input type="number" step="0.5" value={weight} onInput={e => setWeight(e.currentTarget.value)} /></div>
           <div className="field"><label>Reps</label><input type="text" value={reps} onInput={e => setReps(e.currentTarget.value)} /></div>
           <div className="field"><label>RPE</label><input type="number" min="1" max="10" value={rpe} onInput={e => setRpe(e.currentTarget.value)} /></div>
         </div>

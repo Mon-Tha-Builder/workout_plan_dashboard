@@ -6,7 +6,7 @@
 /**
  * @typedef {Object} UserProfile
  * @property {string} name
- * @property {'muscle'|'fatloss'|'strength'|'athleticism'|'consistency'|'health'} goal
+ * @property {'muscle'|'strength'|'athleticism'|'consistency'|'health'} goal
  * @property {'beginner'|'intermediate'|'advanced'} experienceLevel
  * @property {Record<string, boolean>} equipment
  * @property {number[]} preferredDays - weekday indices, 0=Sun..6=Sat
@@ -44,6 +44,7 @@
  * @property {boolean} done
  * @property {Array<{setNumber:number, weight:string, reps:string, rpe:string}>} loggedSets
  * @property {number} rating
+ * @property {boolean} changed - true once this slot has been swapped away from its original pick
  */
 
 /**
@@ -141,8 +142,22 @@ export function uid() {
   return Math.random().toString(36).slice(2, 9) + Date.now().toString(36).slice(-4);
 }
 
+/** Formats a Date as a local-timezone YYYY-MM-DD key (not UTC — avoids the day flipping early/late for non-UTC users). */
+export function dateKey(d) {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
+/** Parses a YYYY-MM-DD key back into a local-midnight Date (avoids new Date(str) parsing it as UTC). */
+export function parseDateKey(key) {
+  const [y, m, d] = String(key).split('-').map(Number);
+  return new Date(y, (m || 1) - 1, d || 1);
+}
+
 export function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+  return dateKey(new Date());
 }
 
 /** @returns {UserProfile} */
@@ -180,6 +195,7 @@ export function freshExercise(partial = {}) {
     done: false,
     loggedSets: [],
     rating: 3,
+    changed: false,
     ...partial
   };
 }

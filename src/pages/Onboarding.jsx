@@ -6,7 +6,6 @@ import { navigate } from '../router.js';
 
 const GOALS = [
   ['muscle', 'Build Muscle', 'Add size, look stronger'],
-  ['fatloss', 'Lose Fat', 'Lean out, stay strong'],
   ['strength', 'Get Stronger', 'Chase heavier lifts'],
   ['athleticism', 'Athleticism', 'Move better, condition'],
   ['consistency', 'Consistency', 'Just show up and train'],
