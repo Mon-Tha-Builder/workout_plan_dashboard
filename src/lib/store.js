@@ -94,7 +94,12 @@ function hydrateFrom(data) {
     ratings.value = data.ratings || {};
     prs.value = data.prs || {};
     coachNotes.value = Array.isArray(data.coachNotes) ? data.coachNotes : [];
-    cloudSettings.value = { ...cloudSettings.value, ...(data.cloudSettings || {}) };
+    // Never let a missing/redacted token in incoming data (e.g. an exported backup) wipe an already-configured one.
+    cloudSettings.value = {
+      ...cloudSettings.value,
+      ...(data.cloudSettings || {}),
+      token: (data.cloudSettings && data.cloudSettings.token) || cloudSettings.value.token
+    };
     lastSaved.value = data.lastSaved || null;
   });
 }
@@ -327,7 +332,9 @@ export function rotationIndex() {
 /** Returns (creating if needed) the live, adapted Workout instance for a given date. */
 export function getOrCreateSession(date = todayISO()) {
   const existing = sessions.value[date];
-  if (existing && existing.exercises && existing.exercises.length) return existing;
+  // A session with zero exercises is still a real session (e.g. an untouched
+  // Custom Plan day, or one the user cleared out) — not a marker to regenerate.
+  if (existing) return existing;
   if (!plan.value || !plan.value.workouts.length) return null;
 
   const idx = rotationIndex();
@@ -390,7 +397,7 @@ export function swapExercise(date, exerciseId, optionName) {
       if (ex.id !== exerciseId) return ex;
       const option = ex.options.find(o => o.name === optionName);
       if (!option) return ex;
-      return { ...ex, name: option.name, muscleGroup: option.muscleGroup, cue: option.cue, rating: ratings.value[option.name] || 3 };
+      return { ...ex, name: option.name, muscleGroup: option.muscleGroup, cue: option.cue, rating: ratings.value[option.name] || 3, changed: true };
     })
   }));
 }

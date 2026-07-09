@@ -122,11 +122,12 @@ export function applyAdaptation(session, { profile, recovery }) {
   }
 
   if (pain.includes('neck') || pain.includes('trap') || pain.includes('mid back')) {
-    decision += ' Mid back / neck / trap note detected: posture-friendly rows, rear delts, and relaxed neck cues get priority.';
+    decision += ' Mid back / neck / trap note logged: protect that area, ease off trap-dominant work, and stop any movement that aggravates it.';
   }
-  if (pain.includes('shoulder')) decision += ' Shoulder note detected: pressing is kept pain free and stable.';
-  if (pain.includes('knee')) decision += ' Knee note detected: lower body work is more controlled.';
+  if (pain.includes('shoulder')) decision += ' Shoulder note logged: keep pressing light and pain free, stop if it aggravates the joint.';
+  if (pain.includes('knee')) decision += ' Knee note logged: control the descent on lower body work and stop if it aggravates the joint.';
 
+  if (recovery.zone !== 'red') next.estimatedDuration = targetMinutes({ profile, recovery });
   next.adjusted = true;
   next.status = 'adjusted';
   next.notes = decision;

@@ -44,6 +44,7 @@
  * @property {boolean} done
  * @property {Array<{setNumber:number, weight:string, reps:string, rpe:string}>} loggedSets
  * @property {number} rating
+ * @property {boolean} changed - true once this slot has been swapped away from its original pick
  */
 
 /**
@@ -194,6 +195,7 @@ export function freshExercise(partial = {}) {
     done: false,
     loggedSets: [],
     rating: 3,
+    changed: false,
     ...partial
   };
 }
