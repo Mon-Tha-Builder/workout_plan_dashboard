@@ -11,7 +11,7 @@ import { buildAvaContext } from '../lib/avaExport.js';
 import { Pill } from '../components/Pill.jsx';
 import { ConfirmDialog } from '../components/ConfirmDialog.jsx';
 
-const GOALS = [['muscle', 'Build Muscle'], ['fatloss', 'Lose Fat'], ['strength', 'Get Stronger'], ['athleticism', 'Athleticism'], ['consistency', 'Consistency'], ['health', 'General Health']];
+const GOALS = [['muscle', 'Build Muscle'], ['strength', 'Get Stronger'], ['athleticism', 'Athleticism'], ['consistency', 'Consistency'], ['health', 'General Health']];
 const LEVELS = [['beginner', 'Beginner'], ['intermediate', 'Intermediate'], ['advanced', 'Advanced']];
 const MOTIVATION = [['strict', 'Strict'], ['calm', 'Calm'], ['hype', 'Hype'], ['technical', 'Technical']];
 const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];

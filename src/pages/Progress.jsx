@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'preact/hooks';
 import { logs, prs, metrics, streak, weeklyCompletion, plan, logBodyMetrics, coachNotes } from '../lib/store.js';
-import { todayISO } from '../lib/models.js';
+import { todayISO, dateKey, parseDateKey } from '../lib/models.js';
 import { StatTile } from '../components/StatTile.jsx';
 import { SVGLineChart } from '../components/SVGLineChart.jsx';
 import { SVGBarChart } from '../components/SVGBarChart.jsx';
@@ -21,7 +21,7 @@ function last8WeeksBars() {
     start.setDate(now.getDate() - now.getDay() - w * 7);
     const keys = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(start); d.setDate(start.getDate() + i);
-      return d.toISOString().slice(0, 10);
+      return dateKey(d);
     });
     const count = logs.value.filter(l => keys.includes(l.date)).length;
     bars.push({ label: w === 0 ? 'Now' : `-${w}w`, value: count, highlight: w === 0 });
@@ -57,13 +57,13 @@ export function Progress() {
 
   const missedRecent = useMemo(() => {
     if (!plan.value) return 0;
-    const start = new Date(plan.value.startDate);
+    const start = parseDateKey(plan.value.startDate);
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 14);
     const from = start > cutoff ? start : cutoff;
     let missed = 0;
     for (let d = new Date(from); d < new Date(); d.setDate(d.getDate() + 1)) {
-      const key = d.toISOString().slice(0, 10);
+      const key = dateKey(d);
       if (key === todayISO()) continue;
       if (!logs.value.some(l => l.date === key)) missed += 1;
     }

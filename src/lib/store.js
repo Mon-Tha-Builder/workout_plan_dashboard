@@ -6,7 +6,7 @@
 
 import { signal, computed, batch } from '@preact/signals';
 import {
-  freshProfile, freshPlan, freshRecoveryLog, freshMetric, todayISO, uid
+  freshProfile, freshPlan, freshRecoveryLog, freshMetric, todayISO, dateKey, parseDateKey, uid
 } from './models.js';
 import { scoreReadiness } from './recovery.js';
 import { getTemplate } from './planTemplates.js';
@@ -56,7 +56,7 @@ function snapshot() {
     ratings: ratings.value,
     prs: prs.value,
     coachNotes: coachNotes.value,
-    cloudSettings: { ...cloudSettings.value, token: cloudSettings.value.token }, // kept local only
+    cloudSettings: cloudSettings.value,
     lastSaved: new Date().toISOString()
   };
 }
@@ -477,9 +477,10 @@ export function adaptTodayFromReadiness(date = todayISO()) {
 }
 
 export function recentTrainingLoad(date = todayISO()) {
-  const cutoff = new Date(date);
+  const cutoff = parseDateKey(date);
   cutoff.setDate(cutoff.getDate() - 3);
-  return logs.value.filter(l => new Date(l.date) >= cutoff && new Date(l.date) <= new Date(date)).length;
+  const upper = parseDateKey(date);
+  return logs.value.filter(l => parseDateKey(l.date) >= cutoff && parseDateKey(l.date) <= upper).length;
 }
 
 export function saveRecoveryCheckIn(partial, date = todayISO()) {
@@ -512,8 +513,11 @@ export function setCloudSettings(partial) {
   persist();
 }
 
+/** Exported backups never carry the cloud sync token — it grants write access to your cloud data and shouldn't travel in a file you might share. */
 export function exportDataBlob() {
-  return new Blob([JSON.stringify(snapshot(), null, 2)], { type: 'application/json' });
+  const data = snapshot();
+  data.cloudSettings = { ...data.cloudSettings, token: '' };
+  return new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
 }
 
 export function importDataFromObject(data) {
@@ -545,7 +549,7 @@ export const streak = computed(() => {
   // allow "today" to be pending without breaking the streak
   if (!dates.has(todayISO())) cursor.setDate(cursor.getDate() - 1);
   while (true) {
-    const key = cursor.toISOString().slice(0, 10);
+    const key = dateKey(cursor);
     if (!dates.has(key)) break;
     count += 1;
     cursor.setDate(cursor.getDate() - 1);
@@ -562,7 +566,7 @@ export const weeklyCompletion = computed(() => {
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setDate(monday.getDate() + i);
-    keys.push(d.toISOString().slice(0, 10));
+    keys.push(dateKey(d));
   }
   const completed = logs.value.filter(l => keys.includes(l.date)).length;
   const target = plan.value?.daysPerWeek || 5;
