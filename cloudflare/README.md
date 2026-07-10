@@ -175,4 +175,4 @@ curl -X POST https://YOUR_WORKER_URL/ai/coach \
 
 ## Frontend status
 
-The current frontend is still local first. Do not add a visible cloud sync or Claude AI button until the Worker is deployed and tested.
+The Worker is deployed and tested (https://forge-fitness-worker.jamonm221.workers.dev/, see `/health`). The frontend (https://workout-plan-dashboard.pages.dev/) remains local first — cloud sync and Claude coaching stay off until a device's Owner ID and Sync Token are entered in Settings, and sync is always explicit push/pull, never a silent background overwrite.
