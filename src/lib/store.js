@@ -34,8 +34,13 @@ export const ratings = signal({}); // exerciseName -> 1..5
 export const prs = signal({});
 /** @type {import('@preact/signals').Signal<Array<{id:string,date:string,title:string,body:string}>>} */
 export const coachNotes = signal([]);
+// The Worker URL is not sensitive (it's a public endpoint) — safe to ship as a default
+// so a fresh browser/device doesn't need it retyped. ownerId/deviceId/token are per-device
+// secrets/identifiers and must still be entered by the user; never default those.
+const FORGE_WORKER_URL = 'https://forge-fitness-worker.jamonm221.workers.dev';
+
 export const cloudSettings = signal({
-  workerUrl: '', ownerId: '', deviceId: '', token: '', lastSync: null, lastStatus: 'Not connected'
+  workerUrl: FORGE_WORKER_URL, ownerId: '', deviceId: '', token: '', lastSync: null, lastStatus: 'Not connected'
 });
 export const lastSaved = signal(null);
 export const migrationNotice = signal('');
@@ -211,7 +216,7 @@ function migrateLegacy(old) {
     ratings: old.ratings || {},
     prs: newPrs,
     coachNotes: Array.isArray(old.coach) ? old.coach : [],
-    cloudSettings: { workerUrl: '', ownerId: '', deviceId: '', token: '', lastSync: null, lastStatus: 'Not connected' },
+    cloudSettings: { workerUrl: FORGE_WORKER_URL, ownerId: '', deviceId: '', token: '', lastSync: null, lastStatus: 'Not connected' },
     lastSaved: old.lastSaved || null
   };
 }

@@ -263,7 +263,7 @@ function CloudPanel() {
           <h2>Cloud & AI Connection</h2>
           <Pill tone={connected ? 'good' : 'warn'}>{connected ? 'Configured' : 'Not Connected'}</Pill>
         </div>
-        <p className="muted">The Cloudflare Worker isn't deployed yet. Deploy <code>cloudflare/worker.js</code>, then fill this in — cloud sync and Claude coaching activate automatically once the Worker responds.</p>
+        <p className="muted">{connected ? 'Cloud sync and Claude coaching are active.' : 'The FORGE Worker is live. Add your Owner ID and Sync Token below to connect — cloud sync and Claude coaching activate automatically once they’re set.'}</p>
         <div className="form-grid mt">
           <div className="field"><label>Worker URL</label><input type="text" placeholder="https://your-worker.workers.dev" value={c.workerUrl} onInput={e => setCloudSettings({ workerUrl: e.currentTarget.value })} /></div>
           <div className="field-row">
