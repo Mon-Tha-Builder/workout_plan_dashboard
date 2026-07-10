@@ -2,12 +2,18 @@
 
 FORGE is a private personal fitness operating system for training, recovery, body tracking, progress review, workout summaries, and adaptive coach logic.
 
+## Live
+
+- App: https://workout-plan-dashboard.pages.dev/
+- Worker (cloud sync + Claude coaching API): https://forge-fitness-worker.jamonm221.workers.dev/ (see `/health` for status)
+
 ## Current status
 
 FORGE is a Vite + Preact single-page app (`@preact/signals` for state), backed by a Cloudflare Worker for optional cloud sync and Claude coaching. There is no build-free vanilla-JS entry point anymore — `src/` is the real app.
 
 - Core rebuild (onboarding, 7-section app shell, adaptive engine, local persistence) complete
-- Cloudflare sync prep complete, manual (explicit push/pull, no silent background overwrite)
+- Deployed: frontend on Cloudflare Pages, backend Worker on Cloudflare Workers + D1, connected and tested end to end
+- Cloud sync is manual (explicit push/pull, no silent background overwrite)
 
 ## Architecture
 
@@ -56,17 +62,15 @@ npm run build     # production build to dist/
 npm run preview   # serve the production build locally
 ```
 
-## Cloudflare backend prep
+## Cloudflare backend
 
-The repo now includes Cloudflare prep files in the `cloudflare/` folder:
+The Worker is deployed and tested (see [Live](#live) above). Source and setup docs are in the `cloudflare/` folder:
 
 - `cloudflare/schema.sql`
 - `cloudflare/worker.js`
 - `cloudflare/README.md`
 
-These files prepare FORGE for real cloud saving through Cloudflare D1 and a protected Worker.
-
-Important: the frontend is still local first. Do not add a visible cloud sync button until the Worker is deployed and tested.
+The frontend remains local first: cloud sync is opt-in and manual (explicit push/pull in Settings), never a silent background overwrite. Each device still needs its own Owner ID and Sync Token entered in Settings to connect — those are per-device secrets and are never defaulted or committed.
 
 ## FORGE training goal
 
@@ -142,5 +146,4 @@ The coach chooses exercises based on equipment profile, pain notes, readiness, a
 - No dead buttons
 - No useless files
 - No placeholder AI that does not do anything
-- No visible cloud sync button until the Worker is deployed and tested
-- Claude integration must go through Cloudflare later
+- Claude integration must go through Cloudflare, never direct browser calls (Worker is live — see Live section)
