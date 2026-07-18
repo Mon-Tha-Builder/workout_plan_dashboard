@@ -1,0 +1,348 @@
+# Instincts generated from https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+# Generated: 2026-07-09T19:29:47.092Z
+# Version: 2.0
+# NOTE: This file supplements (does not replace) any existing curated instincts.
+# High-confidence manually curated instincts should be preserved alongside these.
+
+---
+id: workout_plan_dashboard-commit-length
+trigger: "when writing a commit message"
+confidence: 0.6
+domain: git
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Commit Length
+
+## Action
+
+Write moderate-length commit messages (~77 characters)
+
+## Evidence
+
+- Average commit message length: 77 chars
+- Based on 3 commits
+
+---
+id: workout_plan_dashboard-naming-files
+trigger: "when creating a new file"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Naming Files
+
+## Action
+
+Use PascalCase naming convention
+
+## Evidence
+
+- Analyzed file naming patterns in repository
+- Dominant pattern: PascalCase
+
+---
+id: workout_plan_dashboard-import-relative
+trigger: "when importing modules"
+confidence: 0.75
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Import Relative
+
+## Action
+
+Use relative imports for project files
+
+## Evidence
+
+- Import analysis shows relative import pattern
+- Example: import { x } from '../lib/x'
+
+---
+id: workout_plan_dashboard-export-style
+trigger: "when exporting from a module"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Export Style
+
+## Action
+
+Prefer named exports
+
+## Evidence
+
+- Export pattern analysis
+- Dominant style: named
+
+---
+id: workout_plan_dashboard-arch-type-based
+trigger: "when adding new code"
+confidence: 0.8
+domain: architecture
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Arch Type Based
+
+## Action
+
+Place code in the appropriate type folder (components/, services/, utils/, etc.)
+
+## Evidence
+
+- Type-based module organization detected
+- Folders: components, lib, pages
+
+---
+id: workout_plan_dashboard-test-separate
+trigger: "when writing tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Test Separate
+
+## Action
+
+Place tests in the tests/ or __tests__/ directory, mirroring src structure
+
+## Evidence
+
+- Separate test directory pattern detected
+- Tests live in dedicated test folders
+
+---
+id: workout_plan_dashboard-workflow-multi-file-bugfix-and-feature-audit
+trigger: "when doing multi file bugfix and feature audit"
+confidence: 0.6
+domain: workflow
+source: repo-analysis
+source_repo: https://github.com/Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Workflow Multi File Bugfix And Feature Audit
+
+## Action
+
+Follow the multi-file-bugfix-and-feature-audit workflow:
+1. Identify and document all bugs and inconsistencies during an audit.
+2. Edit several related files (often in src/lib and src/pages) to address each issue.
+3. Update logic, UI, and data handling as needed.
+4. Test changes with automated tests and manual regression passes.
+5. Document fixes in a detailed commit message.
+
+## Evidence
+
+- Workflow detected from commit patterns
+- Frequency: ~2x per month
+- Files: src/lib/store.js, src/lib/models.js, src/pages/Progress.jsx
+
+---
+id: workout_plan_dashboard-instinct-file-naming
+trigger: "When creating or renaming a file in the codebase"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct File Naming
+
+## Action
+
+Name the file using PascalCase (e.g., MyComponent.jsx)
+
+## Evidence
+
+- Pattern in namingConventions.files
+- Files in src/components/CalendarHeatmap.jsx
+
+---
+id: workout_plan_dashboard-instinct-function-naming
+trigger: "When defining a function"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Function Naming
+
+## Action
+
+Name the function using camelCase (e.g., fetchUserData)
+
+## Evidence
+
+- Pattern in namingConventions.functions
+
+---
+id: workout_plan_dashboard-instinct-class-naming
+trigger: "When defining a class"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Class Naming
+
+## Action
+
+Name the class using PascalCase (e.g., WorkoutPlan)
+
+## Evidence
+
+- Pattern in namingConventions.classes
+
+---
+id: workout_plan_dashboard-instinct-constant-naming
+trigger: "When defining a constant"
+confidence: 0.8
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Constant Naming
+
+## Action
+
+Name the constant using SCREAMING_SNAKE_CASE (e.g., MAX_SESSIONS)
+
+## Evidence
+
+- Pattern in namingConventions.constants
+
+---
+id: workout_plan_dashboard-instinct-import-style
+trigger: "When importing modules within the project"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Import Style
+
+## Action
+
+Use relative import paths (e.g., import X from '../lib/X')
+
+## Evidence
+
+- Pattern in importStyle: relative
+- Imports in src/pages/Progress.jsx
+
+---
+id: workout_plan_dashboard-instinct-export-style
+trigger: "When exporting functions, classes, or constants"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Export Style
+
+## Action
+
+Use named exports (e.g., export { MyComponent })
+
+## Evidence
+
+- Pattern in exportStyle: named
+
+---
+id: workout_plan_dashboard-instinct-try-catch-errors
+trigger: "When handling potential errors in code"
+confidence: 0.7
+domain: code-style
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Try Catch Errors
+
+## Action
+
+Use try-catch blocks for error handling
+
+## Evidence
+
+- Pattern in errorHandling.style: try-catch
+- Commits fixing bugs with try-catch
+
+---
+id: workout_plan_dashboard-instinct-test-location
+trigger: "When adding or updating tests"
+confidence: 0.8
+domain: testing
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Test Location
+
+## Action
+
+Place tests in a separate directory from source code
+
+## Evidence
+
+- Pattern in architecture.testLocation: separate
+
+---
+id: workout_plan_dashboard-instinct-batch-bugfix-commit-format
+trigger: "When committing a batch of bug fixes and minor features after an audit"
+confidence: 0.9
+domain: git
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Batch Bugfix Commit Format
+
+## Action
+
+Write a detailed, multi-part commit message summarizing all fixes (e.g., 'Fix local-timezone date bug, redact sync token from exports, drop no-op fat-loss goal')
+
+## Evidence
+
+- Commit: 'Fix local-timezone date bug, redact sync token from exports, drop no-op fat-loss goal'
+- Commit: 'Fix 7 correctness bugs found in a full src/ audit'
+
+---
+id: workout_plan_dashboard-instinct-multi-file-bugfix-workflow
+trigger: "When a full code audit or review identifies multiple correctness bugs and minor issues across the codebase"
+confidence: 0.9
+domain: workflow
+source: repo-analysis
+source_repo: Mon-Tha-Builder/workout_plan_dashboard
+---
+
+# Workout_plan_dashboard Instinct Multi File Bugfix Workflow
+
+## Action
+
+Batch fix the issues across related files (especially in src/lib and src/pages), update logic/UI/data handling, test changes, and document fixes in a detailed commit message
+
+## Evidence
+
+- Workflow: multi-file-bugfix-and-feature-audit
+- Commits: 'Fix 7 correctness bugs found in a full src/ audit'
+- Files: src/lib/store.js, src/pages/Progress.jsx, etc.
+
